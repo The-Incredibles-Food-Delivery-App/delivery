@@ -6,8 +6,6 @@ This is the basic Delivery project that all students forked in CS5500 F20.
 
 A recent Gradle (>= 6.1.1 but < 7.0.0) and JDK 8.
 
-Test changes
-
 ## Building
 
 `./gradlew build`
