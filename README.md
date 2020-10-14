@@ -22,7 +22,7 @@ The server will start on port 5000 by default.
 
 ## Deploying to Heroku
 
-Configure as normal and use `git push heroku master`.
+Configure as normal and use `git push heroku main`.
 
 `./gradlew build deployHeroku` works to deploy without pushes...sometimes.
 
