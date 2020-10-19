@@ -54,7 +54,7 @@ public class Order implements Model {
     @JsonIgnore
     private boolean verifyOrderNonempty() {
         if (this.items.isEmpty()) {
-            return false
+            return false;
         }
         // If one item in the order, ensure quantity is at least 1
         // TODO: we may just want to add this error checking to the Item itself!
@@ -62,7 +62,7 @@ public class Order implements Model {
             HashMap<String, Integer> item = this.items.get(0);
             for (String i : item.keySet()) {
                 if (item.get(i) < 1) {
-                    return False
+                    return false;
                 }
             }
         }
@@ -78,10 +78,10 @@ public class Order implements Model {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
         // QUESTION: Do we want to throw an exception if set in the past?
         if (this.orderBy == null || this.orderBy.isBefore(LocalDateTime.now())) {
-            this.orderBy.setOrderBY(LocalDateTime.now());
+            this.orderBy.setOrderBy(LocalDateTime.now());
         } 
         // if orderBy data/time is set too far in advance, throw an exception
-        if (this.orderBy.isAfter(LocalDateTime.now()) {
+        if (this.orderBy.isAfter(LocalDateTime.now())) {
             if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
                || this.orderBy.getHour() > LocalDateTime.now() + MAXIMUM_HOURS_ORDER_IN_ADV) {
                    throw new InvalidOrderByException("Please choose an order time that is within " 
