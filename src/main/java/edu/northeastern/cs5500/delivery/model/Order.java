@@ -9,9 +9,12 @@ import java.time.LocalDateTime;
 // @ Data annotation creates a constructor, getters, and setters
 @Data
 public class Order implements Model {
+    private static final Integer MAXIMUM_HOURS_ORDER_IN_ADV = 2;
+
     private ObjectId id;
     // TODO: create Receipt Model
     // private Receipt receipt;
+    private Double cost;
     private String currency;
     // TODO: In the future, replace String with Item for a
     // food item
@@ -26,7 +29,8 @@ public class Order implements Model {
     // Can we use dep injection for this?
     // private User user;
     private Integer restaurantID;
-    private static final Integer MAXIMUM_ORDER_IN_ADVANCE_TIME_HOURS = 2;
+    // TODO: work on payment Model and uncomment this
+    // private CreditCard payment;
 
 
     /** 
@@ -79,9 +83,9 @@ public class Order implements Model {
         // if orderBy data/time is set too far in advance, throw an exception
         if (this.orderBy.isAfter(LocalDateTime.now()) {
             if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
-               || this.orderBy.getHour() > LocalDateTime.now() + MAXIMUM_ORDER_IN_ADVANCE_TIME_HOURS) {
-                   throw new InvalidOrderByException("Please choose an order time
-                   that is within " + str(MAXIMUM_ORDER_IN_ADVANCE_TIME_HOURS) + 
+               || this.orderBy.getHour() > LocalDateTime.now() + MAXIMUM_HOURS_ORDER_IN_ADV) {
+                   throw new InvalidOrderByException("Please choose an order time that is within " 
+                   + str(MAXIMUM_HOURS_ORDER_IN_ADV) + 
                    " hours of the current time.");
                }
         }
