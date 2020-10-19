@@ -31,3 +31,5 @@ Configure as normal and use `git push heroku master`.
 Spotless automatically formats code. If it detects errors, run `./gradlew spotlessApply`
 to automatically fix them. `./gradlew spotlessCheck` can be used to directly invoke
 Spotless.
+
+test local pull
