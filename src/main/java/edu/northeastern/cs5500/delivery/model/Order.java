@@ -40,9 +40,10 @@ public class Order implements Model {
      */
     @JsonIgnore
     public boolean isValid() {
-        return user != null && !user.isEmpty()
-               && restaurantID != null
-               && !restaurantID.isEmpty()
+        // && !user.isEmpty() TODO: after user is created
+        // user != null 
+        return restaurantID != null
+               && this.restaurantID != null
                && this.verifyOrderNonempty()
                && this.verifyOrderByTime();
     }
@@ -80,15 +81,14 @@ public class Order implements Model {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
         // QUESTION: Do we want to throw an exception if set in the past?
         if (this.orderBy == null || this.orderBy.isBefore(LocalDateTime.now())) {
-            this.orderBy.setOrderBy(LocalDateTime.now());
+            this.orderBy = LocalDateTime.now();
         } 
         // if orderBy data/time is set too far in advance, throw an exception
         if (this.orderBy.isAfter(LocalDateTime.now())) {
             if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
-               || this.orderBy.getHour() > LocalDateTime.now() + MAXIMUM_HOURS_ORDER_IN_ADV) {
+               || this.orderBy.getHour() > LocalDateTime.now().getHour + MAXIMUM_HOURS_ORDER_IN_ADV) {
                    throw new InvalidOrderException("Please choose an order time that is within " 
-                   + str(MAXIMUM_HOURS_ORDER_IN_ADV) + 
-                   " hours of the current time.");
+                   + MAXIMUM_HOURS_ORDER_IN_ADV) + " hours of the current time.");
                }
         }
 
