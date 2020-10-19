@@ -17,8 +17,7 @@ public class DeliveryDriver implements Model {
     /** @return true if this delivery driver is valid */
     @JsonIgnore
     public boolean isValid() {
-        return phoneNumber != null && !phoneNumber.isEmpty()
-               && firstName != null && !firstName.isEmpty()
-               && lastName != null && !lastName.isEmpty();
+        return phoneNumber != null && firstName != null
+               && lastName != null;
     }
 }
