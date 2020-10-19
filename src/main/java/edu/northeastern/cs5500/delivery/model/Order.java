@@ -26,6 +26,7 @@ public class Order implements Model {
     // Can we use dep injection for this?
     // private User user;
     private Integer restaurantID;
+    private static final Integer MAXIMUM_ORDER_IN_ADVANCE_TIME_HOURS = 2;
 
 
     /** 
@@ -39,6 +40,7 @@ public class Order implements Model {
                && restaurantID != null
                && !restaurantID.isEmpty()
                && this.verifyOrderNonempty()
+               && this.verifyOrderByTime();
     }
 
     /**
@@ -62,3 +64,29 @@ public class Order implements Model {
         }
        return true;
     }
+
+    /**
+    Verifies that the order contains a valid order by time.
+    @return true if a valid order by time has been set
+     */
+    @JsonIgnore
+    private boolean verifyOrderByTime() throws InvalidOrderByException {
+        // if OrderBy date/time is not set or set to the past, set to current timestamp
+        // QUESTION: Do we want to throw an exception if set in the past?
+        if (this.orderBy == null || this.orderBy.isBefore(LocalDateTime.now())) {
+            this.orderBy.setOrderBY(LocalDateTime.now());
+        } 
+        // if orderBy data/time is set too far in advance, throw an exception
+        if (this.orderBy.isAfter(LocalDateTime.now()) {
+            if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
+               || this.orderBy.getHour() > LocalDateTime.now() + MAXIMUM_ORDER_IN_ADVANCE_TIME_HOURS) {
+                   throw new InvalidOrderByException("Please choose an order time
+                   that is within " + str(MAXIMUM_ORDER_IN_ADVANCE_TIME_HOURS) + 
+                   " hours of the current time.");
+               }
+        }
+
+       return true;
+    }
+
+}
