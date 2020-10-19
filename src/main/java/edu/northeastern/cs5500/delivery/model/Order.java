@@ -71,10 +71,12 @@ public class Order implements Model {
 
     /**
     Verifies that the order contains a valid order by time.
+    @throws InvalidOrderException - if order time is before the current time
+        or more than the maximum number of hours from the current time.
     @return true if a valid order by time has been set
      */
     @JsonIgnore
-    private boolean verifyOrderByTime() throws InvalidOrderByException {
+    private boolean verifyOrderByTime() throws InvalidOrderException {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
         // QUESTION: Do we want to throw an exception if set in the past?
         if (this.orderBy == null || this.orderBy.isBefore(LocalDateTime.now())) {
@@ -84,7 +86,7 @@ public class Order implements Model {
         if (this.orderBy.isAfter(LocalDateTime.now())) {
             if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
                || this.orderBy.getHour() > LocalDateTime.now() + MAXIMUM_HOURS_ORDER_IN_ADV) {
-                   throw new InvalidOrderByException("Please choose an order time that is within " 
+                   throw new InvalidOrderException("Please choose an order time that is within " 
                    + str(MAXIMUM_HOURS_ORDER_IN_ADV) + 
                    " hours of the current time.");
                }
