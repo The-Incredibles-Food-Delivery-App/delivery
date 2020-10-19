@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 
 @Data
 public class DeliveryDriver implements Model {
-    private ObjectId driverId;
+    private ObjectId id;
     private String firstName;
     private String lastName;
     private Integer phoneNumber;

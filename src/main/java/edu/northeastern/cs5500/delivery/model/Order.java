@@ -86,7 +86,7 @@ public class Order implements Model {
         // if orderBy data/time is set too far in advance, throw an exception
         if (this.orderBy.isAfter(LocalDateTime.now())) {
             if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
-               || this.orderBy.getHour() > LocalDateTime.now().getHour + MAXIMUM_HOURS_ORDER_IN_ADV) {
+               || this.orderBy.getHour() > LocalDateTime.now().getHour() + MAXIMUM_HOURS_ORDER_IN_ADV) {
                    throw new InvalidOrderException("Please choose an order time that is within " + MAXIMUM_HOURS_ORDER_IN_ADV + " hours of the current time.");
                }
         }
