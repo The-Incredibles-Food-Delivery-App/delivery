@@ -39,7 +39,7 @@ public class Order implements Model {
     @return true if this order is valid.
      */
     @JsonIgnore
-    public boolean isValid() {
+    public boolean isValid() throws InvalidOrderException {
         // && !user.isEmpty() TODO: after user is created
         // user != null 
         return restaurantID != null
