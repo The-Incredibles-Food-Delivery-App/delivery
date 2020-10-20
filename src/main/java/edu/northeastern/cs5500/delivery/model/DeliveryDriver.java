@@ -12,12 +12,10 @@ public class DeliveryDriver implements Model {
     private Integer phoneNumber;
     private Order currentOrder;
     private Boolean currentlyWorking;
-    
 
     /** @return true if this delivery driver is valid */
     @JsonIgnore
     public boolean isValid() {
-        return phoneNumber != null && firstName != null
-               && lastName != null;
+        return phoneNumber != null && firstName != null && lastName != null;
     }
 }

@@ -1,10 +1,10 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
+import java.util.*;
 import lombok.Data;
 import org.bson.types.ObjectId;
-import java.util.*;
-import java.time.LocalDateTime;
 
 // @ Data annotation creates a constructor, getters, and setters
 @Data
@@ -32,25 +32,26 @@ public class Order implements Model {
     // TODO: work on payment Model and uncomment this
     // private CreditCard payment;
 
-
-    /** 
-    Validates the order. A valid order has a user, a valid associated restaurant,
-    and at least one item.
-    @return true if this order is valid.
+    /**
+     * Validates the order. A valid order has a user, a valid associated restaurant, and at least
+     * one item.
+     *
+     * @return true if this order is valid.
      */
     @JsonIgnore
     public boolean isValid() throws InvalidOrderException {
         // && !user.isEmpty() TODO: after user is created
-        // user != null 
+        // user != null
         return restaurantID != null
-               && this.restaurantID != null
-               && this.verifyOrderNonempty()
-               && this.verifyOrderByTime();
+                && this.restaurantID != null
+                && this.verifyOrderNonempty()
+                && this.verifyOrderByTime();
     }
 
     /**
-    Verifies that the order contains at least one item.
-    @return true if the order contains at least one item.
+     * Verifies that the order contains at least one item.
+     *
+     * @return true if the order contains at least one item.
      */
     @JsonIgnore
     private boolean verifyOrderNonempty() {
@@ -67,14 +68,15 @@ public class Order implements Model {
                 }
             }
         }
-       return true;
+        return true;
     }
 
     /**
-    Verifies that the order contains a valid order by time.
-    @throws InvalidOrderException - if order time is before the current time
-        or more than the maximum number of hours from the current time.
-    @return true if a valid order by time has been set
+     * Verifies that the order contains a valid order by time.
+     *
+     * @throws InvalidOrderException - if order time is before the current time or more than the
+     *     maximum number of hours from the current time.
+     * @return true if a valid order by time has been set
      */
     @JsonIgnore
     private boolean verifyOrderByTime() throws InvalidOrderException {
@@ -82,16 +84,19 @@ public class Order implements Model {
         // QUESTION: Do we want to throw an exception if set in the past?
         if (this.orderBy == null || this.orderBy.isBefore(LocalDateTime.now())) {
             this.orderBy = LocalDateTime.now();
-        } 
+        }
         // if orderBy data/time is set too far in advance, throw an exception
         if (this.orderBy.isAfter(LocalDateTime.now())) {
             if (this.orderBy.getDayOfWeek() != LocalDateTime.now().getDayOfWeek()
-               || this.orderBy.getHour() > LocalDateTime.now().getHour() + MAXIMUM_HOURS_ORDER_IN_ADV) {
-                   throw new InvalidOrderException("Please choose an order time that is within " + MAXIMUM_HOURS_ORDER_IN_ADV + " hours of the current time.");
-               }
+                    || this.orderBy.getHour()
+                            > LocalDateTime.now().getHour() + MAXIMUM_HOURS_ORDER_IN_ADV) {
+                throw new InvalidOrderException(
+                        "Please choose an order time that is within "
+                                + MAXIMUM_HOURS_ORDER_IN_ADV
+                                + " hours of the current time.");
+            }
         }
 
-       return true;
+        return true;
     }
-
 }
