@@ -14,9 +14,9 @@ public class Restaurant implements Model {
     
     private String restaurantName;
     private String website;
-    // confused about the objectId vs restaurantId;
+    // confused about the objectId vs restaurantId, went with objectId?
     private ObjectId id;
-    private Integer restaurantId;
+    // private Integer restaurantId;
     private Integer phoneNumber;
     private String address;
     // Uncomment this out after adding cuisine enum
@@ -25,14 +25,13 @@ public class Restaurant implements Model {
     private ArrayList<ArrayList<Order>> pendingOrders;
     private ArrayList<HashMap<String, String>> menu;
 
-    /** A valid restuarant should have a name, an Id, a phone number,
+    /** A valid restuarant should have a name, a phone number,
      * hours, and a menu
      * @return true if this is a valid Restaurant
      */
     @JsonIgnore
     public boolean isValid() throws InvalidOrderException {
-        return restaurantId != null
-                && restaurantName != null
+        return restaurantName != null
                 && phoneNumber != null
                 && menu != null
                 && hours != null;
