@@ -9,15 +9,16 @@ import org.bson.types.ObjectId;
 public class Recommendation implements Model {
     private ObjectId id;
     private String username;
-    private Integer restaurantID;
+    private Restaurant restaurantID;
 
     /**
-     * Validates the Recommendation. A valid recommendation has a user, a valid associated restaurant.
+     * Validates the Recommendation. A valid recommendation has a user, a valid associated
+     * restaurant.
      *
      * @return true if this Recommendation is valid.
      */
     @JsonIgnore
-    public boolean isValid() throws InvalidRecommendationException{
-        return  username != null && restaurantID != null;
+    public boolean isValid() throws InvalidRecommendationException {
+        return username != null && restaurantID != null;
     }
-} 
+}
