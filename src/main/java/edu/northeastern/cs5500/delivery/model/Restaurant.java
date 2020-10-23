@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package edu.northeastern.cs5500.delivery.model;
 
 import java.util.ArrayList;
@@ -38,3 +39,6 @@ public class Restaurant implements Model {
     }
 
 }
+=======
+// making a small change here
+>>>>>>> main
