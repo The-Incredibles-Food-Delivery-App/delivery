@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+// Pulled for inspiration from https://gist.github.com/webdevwilson/5271984
 
 public enum State {
     ALABAMA("Alabama", "AL"),
