@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package edu.northeastern.cs5500.delivery.model;
 
 import java.util.ArrayList;
@@ -11,20 +10,18 @@ import org.bson.types.ObjectId;
 // @ Data annotation creates a constructor, getters, and setters
 @Data
 public class Restaurant implements Model {
-    private static final Double MAX_DISTANCE = 5.0;
-    
+    // Maximum distance a restaurant will send food out?
+    // private static final Double MAX_DISTANCE = 5.0;
     private String restaurantName;
     private String website;
-    // confused about the objectId vs restaurantId, went with objectId?
     private ObjectId id;
-    // private Integer restaurantId;
     private Integer phoneNumber;
     private String address;
-    // Uncomment this out after adding cuisine enum
-    // CuisineType cuisineType;
+    private CuisineType cuisineType;
     private String hours;
     private ArrayList<ArrayList<Order>> pendingOrders;
-    private ArrayList<HashMap<String, String>> menu;
+    // Arraylist for the purposes of breaking down breakfast/lunch/dinner of items with their pricing
+    private ArrayList<HashMap<String, Double>> menu;
 
     /** A valid restuarant should have a name, a phone number,
      * hours, and a menu
@@ -34,11 +31,9 @@ public class Restaurant implements Model {
     public boolean isValid() throws InvalidOrderException {
         return restaurantName != null
                 && phoneNumber != null
+                && address != null
                 && menu != null
                 && hours != null;
     }
 
 }
-=======
-// making a small change here
->>>>>>> main
