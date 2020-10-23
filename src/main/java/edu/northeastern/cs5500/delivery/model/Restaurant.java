@@ -1,9 +1,8 @@
 package edu.northeastern.cs5500.delivery.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -20,11 +19,13 @@ public class Restaurant implements Model {
     private CuisineType cuisineType;
     private String hours;
     private ArrayList<ArrayList<Order>> pendingOrders;
-    // Arraylist for the purposes of breaking down breakfast/lunch/dinner of items with their pricing
+    // Arraylist for the purposes of breaking down breakfast/lunch/dinner of items with their
+    // pricing
     private ArrayList<HashMap<String, Double>> menu;
 
-    /** A valid restuarant should have a name, a phone number,
-     * hours, and a menu
+    /**
+     * A valid restuarant should have a name, a phone number, hours, and a menu
+     *
      * @return true if this is a valid Restaurant
      */
     @JsonIgnore
@@ -35,5 +36,4 @@ public class Restaurant implements Model {
                 && menu != null
                 && hours != null;
     }
-
 }
