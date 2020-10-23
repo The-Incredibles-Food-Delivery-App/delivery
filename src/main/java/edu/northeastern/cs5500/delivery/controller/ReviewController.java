@@ -14,11 +14,11 @@ import org.bson.types.ObjectId;
 
 @Singleton
 @Slf4j
-public class ReviewContoller {
+public class ReviewController {
     private final GenericRepository<Review> reviews;
 
     @Inject
-    RecommendationController(GenericRepository<Review> reviewRepository) {
+    ReviewController(GenericRepository<Review> reviewRepository) {
         reviews = reviewRepository;
 
         log.info("ReviewController > construct");
