@@ -21,8 +21,7 @@ public class Order implements Model {
     private ArrayList<HashMap<String, Integer>> items;
     private LocalDateTime orderTime;
     private LocalDateTime completionTime;
-    // TODO: Make sure enum is completed & uncomment this
-    // private OrderStatus orderStatus;
+    private OrderStatus orderStatus;
     private double distance;
     private LocalDateTime orderBy;
     // TODO: Make sure User class is completed & uncomment this
