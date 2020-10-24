@@ -39,9 +39,8 @@ public class Review implements Model {
     }
 
     /**
-     * Validates the timestamp of the review is before the present time.
-     * TODO: (maybe) Add check to see if customer has already submitted
-     * order
+     * Validates the timestamp of the review is before the present time. TODO: (maybe) Add check to
+     * see if customer has already submitted order
      *
      * @return true if this timestamp is valid.
      */
