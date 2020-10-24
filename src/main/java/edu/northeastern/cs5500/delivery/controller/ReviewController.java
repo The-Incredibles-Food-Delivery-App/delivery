@@ -34,8 +34,8 @@ public class ReviewController {
         // TODO: add in a restaurant id per recommendation, but how?
         // defaultReview1.setRestaurantID(1);
 
-        final Review defaultRecommendation2 = new Review();
-        defaultReview1.setRating(3.0);
+        final Review defaultReview2 = new Review();
+        defaultReview2.setRating(3.0);
         defaultReview2.setUsername("Danielle");
         // TODO: add in a restaurant id per recommendation, but how?
         // defaultReview2.setRestaurantID(2);
@@ -72,7 +72,7 @@ public class ReviewController {
 
         ObjectId id = review.getId();
 
-        if (id != null && review.get(id) != null) {
+        if (id != null && reviews.get(id) != null) {
             // TODO: replace with a real duplicate key exception
             throw new Exception("DuplicateKeyException");
         }
