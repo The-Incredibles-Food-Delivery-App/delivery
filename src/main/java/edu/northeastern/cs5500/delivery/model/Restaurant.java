@@ -3,6 +3,8 @@ package edu.northeastern.cs5500.delivery.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.HashMap;
+// import java.util.Hashtable;
+
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -14,14 +16,14 @@ public class Restaurant implements Model {
     private String restaurantName;
     private String website;
     private ObjectId id;
-    private Integer phoneNumber;
+    private String phoneNumber;
     private String address;
     private CuisineType cuisineType;
     private String hours;
     private ArrayList<ArrayList<Order>> pendingOrders;
     // Arraylist for the purposes of breaking down breakfast/lunch/dinner of items with their
     // pricing
-    private ArrayList<HashMap<String, Double>> menu;
+    private HashMap<String, HashMap<String, Double>> menu;
 
     /**
      * A valid restuarant should have a name, a phone number, hours, and a menu
