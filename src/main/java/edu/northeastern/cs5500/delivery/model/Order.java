@@ -6,18 +6,14 @@ import java.util.*;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
-// @ Data annotation creates a constructor, getters, and setters
 @Data
 public class Order implements Model {
     private static final Integer MAXIMUM_HOURS_ORDER_IN_ADV = 2;
+    private static final Integer MAXIMUM_DISTANCE = 35;
 
     private ObjectId id;
-    // TODO: create Receipt Model
-    // private Receipt receipt;
     private Double cost;
     private String currency;
-    // TODO: In the future, replace String with Item for a
-    // food item
     private ArrayList<HashMap<String, Integer>> items;
     private LocalDateTime orderTime;
     private LocalDateTime completionTime;
@@ -27,13 +23,13 @@ public class Order implements Model {
     // TODO: Make sure User class is completed & uncomment this
     // Can we use dep injection for this?
     // private User user;
-    private Integer restaurantID;
+    private Integer restaurantId;
     // TODO: work on payment Model and uncomment this
     // private CreditCard payment;
 
     /**
-     * Validates the order. A valid order has a user, a valid associated restaurant, and at least
-     * one item.
+     * Validates the order. A valId order has a user, a valid associated restaurant, at least one
+     * item, does not exceeded the maximum distance, and has a valid cost.
      *
      * @return true if this order is valid.
      */
@@ -41,10 +37,32 @@ public class Order implements Model {
     public boolean isValid() throws InvalidOrderException {
         // && !user.isEmpty() TODO: after user is created
         // user != null
-        return restaurantID != null
-                && this.restaurantID != null
+        return restaurantId != null
+                // TODO: this.restaurantId != null
                 && this.verifyOrderNonempty()
-                && this.verifyOrderByTime();
+                && this.verifyOrderByTime()
+                && this.verifyDistance()
+                && this.cost != null;
+    }
+
+    /**
+     * Validates the distance. A valid distance is less than or equal to the maximum allowed
+     * distance
+     *
+     * @return true if the distance is less than or equal to the max delivery distance.
+     */
+    @JsonIgnore
+    public boolean verifyDistance() throws InvalidOrderException {
+        if (this.distance > MAXIMUM_DISTANCE) {
+            String message =
+                    "Distance exceeds maximum allowed delivery distance"
+                            + "Delivery distance cannot exceed"
+                            + MAXIMUM_DISTANCE
+                            + " miles.";
+            throw new InvalidOrderException(message);
+        } else {
+            return true;
+        }
     }
 
     /**

@@ -6,7 +6,7 @@ public class InvalidOrderException extends Exception {
     /**
      * Constructs an InvalidDateException object
      *
-     * @param message - A message informing the user that the
+     * @param message - A message informing the user why their order is invalid
      */
     public InvalidOrderException(String message) {
         super(message);
