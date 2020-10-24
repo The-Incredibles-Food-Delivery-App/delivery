@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 public class Customer extends User {
     HashSet<Order> orders;
 
-    /** @return true if this delivery is valid */
+    /** @return true if this customer is valid */
     @JsonIgnore
     public boolean isValid() {
         return orders != null;
