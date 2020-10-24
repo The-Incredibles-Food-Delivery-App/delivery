@@ -70,17 +70,17 @@ public class RecommendationController {
 
         ObjectId id = recommendation.getId();
 
-        if (id != null && recommendation.get(id) != null) {
+        if (id != null && recommendations.get(id) != null) {
             // TODO: replace with a real duplicate key exception
             throw new Exception("DuplicateKeyException");
         }
 
-        return recommendation.add(recommendation);
+        return recommendations.add(recommendation);
     }
 
     public void updateRecommendation(@Nonnull Recommendation recommendation) throws Exception {
         log.debug("RecommendationController > updateRecommendation(...)");
-        recommendation.update(recommendation);
+        recommendations.update(recommendation);
     }
 
     public void deleteRecommendation(@Nonnull ObjectId id) throws Exception {

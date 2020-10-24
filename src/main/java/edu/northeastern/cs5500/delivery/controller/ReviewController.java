@@ -77,12 +77,12 @@ public class ReviewController {
             throw new Exception("DuplicateKeyException");
         }
 
-        return review.add(review);
+        return reviews.add(review);
     }
 
     public void updateReview(@Nonnull Review review) throws Exception {
         log.debug("ReviewController > updateReview(...)");
-        review.update(review);
+        reviews.update(review);
     }
 
     public void deleteReview(@Nonnull ObjectId id) throws Exception {
