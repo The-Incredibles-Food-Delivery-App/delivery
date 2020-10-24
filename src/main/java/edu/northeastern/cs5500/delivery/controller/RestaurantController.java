@@ -1,16 +1,16 @@
 package edu.northeastern.cs5500.delivery.controller;
 
+import com.mongodb.lang.Nullable;
+import edu.northeastern.cs5500.delivery.model.CuisineType;
+import edu.northeastern.cs5500.delivery.model.Restaurant;
+import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import com.mongodb.lang.Nullable;
-import org.bson.types.ObjectId;
-import edu.northeastern.cs5500.delivery.model.CuisineType;
-import edu.northeastern.cs5500.delivery.model.Restaurant;
-import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 
 @Singleton
 @Slf4j
@@ -30,7 +30,8 @@ public class RestaurantController {
         log.info("RestaurantController > construct > adding default restaurants");
 
         final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Double>> menu1 = new HashMap<String, HashMap<String, Double>>();
+        HashMap<String, HashMap<String, Double>> menu1 =
+                new HashMap<String, HashMap<String, Double>>();
         HashMap<String, Double> dimSumItems = new HashMap<String, Double>();
         dimSumItems.put("BBQ Pork Bun", 4.99);
         dimSumItems.put("Shrimp Dumpling", 5.99);
@@ -51,14 +52,15 @@ public class RestaurantController {
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
         defaultRestaurant1.setPendingOrders(null);
-        //TODO??
+        // TODO??
         // defaultRestaurant1.setId(id);
         defaultRestaurant1.setPhoneNumber("1234567890");
         defaultRestaurant1.setMenu(menu1);
 
         final Restaurant defaultRestaurant2 = new Restaurant();
 
-        HashMap<String, HashMap<String, Double>> menu2 = new HashMap<String, HashMap<String, Double>>();
+        HashMap<String, HashMap<String, Double>> menu2 =
+                new HashMap<String, HashMap<String, Double>>();
         HashMap<String, Double> items = new HashMap<String, Double>();
         items.put("Pho Small", 10.00);
         items.put("Pho Large", 11.00);
@@ -107,7 +109,7 @@ public class RestaurantController {
 
         ObjectId id = restaurant.getId();
 
-        if (id !=  null && restaurants.get(id) != null) {
+        if (id != null && restaurants.get(id) != null) {
             // TODO: replace with a real duplicate key exception
             throw new Exception("DuplicateKeyException");
         }
@@ -115,7 +117,7 @@ public class RestaurantController {
     }
 
     public void updateRestaurant(@Nonnull Restaurant restaurant) throws Exception {
-            log.debug("RestaurantController > updateDelivery(...)");
+        log.debug("RestaurantController > updateDelivery(...)");
         restaurants.update(restaurant);
     }
 

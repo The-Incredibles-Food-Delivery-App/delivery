@@ -1,9 +1,9 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.HashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.util.HashSet;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -15,5 +15,4 @@ public class Customer extends User {
     public boolean isValid() {
         return orders != null;
     }
-    
 }

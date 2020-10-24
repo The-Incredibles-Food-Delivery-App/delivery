@@ -18,11 +18,10 @@ public abstract class User implements Model {
     @JsonIgnore
     public boolean isValid() {
         return firstName != null
-               && lastName != null
-               && userName != null
-               && phoneNumber != null
-               && address != null
-               && email != null;
+                && lastName != null
+                && userName != null
+                && phoneNumber != null
+                && address != null
+                && email != null;
     }
-    
 }

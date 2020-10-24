@@ -3,8 +3,6 @@ package edu.northeastern.cs5500.delivery.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.HashMap;
-// import java.util.Hashtable;
-
 import lombok.Data;
 import org.bson.types.ObjectId;
 
