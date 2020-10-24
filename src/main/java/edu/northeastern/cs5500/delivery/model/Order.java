@@ -17,8 +17,7 @@ public class Order implements Model {
     private ArrayList<HashMap<String, Integer>> items;
     private LocalDateTime orderTime;
     private LocalDateTime completionTime;
-    // TODO: Make sure enum is completed & uncomment this
-    // private OrderStatus orderStatus;
+    private OrderStatus orderStatus;
     private double distance;
     private LocalDateTime orderBy;
     // TODO: Make sure User class is completed & uncomment this
@@ -90,11 +89,11 @@ public class Order implements Model {
     }
 
     /**
-     * Verifies that the order contains a valId order by time.
+     * Verifies that the order contains a valid order by time.
      *
-     * @throws InvalIdOrderException - if order time is before the current time or more than the
+     * @throws InvalidOrderException - if order time is before the current time or more than the
      *     maximum number of hours from the current time.
-     * @return true if a valId order by time has been set
+     * @return true if a valid order by time has been set
      */
     @JsonIgnore
     private boolean verifyOrderByTime() throws InvalidOrderException {
@@ -117,5 +116,4 @@ public class Order implements Model {
 
         return true;
     }
-
 }
