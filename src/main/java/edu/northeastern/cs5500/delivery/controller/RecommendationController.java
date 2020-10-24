@@ -30,11 +30,13 @@ public class RecommendationController {
 
         final Recommendation defaultRecommendation1 = new Recommendation();
         defaultRecommendation1.setUsername("Mustafa");
-        defaultRecommendation1.setRestaurantID(1);
+        // TODO: add in a restaurant id per recommendation, but how?
+        // defaultRecommendation1.setRestaurantID(1);
 
         final Recommendation defaultRecommendation2 = new Recommendation();
         defaultRecommendation2.setUsername("Danielle");
-        defaultRecommendation2.setRestaurantID(2);
+        // TODO: add in a restaurant id per recommendation, but how?
+        // defaultRecommendation2.setRestaurantID(2);
 
         try {
             addRecommendation(defaultRecommendation1);

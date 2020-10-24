@@ -1,7 +1,6 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.Delivery;
-import edu.northeastern.cs5500.delivery.model.Recommendation;
 import edu.northeastern.cs5500.delivery.model.Review;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
@@ -32,12 +31,14 @@ public class ReviewController {
         final Review defaultReview1 = new Review();
         defaultReview1.setRating(4.0);
         defaultReview1.setUsername("Mustafa");
-        defaultReview1.setRestaurantID(1);
+        // TODO: add in a restaurant id per recommendation, but how?
+        // defaultReview1.setRestaurantID(1);
 
-        final Recommendation defaultRecommendation2 = new Recommendation();
+        final Review defaultRecommendation2 = new Review();
         defaultReview1.setRating(3.0);
         defaultReview2.setUsername("Danielle");
-        defaultReview2.setRestaurantID(2);
+        // TODO: add in a restaurant id per recommendation, but how?
+        // defaultReview2.setRestaurantID(2);
 
         try {
             addReview(defaultReview1);
