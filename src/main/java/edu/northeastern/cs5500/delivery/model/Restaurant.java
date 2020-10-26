@@ -29,7 +29,7 @@ public class Restaurant implements Model {
      * @return true if this is a valid Restaurant
      */
     @JsonIgnore
-    public boolean isValid() throws InvalidOrderException {
+    public boolean isValid() {
         return restaurantName != null
                 && phoneNumber != null
                 && address != null
