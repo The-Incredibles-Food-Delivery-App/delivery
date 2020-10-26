@@ -18,7 +18,7 @@ public class Recommendation implements Model {
      * @return true if this Recommendation is valid.
      */
     @JsonIgnore
-    public boolean isValid() throws InvalidRecommendationException {
+    public boolean isValid() {
         return username != null && restaurantID != null;
     }
 }
