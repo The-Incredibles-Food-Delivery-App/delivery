@@ -72,8 +72,8 @@ public class OrderController {
 
     private boolean checkOrderValid(@Nonnull Order order) throws InvalidOrderException {
         return this.verifyOrderNonempty(order)
-            && this.verifyOrderByTime(order)
-            && this.verifyDistance(order);     
+                && this.verifyOrderByTime(order)
+                && this.verifyDistance(order);
     }
 
     /**
@@ -81,7 +81,6 @@ public class OrderController {
      * distance
      *
      * @param order - the order to be validated
-     * 
      * @throws InvalidOrderException if the order exceeds the max delivery distance
      * @return true if the distance is less than or equal to the max delivery distance.
      */
@@ -98,12 +97,10 @@ public class OrderController {
         }
     }
 
-
     /**
      * Verifies that the order contains at least one item.
-     * 
-     * @param order - the order to be validated
      *
+     * @param order - the order to be validated
      * @throws InvalidOrderException if the order does not contain at least one item
      * @return true if the order contains at least one item.
      */
@@ -130,7 +127,6 @@ public class OrderController {
      * Verifies that the order contains a valid order by time.
      *
      * @param order - the order to validate
-     * 
      * @throws InvalidOrderException - if order time is before the current time or more than the
      *     maximum number of hours from the current time.
      * @return true if a valid order by time has been set
@@ -146,7 +142,8 @@ public class OrderController {
         LocalDateTime orderBy = order.getOrderBy();
         if (orderBy.isAfter(LocalDateTime.now())) {
             if (orderBy.getDayOfYear() != LocalDateTime.now().getDayOfYear()
-                    || orderBy.getHour() > LocalDateTime.now().getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV) {
+                    || orderBy.getHour()
+                            > LocalDateTime.now().getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV) {
                 throw new InvalidOrderException(
                         "Please choose an order time that is within "
                                 + Order.MAXIMUM_HOURS_ORDER_IN_ADV
@@ -157,16 +154,16 @@ public class OrderController {
         return true;
     }
 
-
     /**
      * Adds an order to the repository
-     * 
+     *
      * @param order - the order to add
      * @throws InvalidOrderException - when the order given is invalid
-     * @throws DuplicateKeyException - when the order id is already contained in the
-     *      collection of orders
+     * @throws DuplicateKeyException - when the order id is already contained in the collection of
+     *     orders
      */
-    public Order addOrder(@Nonnull Order order) throws InvalidOrderException, DuplicateKeyException {
+    public Order addOrder(@Nonnull Order order)
+            throws InvalidOrderException, DuplicateKeyException {
         log.debug("OrderController > addOrder(...)");
         if (!order.isValid() || !this.checkOrderValid(order)) {
             throw new InvalidOrderException("Invalid Order");

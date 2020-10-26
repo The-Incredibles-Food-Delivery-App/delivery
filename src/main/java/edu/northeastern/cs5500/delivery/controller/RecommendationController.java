@@ -1,6 +1,5 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.Recommendation;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
@@ -42,7 +41,8 @@ public class RecommendationController {
             addRecommendation(defaultRecommendation1);
             addRecommendation(defaultRecommendation2);
         } catch (Exception e) {
-            log.error("RecommendationController > construct > adding default recommendations > failure?");
+            log.error(
+                    "RecommendationController > construct > adding default recommendations > failure?");
             e.printStackTrace();
         }
     }
@@ -60,7 +60,8 @@ public class RecommendationController {
     }
 
     @Nonnull
-    public Recommendation addRecommendation(@Nonnull Recommendation recommendation) throws Exception {
+    public Recommendation addRecommendation(@Nonnull Recommendation recommendation)
+            throws Exception, DuplicateKeyException {
         log.debug("RecommendationController > addRecommendation(...)");
         if (!recommendation.isValid()) {
             // TODO: replace with a real invalid object exception
@@ -71,8 +72,7 @@ public class RecommendationController {
         ObjectId id = recommendation.getId();
 
         if (id != null && recommendations.get(id) != null) {
-            // TODO: replace with a real duplicate key exception
-            throw new Exception("DuplicateKeyException");
+            throw new DuplicateKeyException("Reccommendation already exists");
         }
 
         return recommendations.add(recommendation);

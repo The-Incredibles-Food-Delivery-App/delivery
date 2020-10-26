@@ -1,8 +1,8 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.Review;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,20 +61,45 @@ public class ReviewController {
         return reviews.getAll();
     }
 
+    /**
+     * Validates the ReviewRating is in the range of valid numbers.
+     *
+     * @return true if this ReviewRating is valid.
+     */
+    public boolean ratingIsValid(@Nonnull Review review) {
+        if (review.getRating() < 0.0 || review.getRating() > 5.0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Validates the timestamp of the review is before the present time. TODO: (maybe) Add check to
+     * see if customer has already submitted order
+     *
+     * @return true if this timestamp is valid.
+     */
+    public boolean timestampIsValid(@Nonnull Review review) {
+        if (review.getTimeStamp().isAfter(LocalDateTime.now())) {
+            return false;
+        }
+        return true;
+    }
+
     @Nonnull
-    public Review addReview(@Nonnull Review review) throws Exception {
+    public Review addReview(@Nonnull Review review)
+            throws InvalidReviewException, DuplicateKeyException {
         log.debug("ReviewController > addReview(...)");
-        if (!review.isValid()) {
+        if (!review.isValid() || !timestampIsValid(review) || !ratingIsValid(review)) {
             // TODO: replace with a real invalid object exception
             // probably not one exception per object type though...
-            throw new Exception("InvalidReviewException");
+            throw new InvalidReviewException("Review is invalid");
         }
 
         ObjectId id = review.getId();
 
         if (id != null && reviews.get(id) != null) {
-            // TODO: replace with a real duplicate key exception
-            throw new Exception("DuplicateKeyException");
+            throw new DuplicateKeyException("Review already exists");
         }
 
         return reviews.add(review);

@@ -37,9 +37,6 @@ public class Order implements Model {
         // && !user.isEmpty() TODO: after user is created
         // user != null
         // Do we check on the restaurantId or that uuid?
-        return restaurantId != null
-                && this.user != null
-                && this.cost != null;
+        return restaurantId != null && this.user != null && this.cost != null;
     }
-
 }
