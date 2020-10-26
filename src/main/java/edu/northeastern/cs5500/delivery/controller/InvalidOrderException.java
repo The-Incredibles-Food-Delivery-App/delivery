@@ -1,4 +1,4 @@
-package edu.northeastern.cs5500.delivery.model;
+package edu.northeastern.cs5500.delivery.controller;
 
 /** Class representing the checked exception that occurs when the given order is invalid */
 public class InvalidOrderException extends Exception {
