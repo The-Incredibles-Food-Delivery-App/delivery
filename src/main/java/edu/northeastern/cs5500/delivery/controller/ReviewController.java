@@ -66,7 +66,7 @@ public class ReviewController {
      *
      * @return true if this ReviewRating is valid.
      */
-    public boolean ratingIsValid(@Nonnull Review review) throws InvalidReviewException {
+    public boolean ratingIsValid(@Nonnull Review review) {
         if (review.getRating() < 0.0 || review.getRating() > 5.0) {
             return false;
         }
@@ -79,7 +79,7 @@ public class ReviewController {
      *
      * @return true if this timestamp is valid.
      */
-    public boolean timestampIsValid(@Nonnull Review review) throws InvalidReviewException {
+    public boolean timestampIsValid(@Nonnull Review review) {
         if (review.getTimeStamp().isAfter(LocalDateTime.now())) {
             return false;
         }
@@ -90,7 +90,7 @@ public class ReviewController {
     public Review addReview(@Nonnull Review review)
             throws InvalidReviewException, DuplicateKeyException {
         log.debug("ReviewController > addReview(...)");
-        if (!review.isValid() || !this.timestampIsValid(review) || !this.ratingIsValid(review)) {
+        if (!review.isValid() || !timestampIsValid(review) || !ratingIsValid(review)) {
             // TODO: replace with a real invalid object exception
             // probably not one exception per object type though...
             throw new InvalidReviewException("Review is invalid");
