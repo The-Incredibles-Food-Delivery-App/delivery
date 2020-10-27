@@ -8,8 +8,10 @@ import org.bson.types.ObjectId;
 
 @Data
 public class CreditCard implements Model{
+  public static final Integer DIGITS_ALLOWED_ON_CARD = 16;
+
   private ObjectId id;
-  private Integer cardNumber;
+  private Long cardNumber;
   private LocalDate expirationDate;
   private String username;
   // TODO: isDefault was on the UML but unsure what this meant
