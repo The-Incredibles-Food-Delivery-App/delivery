@@ -2,12 +2,8 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.CreditCard;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -18,7 +14,7 @@ import org.bson.types.ObjectId;
 @Singleton
 @Slf4j
 public class CreditCardController {
-  private final GenericRepository<CreditCard> creditCards;
+    private final GenericRepository<CreditCard> creditCards;
 
     @Inject
     CreditCardController(GenericRepository<CreditCard> creditCardRepository) {
@@ -33,27 +29,18 @@ public class CreditCardController {
         log.info("CreditCardController > construct > adding default creditCards");
 
         final CreditCard defaultCreditCard1 = new CreditCard();
-        // defaultDelivery1.setDistance(1.25);
-        // Order defaultOrder1 = new Order();
-        // ArrayList<HashMap<String, Integer>> items = new ArrayList<>();
-        // HashMap<String, Integer> item1 = new HashMap<>();
-        // item1.put("Masala dosa", 1);
-        // items.add(item1);
-        // defaultOrder1.setItems(items);
-        // defaultOrder1.setCost(8.99);
-        // defaultOrder1.setOrderTime(LocalDateTime.now());
-        // defaultDelivery1.setOrder(defaultOrder1);
-        // defaultDelivery1.setNotes("Place in the basket on the front porch");
-        // defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
+        defaultCreditCard1.setCardNumber(1234567891234567L);
+        defaultCreditCard1.setExpirationDate(LocalDate.now());
+        defaultCreditCard1.setUsername("Mary Poppins");
 
-        // final Delivery defaultDelivery2 = new Delivery();
-        // defaultDelivery2.setTitle("A steak");
-        // defaultDelivery2.setDescription("Not a hot dog");
-        // defaultDelivery2.setDistance(21.0);
+        final CreditCard defaultCreditCard2 = new CreditCard();
+        defaultCreditCard2.setCardNumber(1234567891234569L);
+        defaultCreditCard2.setExpirationDate(LocalDate.now());
+        defaultCreditCard2.setUsername("Spider Man");
 
         try {
             addCreditCard(defaultCreditCard1);
-            // addDelivery(defaultDelivery2);
+            addCreditCard(defaultCreditCard2);
         } catch (Exception e) {
             log.error("CreditCardController > construct > adding default creditCards > failure?");
             e.printStackTrace();
@@ -73,17 +60,19 @@ public class CreditCardController {
     }
 
     /**
-     * Validates the cardnumber. A valid cardnumber is equal to the valid number of digits allowed in a creditcard than or equal to the maximum allowed
-     * distance
+     * Validates the cardnumber. A valid cardnumber is equal to the valid number of digits allowed
+     * in a creditcard than or equal to the maximum allowed distance
      *
      * @param creditCard - the creditcard to be validated
-     * @throws InvalidCreditCardException if the creditcard number exceeds or is less than the number of allowed digits on a card
+     * @throws InvalidCreditCardException if the creditcard number exceeds or is less than the
+     *     number of allowed digits on a card
      * @return true if the creditcard number is equal to the number of allowed digits
      */
-    public boolean verifyCardNumber(@Nonnull CreditCard creditCard) throws InvalidCreditCardException {
+    public boolean verifyCardNumber(@Nonnull CreditCard creditCard)
+            throws InvalidCreditCardException {
         int digits_on_card = 0;
-        for (int i=0; i< creditCard.getCardNumber(); i++) {
-          digits_on_card++;
+        for (int i = 0; i < creditCard.getCardNumber(); i++) {
+            digits_on_card++;
         }
         if (digits_on_card != CreditCard.DIGITS_ALLOWED_ON_CARD) {
             String message =
@@ -97,27 +86,32 @@ public class CreditCardController {
     }
 
     /**
-     * Validates the credit card's expiration data. A valid expiration date is greater than today's local date
+     * Validates the credit card's expiration data. A valid expiration date is greater than today's
+     * local date
      *
      * @param creditCard - the creditcard to be validated
-     * @throws InvalidCreditCardException if the creditcard's expiration date is prior to todays date
+     * @throws InvalidCreditCardException if the creditcard's expiration date is prior to todays
+     *     date
      * @return true if the creditcard's expiration date is equal to today or later
      */
-    public boolean verifyCardExpirationDate(@Nonnull CreditCard creditCard) throws InvalidCreditCardException {
-      if (creditCard.getExpirationDate().isBefore(LocalDate.now())) {
-          String message =
-                  "Credit card expiration date is before the current day and has thus expired.";
-          throw new InvalidCreditCardException(message);
-      } else {
-          return true;
-      }
-  }
+    public boolean verifyCardExpirationDate(@Nonnull CreditCard creditCard)
+            throws InvalidCreditCardException {
+        if (creditCard.getExpirationDate().isBefore(LocalDate.now())) {
+            String message =
+                    "Credit card expiration date is before the current day and has thus expired.";
+            throw new InvalidCreditCardException(message);
+        } else {
+            return true;
+        }
+    }
 
     @Nonnull
     public CreditCard addCreditCard(@Nonnull CreditCard creditCard)
-            throws DuplicateKeyException, InvalidDeliveryException {
+            throws DuplicateKeyException, InvalidCreditCardException {
         log.debug("CreditCardController > addCreditCard(...)");
-        if (!creditCard.isValid() || !this.verifyCardNumber(creditCard) || !this.verifyCardExpirationDate(creditCard)) {
+        if (!creditCard.isValid()
+                || !this.verifyCardNumber(creditCard)
+                || !this.verifyCardExpirationDate(creditCard)) {
             // TODO: replace with a real invalid object exception
             // probably not one exception per object type though...
             throw new InvalidCreditCardException("Invalid CreditCard");
@@ -141,6 +135,4 @@ public class CreditCardController {
         log.debug("CreditCardController > deleteCreditCard(...)");
         creditCards.delete(id);
     }
-}
-
 }
