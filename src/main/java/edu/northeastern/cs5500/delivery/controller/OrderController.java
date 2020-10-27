@@ -38,6 +38,8 @@ public class OrderController {
         defaultorder1.setItems(items);
         defaultorder1.setCost(8.99);
         defaultorder1.setOrderTime(LocalDateTime.now());
+        ObjectId orderId = new ObjectId();
+        defaultorder1.setId(orderId);
 
         try {
             addOrder(defaultorder1);
