@@ -33,12 +33,16 @@ public class ReviewController {
         defaultReview1.setUsername("Mustafa");
         // TODO: add in a restaurant id per recommendation, but how?
         // defaultReview1.setRestaurantID(1);
+        defaultReview1.setReviewContent("Review content for this default review 1");
+        defaultReview1.setTimeStamp(LocalDateTime.now());
 
         final Review defaultReview2 = new Review();
         defaultReview2.setRating(3.0);
         defaultReview2.setUsername("Danielle");
         // TODO: add in a restaurant id per recommendation, but how?
         // defaultReview2.setRestaurantID(2);
+        defaultReview2.setReviewContent("Review content for this default review 2");
+        defaultReview2.setTimeStamp(LocalDateTime.now());
 
         try {
             addReview(defaultReview1);
@@ -74,8 +78,8 @@ public class ReviewController {
     }
 
     /**
-     * Validates the timestamp of the review is before the present time. TODO: (maybe) Add check to
-     * see if customer has already submitted order
+     * Validates the timestamp of the review is before or equal to the present time. TODO: (maybe)
+     * Add check to see if customer has already submitted order
      *
      * @return true if this timestamp is valid.
      */

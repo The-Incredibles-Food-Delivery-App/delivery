@@ -10,6 +10,7 @@ public class Delivery implements Model {
 
     private ObjectId id;
     private User deliveryDriver;
+    // TODO: Update User to DeliveryDriver?
     private DeliveryStatus deliveryStatus;
     private double distance;
     private Order order;

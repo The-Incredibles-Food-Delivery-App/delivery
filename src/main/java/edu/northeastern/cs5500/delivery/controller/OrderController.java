@@ -82,8 +82,6 @@ public class OrderController {
      * @return true if the order contains at least one item.
      */
     private boolean verifyOrderNonempty(@Nonnull Order order) {
-        // TODO: is this chaining of two methods bad? Should I add a
-        // method isEmpty in the order class iteself?
         if (order.getItems().isEmpty()) {
             return false;
         }
