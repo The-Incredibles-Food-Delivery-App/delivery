@@ -70,10 +70,14 @@ public class CreditCardController {
      */
     public boolean verifyCardNumber(@Nonnull CreditCard creditCard)
             throws InvalidCreditCardException {
+       
         int digits_on_card = 0;
-        for (int i = 0; i < creditCard.getCardNumber(); i++) {
+        long tempCreditCardNumber = creditCard.getCardNumber();
+        while (tempCreditCardNumber > 0) {
             digits_on_card++;
+            tempCreditCardNumber /=10;
         }
+        
         if (digits_on_card != CreditCard.DIGITS_ALLOWED_ON_CARD) {
             String message =
                     "Credit card number is not equal to the allowed"
