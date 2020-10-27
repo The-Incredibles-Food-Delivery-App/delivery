@@ -6,13 +6,22 @@ import org.bson.types.ObjectId;
 
 @Data
 public class Delivery implements Model {
-    private ObjectId id;
-    private String title;
-    private String description;
+    public static final Integer MAXIMUM_DISTANCE = 45;
 
-    /** @return true if this delivery is valid */
+    private ObjectId id;
+    private User deliveryDriver;
+    private DeliveryStatus deliveryStatus;
+    private double distance;
+    private Order order;
+    private String notes;
+
+    /**
+     * Checks that the delivery is valid, a valid delivery has a nonnull order.
+     *
+     * @return true if this delivery is valid
+     */
     @JsonIgnore
     public boolean isValid() {
-        return title != null && !title.isEmpty();
+        return order != null;
     }
 }
