@@ -24,7 +24,7 @@ class DeliveryControllerTest {
                 new DeliveryController(new InMemoryRepository<Delivery>());
 
         for (Delivery delivery : deliveryController.getDeliveries()) {
-            assertWithMessage(delivery.getTitle()).that(delivery.isValid()).isTrue();
+            assertWithMessage(delivery.getNotes()).that(delivery.isValid()).isTrue();
         }
     }
 

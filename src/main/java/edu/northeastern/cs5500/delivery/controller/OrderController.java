@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+
 // import java.util.Collection;
 
 @Singleton
@@ -37,7 +38,6 @@ public class OrderController {
         defaultorder1.setItems(items);
         defaultorder1.setCost(8.99);
         defaultorder1.setOrderTime(LocalDateTime.now());
-        defaultorder1.setDistance(25);
 
         try {
             addOrder(defaultorder1);
@@ -71,30 +71,7 @@ public class OrderController {
     }
 
     private boolean checkOrderValid(@Nonnull Order order) throws InvalidOrderException {
-        return this.verifyOrderNonempty(order)
-                && this.verifyOrderByTime(order)
-                && this.verifyDistance(order);
-    }
-
-    /**
-     * Validates the distance. A valid distance is less than or equal to the maximum allowed
-     * distance
-     *
-     * @param order - the order to be validated
-     * @throws InvalidOrderException if the order exceeds the max delivery distance
-     * @return true if the distance is less than or equal to the max delivery distance.
-     */
-    public boolean verifyDistance(@Nonnull Order order) throws InvalidOrderException {
-        if (order.getDistance() > Order.MAXIMUM_DISTANCE) {
-            String message =
-                    "Distance exceeds maximum allowed delivery distance"
-                            + "Delivery distance cannot exceed"
-                            + Order.MAXIMUM_DISTANCE
-                            + " miles.";
-            throw new InvalidOrderException(message);
-        } else {
-            return true;
-        }
+        return this.verifyOrderNonempty(order) && this.verifyOrderByTime(order);
     }
 
     /**
