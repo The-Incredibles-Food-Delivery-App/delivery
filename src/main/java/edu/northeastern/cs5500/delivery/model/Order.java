@@ -21,8 +21,7 @@ public class Order implements Model {
     // TODO: Is this the correct way to incorporate User?
     private User user;
     private Restaurant restaurant;
-    // TODO: work on payment Model and uncomment this
-    // private CreditCard payment;
+    private CreditCard payment;
 
     /**
      * Validates the order. A valId order has a user, a valid associated restaurant, at least one

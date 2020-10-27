@@ -33,7 +33,7 @@ public class DeliveryController {
         log.info("DeliveryController > construct > adding default deliveries");
 
         final Delivery defaultDelivery1 = new Delivery();
-        defaultDelivery1.setDistance(1.25);
+        defaultDelivery1.setDistance(11.25);
         Order defaultOrder1 = new Order();
         ArrayList<HashMap<String, Integer>> items = new ArrayList<>();
         HashMap<String, Integer> item1 = new HashMap<>();
