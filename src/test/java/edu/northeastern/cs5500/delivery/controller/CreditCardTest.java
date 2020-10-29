@@ -1,7 +1,6 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +37,7 @@ public class CreditCardTest {
         testCreditCard.setCardNumber(1234123412341234L);
         testCreditCard.setExpirationDate(LocalDate.now());
         testCreditCard.setUsername("Jimmy Neutron");
-        testCreditCard.setIsDefault(true);
+        testCreditCard.setIsDefault(false);
 
         // check that the creditcard has been added to the CreditCard repository
         CreditCard addedCreditCard = creditCardController.addCreditCard(testCreditCard);
@@ -49,14 +48,52 @@ public class CreditCardTest {
     }
 
     @Test
-    void testCanReplaceDelivery() {
-        // This test should NOT call register
-        // TODO: implement this test.
+    void testCanReplaceDelivery() throws DuplicateKeyException, InvalidCreditCardException, Exception{
+      CreditCardController creditCardController =
+                new CreditCardController(new InMemoryRepository<CreditCard>());
+
+        // Creates a default creditcard
+        final CreditCard testCreditCard = new CreditCard();
+        testCreditCard.setCardNumber(1234123412341234L);
+        testCreditCard.setExpirationDate(LocalDate.now());
+        testCreditCard.setUsername("Jimmy Neutron");
+        testCreditCard.setIsDefault(false);
+
+        // check that the creditcard has been added to the CreditCard repository
+        CreditCard addedCreditCard = creditCardController.addCreditCard(testCreditCard);
+        // Update the creditcard's field
+        addedCreditCard.setCardNumber(1234123412341235L);
+        creditCardController.updateCreditCard(addedCreditCard);
+
+        assertTrue(addedCreditCard.getCardNumber().equals(1234123412341235L));
+        
     }
 
     @Test
-    void testCanDeleteDelivery() {
-        // This test should NOT call register
-        // TODO: implement this test
+    void testCanDeleteDelivery() throws Exception{
+      CreditCardController creditCardController = new CreditCardController(new InMemoryRepository<CreditCard>());
+        
+      // Creates a default creditcard
+      final CreditCard testCreditCard = new CreditCard();
+      testCreditCard.setCardNumber(1234123412341234L);
+      testCreditCard.setExpirationDate(LocalDate.now());
+      testCreditCard.setUsername("Jimmy Neutron");
+      testCreditCard.setIsDefault(false);
+
+      // check that the creditcard has been added to the CreditCard repository
+      CreditCard addedCreditCard = creditCardController.addCreditCard(testCreditCard);
+
+      // Delete the credit card we just added
+      creditCardController.deleteCreditCard(addedCreditCard.getId());
+
+      // Iterate through the in-memory repo of credit card, and flag is the card was deleted
+      boolean cardIsNotDeleted = false;
+      for (CreditCard creditCard : creditCardController.getCreditCards()) {
+        if (creditCard == addedCreditCard) {
+          cardIsNotDeleted = true;
+          break;
+        }
+      }
+      assertEquals(true, cardIsNotDeleted);
     }
 }
