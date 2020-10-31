@@ -26,8 +26,8 @@ public class UserController {
     // use these to keep track of the models that are
     // registered with UserController
     // TODO: DO WE NEED THESE?
-    private ArrayList<DeliveryDriver> drivers;
-    private ArrayList<Customer> customers;
+    // private ArrayList<DeliveryDriver> drivers;
+    // private ArrayList<Customer> customers;
 
     @Inject
     UserController(GenericRepository<User> userRepository) {
@@ -83,10 +83,10 @@ public class UserController {
         // Adding the Default Driver and Default Customer to an
         // ArrayList of each type --->
         // TODO: DO WE NEED THIS?
-        drivers = new ArrayList<DeliveryDriver>();
-        customers = new ArrayList<Customer>();
-        drivers.add(defaultDeliveryDriver1);
-        customers.add(defaultCustomer1);
+        // drivers = new ArrayList<DeliveryDriver>();
+        // customers = new ArrayList<Customer>();
+        // drivers.add(defaultDeliveryDriver1);
+        // customers.add(defaultCustomer1);
 
         try {
             addUser(defaultDeliveryDriver1);
