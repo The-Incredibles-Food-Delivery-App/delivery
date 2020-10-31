@@ -11,7 +11,7 @@ public abstract class User implements Model {
     private String lastName;
     public String userName;
     private String email;
-    private Integer phoneNumber;
+    private String phoneNumber;
     private String address;
 
     /** @return true if this delivery is valid */
