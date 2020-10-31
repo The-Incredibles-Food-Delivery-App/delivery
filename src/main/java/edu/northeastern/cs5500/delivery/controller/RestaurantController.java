@@ -52,8 +52,6 @@ public class RestaurantController {
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
         defaultRestaurant1.setPendingOrders(null);
-        // TODO??
-        // defaultRestaurant1.setId(id);
         defaultRestaurant1.setPhoneNumber("1234567890");
         defaultRestaurant1.setMenu(menu1);
 

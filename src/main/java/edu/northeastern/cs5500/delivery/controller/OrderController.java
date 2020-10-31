@@ -75,8 +75,6 @@ public class OrderController {
         defaultorder1.setItems(items);
         defaultorder1.setCost(8.99);
         defaultorder1.setOrderTime(LocalDateTime.now());
-        // ObjectId orderId = new ObjectId();
-        // defaultorder1.setId(orderId);
         defaultorder1.setRestaurant(defaultRestaurant1);
         defaultorder1.setUser(defaultCustomer);
 
@@ -168,7 +166,6 @@ public class OrderController {
                                 + " hours of the current time.");
             }
         }
-
         return true;
     }
 
