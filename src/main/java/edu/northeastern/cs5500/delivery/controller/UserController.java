@@ -36,9 +36,9 @@ public class UserController {
         defaultDeliveryDriver1.setPhoneNumber("2245678921");
         defaultDeliveryDriver1.setUserName("Ra_wood");
         defaultDeliveryDriver1.setEmail("ra_wood@hotmail.com");
-        defaultDeliveryDriver1.setCurrentlyWorking(true);
 
         final Customer defaultCustomer1 = new Customer();
+        defaultCustomer1.setFirstName("Sam");
         defaultCustomer1.setLastName("Rockwell");
         defaultCustomer1.setPhoneNumber("8892134567");
         defaultCustomer1.setUserName("sam_rockwell666");

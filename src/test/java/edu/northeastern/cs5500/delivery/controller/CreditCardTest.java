@@ -18,7 +18,7 @@ public class CreditCardTest {
     }
 
     @Test
-    void testRegisterCreatesValidDeliveries() {
+    void testRegisterCreatesValidCreditCards() {
         CreditCardController creditCardController =
                 new CreditCardController(new InMemoryRepository<CreditCard>());
 
@@ -28,7 +28,7 @@ public class CreditCardTest {
     }
 
     @Test
-    void testCanAddDelivery() throws DuplicateKeyException, InvalidCreditCardException {
+    void testCanAddCreditCard() throws DuplicateKeyException, InvalidCreditCardException {
         CreditCardController creditCardController =
                 new CreditCardController(new InMemoryRepository<CreditCard>());
 
@@ -48,7 +48,7 @@ public class CreditCardTest {
     }
 
     @Test
-    void testCanReplaceDelivery()
+    void testCanReplaceCreditCard()
             throws DuplicateKeyException, InvalidCreditCardException, Exception {
         CreditCardController creditCardController =
                 new CreditCardController(new InMemoryRepository<CreditCard>());
@@ -70,7 +70,7 @@ public class CreditCardTest {
     }
 
     @Test
-    void testCanDeleteDelivery() throws Exception {
+    void testCanDeleteCreditCard() throws Exception {
         CreditCardController creditCardController =
                 new CreditCardController(new InMemoryRepository<CreditCard>());
 
