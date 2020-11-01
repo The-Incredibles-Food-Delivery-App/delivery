@@ -4,7 +4,6 @@ import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
-import edu.northeastern.cs5500.delivery.model.User;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -34,21 +33,20 @@ public class OrderController {
 
         log.info("OrderController > construct > adding default orders");
 
-        // create a default restaurant
+        // create the restaurant
         final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Double>> menu1 =
-                new HashMap<String, HashMap<String, Double>>();
-        HashMap<String, Double> dimSumItems = new HashMap<String, Double>();
-        dimSumItems.put("BBQ Pork Bun", 4.99);
-        dimSumItems.put("Shrimp Dumpling", 5.99);
-        dimSumItems.put("Salty Dumpliint with Pork", 4.99);
-        dimSumItems.put("Sesame Ball", 4.99);
+        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
+        HashMap<String, Integer> dimSumItems = new HashMap<>();
+        dimSumItems.put("BBQ Pork Bun", 499);
+        dimSumItems.put("Shrimp Dumpling", 599);
+        dimSumItems.put("Salty Dumpliint with Pork", 499);
+        dimSumItems.put("Sesame Ball", 499);
 
-        HashMap<String, Double> traditionalItems = new HashMap<String, Double>();
-        traditionalItems.put("General Tso's Chicken", 15.95);
-        traditionalItems.put("Mongolian Beef", 19.95);
-        traditionalItems.put("Tripple Delight", 20.95);
-        traditionalItems.put("Honey Walnut Prawn", 19.95);
+        HashMap<String, Integer> traditionalItems = new HashMap<>();
+        traditionalItems.put("General Tso's Chicken", 1595);
+        traditionalItems.put("Mongolian Beef", 1995);
+        traditionalItems.put("Tripple Delight", 2095);
+        traditionalItems.put("Honey Walnut Prawn", 1995);
 
         menu1.put("DimSum Menu", dimSumItems);
         menu1.put("Traditional Menu", traditionalItems);
@@ -58,9 +56,11 @@ public class OrderController {
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
         defaultRestaurant1.setPendingOrders(null);
+        defaultRestaurant1.setPhoneNumber("1234567890");
+        defaultRestaurant1.setMenu(menu1);
 
         // create the Customer
-        User defaultCustomer = new Customer();
+        Customer defaultCustomer = new Customer();
         defaultCustomer.setUserName("catlover11");
         defaultCustomer.setFirstName("Ellie");
         defaultCustomer.setLastName("Gato");
@@ -68,15 +68,14 @@ public class OrderController {
 
         // create the order
         final Order defaultorder1 = new Order();
-        ArrayList<HashMap<String, Integer>> items = new ArrayList<>();
+        HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
         HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("Masala dosa", 1);
-        items.add(item1);
+        item1.put("Pho Small", 1000);
+        items.put(item1, 2);
         defaultorder1.setItems(items);
-        defaultorder1.setCost(8.99);
         defaultorder1.setOrderTime(LocalDateTime.now());
         defaultorder1.setRestaurant(defaultRestaurant1);
-        defaultorder1.setUser(defaultCustomer);
+        defaultorder1.setCustomer(defaultCustomer);
 
         try {
             addOrder(defaultorder1);
@@ -127,11 +126,10 @@ public class OrderController {
             return false;
         }
         // If one item in the order, ensure quantity is at least 1
-        // TODO: we may just want to add this error checking to the Item itself??
         if (order.getItems().size() == 1) {
-            HashMap<String, Integer> item = order.getItems().get(0);
-            for (String itemName : item.keySet()) {
-                if (item.get(itemName) < 1) {
+            HashMap<HashMap<String, Integer>, Integer> items = order.getItems();
+            for (HashMap<String, Integer> item : items.keySet()) {
+                if (items.get(item) < 1) {
                     return false;
                 }
             }

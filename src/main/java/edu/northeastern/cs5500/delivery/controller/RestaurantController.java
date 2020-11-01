@@ -30,19 +30,18 @@ public class RestaurantController {
         log.info("RestaurantController > construct > adding default restaurants");
 
         final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Double>> menu1 =
-                new HashMap<String, HashMap<String, Double>>();
-        HashMap<String, Double> dimSumItems = new HashMap<String, Double>();
-        dimSumItems.put("BBQ Pork Bun", 4.99);
-        dimSumItems.put("Shrimp Dumpling", 5.99);
-        dimSumItems.put("Salty Dumpliint with Pork", 4.99);
-        dimSumItems.put("Sesame Ball", 4.99);
+        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
+        HashMap<String, Integer> dimSumItems = new HashMap<>();
+        dimSumItems.put("BBQ Pork Bun", 499);
+        dimSumItems.put("Shrimp Dumpling", 599);
+        dimSumItems.put("Salty Dumpliint with Pork", 499);
+        dimSumItems.put("Sesame Ball", 499);
 
-        HashMap<String, Double> traditionalItems = new HashMap<String, Double>();
-        traditionalItems.put("General Tso's Chicken", 15.95);
-        traditionalItems.put("Mongolian Beef", 19.95);
-        traditionalItems.put("Tripple Delight", 20.95);
-        traditionalItems.put("Honey Walnut Prawn", 19.95);
+        HashMap<String, Integer> traditionalItems = new HashMap<>();
+        traditionalItems.put("General Tso's Chicken", 1595);
+        traditionalItems.put("Mongolian Beef", 1995);
+        traditionalItems.put("Tripple Delight", 2095);
+        traditionalItems.put("Honey Walnut Prawn", 1995);
 
         menu1.put("DimSum Menu", dimSumItems);
         menu1.put("Traditional Menu", traditionalItems);
@@ -57,13 +56,12 @@ public class RestaurantController {
 
         final Restaurant defaultRestaurant2 = new Restaurant();
 
-        HashMap<String, HashMap<String, Double>> menu2 =
-                new HashMap<String, HashMap<String, Double>>();
-        HashMap<String, Double> items = new HashMap<String, Double>();
-        items.put("Pho Small", 10.00);
-        items.put("Pho Large", 11.00);
-        items.put("Bun Bo Hue", 14.00);
-        items.put("Pho Tron", 11.00);
+        HashMap<String, HashMap<String, Integer>> menu2 = new HashMap<>();
+        HashMap<String, Integer> items = new HashMap<>();
+        items.put("Pho Small", 1000);
+        items.put("Pho Large", 1100);
+        items.put("Bun Bo Hue", 1400);
+        items.put("Pho Tron", 1100);
 
         menu2.put("DimSum Menu", items);
 
@@ -72,8 +70,6 @@ public class RestaurantController {
         defaultRestaurant2.setHours("5-9");
         defaultRestaurant2.setPhoneNumber("7096678546");
         defaultRestaurant2.setMenu(menu2);
-        // TODO??
-        // defaultRestaurant2.setId(id);
 
         try {
             addRestaurant(defaultRestaurant1);

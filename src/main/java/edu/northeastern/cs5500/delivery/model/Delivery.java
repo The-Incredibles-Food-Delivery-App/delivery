@@ -14,6 +14,7 @@ public class Delivery implements Model {
     private double distance;
     private Order order;
     private String notes;
+    private Integer cost;
 
     /**
      * Checks that the delivery is valid, a valid delivery has a nonnull order.
@@ -22,6 +23,6 @@ public class Delivery implements Model {
      */
     @JsonIgnore
     public boolean isValid() {
-        return order != null;
+        return order != null && cost != null;
     }
 }
