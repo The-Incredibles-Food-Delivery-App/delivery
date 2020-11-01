@@ -20,6 +20,16 @@ public class ModelModule {
         return Order.class;
     }
 
+    @Provides
+    public Class<CreditCard> provideCreditCardClass() {
+        return CreditCard.class;
+    }
+
+    @Provides
+    public Class<Review> provideReviewClass() {
+        return Review.class;
+    }
+
     // TODO: do I just make general User or separate Customer/ DeliveryDriver?
     @Provides
     public Class<User> provideUserClass() {
