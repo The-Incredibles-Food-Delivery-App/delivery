@@ -6,10 +6,7 @@ import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.User;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -41,37 +38,19 @@ public class UserController {
 
         log.info("UserController > construct > adding default users");
 
-        final Order defaultorder1 = new Order();
-        ArrayList<HashMap<String, Integer>> items = new ArrayList<>();
-        HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("Masala dosa", 1);
-        items.add(item1);
-        defaultorder1.setItems(items);
-        defaultorder1.setCost(8.99);
-        defaultorder1.setOrderTime(LocalDateTime.now());
-
-        final Order defaultorder2 = new Order();
-        ArrayList<HashMap<String, Integer>> items2 = new ArrayList<>();
-        HashMap<String, Integer> item2 = new HashMap<>();
-        item2.put("Pho Bac", 1);
-        items2.add(item2);
-        defaultorder1.setItems(items2);
-        defaultorder1.setCost(10.99);
-        defaultorder1.setOrderTime(LocalDateTime.now());
-
         final DeliveryDriver defaultDeliveryDriver1 = new DeliveryDriver();
         defaultDeliveryDriver1.setFirstName("Rachel");
         defaultDeliveryDriver1.setLastName("Woods");
         defaultDeliveryDriver1.setPhoneNumber("2245678921");
         defaultDeliveryDriver1.setUserName("Ra_wood");
         defaultDeliveryDriver1.setEmail("ra_wood@hotmail.com");
-        defaultDeliveryDriver1.setCurrentOrder(defaultorder1);
+        // defaultDeliveryDriver1.setCurrentOrder(defaultorder1);
         defaultDeliveryDriver1.setCurrentlyWorking(true);
 
         final Customer defaultCustomer1 = new Customer();
         HashSet<Order> defaultCustomerOrders = new HashSet<>();
-        defaultCustomerOrders.add(defaultorder1);
-        defaultCustomerOrders.add(defaultorder2);
+        // defaultCustomerOrders.add(defaultorder1);
+        // defaultCustomerOrders.add(defaultorder2);
         defaultCustomer1.setFirstName("Sam");
         defaultCustomer1.setLastName("Rockwell");
         defaultCustomer1.setPhoneNumber("8892134567");
