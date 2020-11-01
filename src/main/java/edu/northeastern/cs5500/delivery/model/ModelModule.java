@@ -15,6 +15,11 @@ public class ModelModule {
         return Restaurant.class;
     }
 
+    @Provides
+    public Class<Order> provideOrderClass() {
+        return Order.class;
+    }
+
     // TODO: do I just make general User or separate Customer/ DeliveryDriver?
     @Provides
     public Class<User> provideUserClass() {

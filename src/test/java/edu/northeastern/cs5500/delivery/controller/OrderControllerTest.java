@@ -1,6 +1,7 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.northeastern.cs5500.delivery.model.CuisineType;
@@ -94,9 +95,9 @@ public class OrderControllerTest {
         Order addedOrder = orderController.addOrder(neworder);
         ObjectId addedOrderID = addedOrder.getId();
         Order addedOrderInCollection = orderController.getOrder(addedOrderID);
-        // assertEquals(neworder.getRestaurant(), addedOrderInCollection.getRestaurant());
-        // assertEquals(neworder.getCustomer(), addedOrderInCollection.getCustomer());
-        // assertEquals(neworder.getItems(), addedOrderInCollection.getItems());
+        assertEquals(neworder.getRestaurant(), addedOrderInCollection.getRestaurant());
+        assertEquals(neworder.getCustomer(), addedOrderInCollection.getCustomer());
+        assertEquals(neworder.getItems(), addedOrderInCollection.getItems());
     }
 
     @Test
