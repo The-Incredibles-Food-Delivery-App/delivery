@@ -21,7 +21,7 @@ public class Restaurant implements Model {
     private ArrayList<ArrayList<Order>> pendingOrders;
     // Arraylist for the purposes of breaking down breakfast/lunch/dinner of items with their
     // pricing
-    private HashMap<String, HashMap<String, Double>> menu;
+    private HashMap<String, HashMap<String, Integer>> menu;
 
     /**
      * A valid restuarant should have a name, a phone number, hours, and a menu

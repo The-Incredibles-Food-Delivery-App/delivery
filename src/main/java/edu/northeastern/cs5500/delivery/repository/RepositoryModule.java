@@ -2,12 +2,37 @@ package edu.northeastern.cs5500.delivery.repository;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
+import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
+import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.Restaurant;
 
 @Module
 public class RepositoryModule {
     @Provides
     public GenericRepository<Delivery> provideDeliveryRepository() {
+        return new InMemoryRepository<>();
+    }
+
+    @Provides
+    public GenericRepository<Order> provideOrderRepository() {
+        return new InMemoryRepository<>();
+    }
+
+    // TODO: do I just make general User or separate Customer/ DeliveryDriver?
+    @Provides
+    public GenericRepository<Customer> provideCustomerRepository() {
+        return new InMemoryRepository<>();
+    }
+
+    @Provides
+    public GenericRepository<DeliveryDriver> provideDeliveryDriverRepository() {
+        return new InMemoryRepository<>();
+    }
+
+    @Provides
+    public GenericRepository<Restaurant> provideRestaurantRepository() {
         return new InMemoryRepository<>();
     }
 }

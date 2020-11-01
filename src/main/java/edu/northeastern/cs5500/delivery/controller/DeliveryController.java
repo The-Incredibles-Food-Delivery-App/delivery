@@ -1,11 +1,13 @@
 package edu.northeastern.cs5500.delivery.controller;
 
+import edu.northeastern.cs5500.delivery.model.CuisineType;
+import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
@@ -32,24 +34,54 @@ public class DeliveryController {
 
         log.info("DeliveryController > construct > adding default deliveries");
 
+        // create a default restaurant
+        final Restaurant defaultRestaurant1 = new Restaurant();
+        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
+        HashMap<String, Integer> dimSumItems = new HashMap<>();
+        dimSumItems.put("BBQ Pork Bun", 499);
+        dimSumItems.put("Shrimp Dumpling", 599);
+        dimSumItems.put("Salty Dumpliint with Pork", 499);
+        dimSumItems.put("Sesame Ball", 499);
+
+        HashMap<String, Integer> traditionalItems = new HashMap<>();
+        traditionalItems.put("General Tso's Chicken", 1595);
+        traditionalItems.put("Mongolian Beef", 1995);
+        traditionalItems.put("Tripple Delight", 2095);
+        traditionalItems.put("Honey Walnut Prawn", 1995);
+
+        menu1.put("DimSum Menu", dimSumItems);
+        menu1.put("Traditional Menu", traditionalItems);
+
+        defaultRestaurant1.setRestaurantName("China Harbor");
+        defaultRestaurant1.setAddress("123 Birch Lane");
+        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
+        defaultRestaurant1.setHours("11-5");
+        defaultRestaurant1.setPendingOrders(null);
+        defaultRestaurant1.setPhoneNumber("1234567890");
+        defaultRestaurant1.setMenu(menu1);
+
+        // create the Customer
+        Customer defaultCustomer = new Customer();
+        defaultCustomer.setUserName("catlover11");
+        defaultCustomer.setFirstName("Ellie");
+        defaultCustomer.setLastName("Gato");
+        defaultCustomer.setEmail("gatolover@gmail.com");
+
         final Delivery defaultDelivery1 = new Delivery();
         defaultDelivery1.setDistance(11.25);
-        Order defaultOrder1 = new Order();
-        ArrayList<HashMap<String, Integer>> items = new ArrayList<>();
+        final Order defaultorder1 = new Order();
+        HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
         HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("Masala dosa", 1);
-        items.add(item1);
-        defaultOrder1.setItems(items);
-        defaultOrder1.setCost(8.99);
-        defaultOrder1.setOrderTime(LocalDateTime.now());
-        defaultDelivery1.setOrder(defaultOrder1);
+        item1.put("Pho Small", 1000);
+        items.put(item1, 2);
+        defaultorder1.setItems(items);
+        defaultorder1.setOrderTime(LocalDateTime.now());
+        defaultorder1.setRestaurant(defaultRestaurant1);
+        defaultorder1.setCustomer(defaultCustomer);
+
         defaultDelivery1.setNotes("Place in the basket on the front porch");
         defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
-
-        // final Delivery defaultDelivery2 = new Delivery();
-        // defaultDelivery2.setTitle("A steak");
-        // defaultDelivery2.setDescription("Not a hot dog");
-        // defaultDelivery2.setDistance(21.0);
+        defaultDelivery1.setOrder(defaultorder1);
 
         try {
             addDelivery(defaultDelivery1);
@@ -58,6 +90,26 @@ public class DeliveryController {
             log.error("DeliveryController > construct > adding default deliveries > failure?");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Calculates the total cost of all items in the delivery order
+     *
+     * @param delivery - the given delivery
+     * @return - the total cost of the delivery order
+     */
+    @Nonnull
+    private Integer calculateCost(Delivery delivery) {
+        HashMap<HashMap<String, Integer>, Integer> items = delivery.getOrder().getItems();
+        Integer totalCost = 0;
+
+        // TODO: Is this a good way to go about grabbing the price?
+        for (HashMap<String, Integer> item : items.keySet()) {
+            Integer price = (Integer) item.values().toArray()[0];
+            // Add quantity * price to total cost
+            totalCost += (items.get(item) * price);
+        }
+        return totalCost;
     }
 
     @Nullable
@@ -97,6 +149,11 @@ public class DeliveryController {
     public Delivery addDelivery(@Nonnull Delivery delivery)
             throws DuplicateKeyException, InvalidDeliveryException {
         log.debug("DeliveryController > addDelivery(...)");
+
+        // First compute the total cost
+        Integer cost = calculateCost(delivery);
+        delivery.setCost(cost);
+        // verify delivery is valid
         if (!delivery.isValid() || !verifyDistance(delivery)) {
             // TODO: replace with a real invalid object exception
             // probably not one exception per object type though...
