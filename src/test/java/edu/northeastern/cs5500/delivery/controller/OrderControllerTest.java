@@ -6,19 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
+
 import java.util.HashMap;
 import org.bson.types.ObjectId;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 // import org.junit.jupiter.api.function.Executable;
-
-@TestInstance(Lifecycle.PER_CLASS)
+// @TestInstance(Lifecycle.PER_CLASS)
 public class OrderControllerTest {
     public final Restaurant defaultRestaurant1 = new Restaurant();
     public HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
@@ -27,10 +26,10 @@ public class OrderControllerTest {
     public Customer defaultCustomer = new Customer();
     public Order neworder = new Order();
     public HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
-    public HashMap<String, Integer> item1 = new HashMap<>();
-    public HashMap<String, Integer> item2 = new HashMap<>();
+    public MenuItem item1 = new MenuItem();
+    public MenuItem item2 = new MenuItem();
 
-    @BeforeAll
+    @BeforeEach
     public void init() {
         // create a default restaurant
         dimSumItems.put("BBQ Pork Bun", 499);
@@ -59,13 +58,15 @@ public class OrderControllerTest {
         defaultCustomer.setEmail("gatolover@gmail.com");
 
         // create a valid order with two items
-        HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("General Tso's Chicken", 1595);
-        items.put(item1, 1);
-        HashMap<String, Integer> item2 = new HashMap<>();
-        item1.put("BBQ Pork Bun", 499);
+        item1.setName("General Tso's Chicken");
+        item1.setPrice(1595);
+        item2.setName("Mongolian Beef");
+        item2.setPrice(1999);
+        HashMap<MenuItem, Integer> items = new HashMap<>();
+        items.put(item1, 2);
         items.put(item2, 1);
 
+        
         // complete setup of the new order
         neworder.setItems(items);
         neworder.setCustomer(defaultCustomer);
@@ -95,9 +96,11 @@ public class OrderControllerTest {
         Order addedOrder = orderController.addOrder(neworder);
         ObjectId addedOrderID = addedOrder.getId();
         Order addedOrderInCollection = orderController.getOrder(addedOrderID);
-        assertEquals(neworder.getRestaurant(), addedOrderInCollection.getRestaurant());
-        assertEquals(neworder.getCustomer(), addedOrderInCollection.getCustomer());
-        assertEquals(neworder.getItems(), addedOrderInCollection.getItems());
+        ObjectId addedOrderId = addedOrderInCollection.getId();
+        assertEquals(addedOrderInCollection, orderController.getOrder(addedOrderID));
+        // assertEquals(neworder.getRestaurant(), addedOrderInCollection.getRestaurant());
+        // assertEquals(neworder.getCustomer(), addedOrderInCollection.getCustomer());
+        // assertEquals(neworder.getItems(), addedOrderInCollection.getItems());
     }
 
     @Test
@@ -109,8 +112,9 @@ public class OrderControllerTest {
         ObjectId orderID = addedOrder.getId();
 
         Order orderToUpdate = orderController.getOrder(orderID);
-        HashMap<String, Integer> newItem = new HashMap<>();
-        newItem.put("Shrimp Dumpling", 599);
+        MenuItem newItem = new MenuItem();
+        newItem.setName("Shrimp Dumpling");
+        newItem.setPrice(599);
         orderToUpdate.getItems().put(newItem, 1);
 
         // TODO: how do I update an order??

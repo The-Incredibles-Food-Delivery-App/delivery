@@ -2,6 +2,7 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
@@ -34,6 +35,7 @@ public class OrderController {
         log.info("OrderController > construct > adding default orders");
 
         // create the restaurant
+        // TODO: Update restaurant to use MenuItems instead of a hash map of hash maps
         final Restaurant defaultRestaurant1 = new Restaurant();
         HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
         HashMap<String, Integer> dimSumItems = new HashMap<>();
@@ -66,16 +68,24 @@ public class OrderController {
         defaultCustomer.setLastName("Gato");
         defaultCustomer.setEmail("gatolover@gmail.com");
 
+
+        // create order items
+        HashMap<MenuItem, Integer> items = new HashMap<>();
+        final MenuItem defaultItem1 = new MenuItem();
+        final MenuItem defaultItem2 = new MenuItem();
+        defaultItem1.setName("BBQ Pork Bun");
+        defaultItem1.setPrice(499);
+        defaultItem2.setName("Shrimp Dumpling");
+        defaultItem2.setPrice(599);
+        items.put(defaultItem1, 1);
+        items.put(defaultItem2, 2);
+
         // create the order
         final Order defaultorder1 = new Order();
-        HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
-        HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("Pho Small", 1000);
-        items.put(item1, 2);
-        defaultorder1.setItems(items);
         defaultorder1.setOrderTime(LocalDateTime.now());
         defaultorder1.setRestaurant(defaultRestaurant1);
         defaultorder1.setCustomer(defaultCustomer);
+        defaultorder1.setItems(items);
 
         try {
             addOrder(defaultorder1);
@@ -125,9 +135,10 @@ public class OrderController {
         }
         // If one item in the order, ensure quantity is at least 1
         if (order.getItems().size() == 1) {
-            HashMap<HashMap<String, Integer>, Integer> items = order.getItems();
-            for (HashMap<String, Integer> item : items.keySet()) {
-                if (items.get(item) < 1) {
+            HashMap<MenuItem, Integer> items = order.getItems();
+            for (MenuItem item : items.keySet()) {
+                int quantity = items.get(item);
+                if (quantity < 1) {
                     return false;
                 }
             }
