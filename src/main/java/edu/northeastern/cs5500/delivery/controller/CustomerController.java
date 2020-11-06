@@ -57,7 +57,7 @@ public class CustomerController {
 
     @Nonnull
     public Collection<Customer> getCustomers() {
-        log.debug("DeliveryDriverController > getDrivers()");
+        log.debug("CustomerController > getCustomers()");
         return customers.getAll();
     }
 
