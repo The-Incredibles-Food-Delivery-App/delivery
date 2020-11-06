@@ -83,7 +83,7 @@ public class CustomerController {
         customers.update(customer);
     }
 
-    public void deleteDeliveryDriver(@Nonnull ObjectId id) throws Exception {
+    public void deleteCustomer(@Nonnull ObjectId id) throws Exception {
         log.debug("CustomerController > deleteCustomer(...)");
         customers.delete(id);
     }
