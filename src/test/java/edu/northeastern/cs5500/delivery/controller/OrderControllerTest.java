@@ -1,18 +1,11 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
-import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
-
 import java.util.HashMap;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +59,6 @@ public class OrderControllerTest {
         // items.put(item1, 2);
         // items.put(item2, 1);
 
-        
         // complete setup of the new order
         // neworder.setItems(items);
         // neworder.setCustomer(defaultCustomer);

@@ -8,7 +8,6 @@ import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
@@ -22,10 +21,14 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class DeliveryController {
     private final GenericRepository<Delivery> deliveries;
+    private final MenuItemController menuItemController;
 
     @Inject
-    DeliveryController(GenericRepository<Delivery> deliveryRepository) {
+    DeliveryController(
+            GenericRepository<Delivery> deliveryRepository,
+            MenuItemController menuItemControllerInstance) {
         deliveries = deliveryRepository;
+        menuItemController = menuItemControllerInstance;
 
         log.info("DeliveryController > construct");
 
@@ -71,10 +74,10 @@ public class DeliveryController {
         // create items and order
         final Delivery defaultDelivery1 = new Delivery();
         HashMap<MenuItem, Integer> items = new HashMap<>();
-        final MenuItem defaultItem1 = new MenuItem();             
+        final MenuItem defaultItem1 = new MenuItem();
         final MenuItem defaultItem2 = new MenuItem();
         final Order defaultorder1 = new Order();
-  
+
         defaultItem1.setName("BBQ Pork Bun");
         defaultItem1.setPrice(499);
         items.put(defaultItem1, 1);
@@ -104,13 +107,14 @@ public class DeliveryController {
      */
     @Nonnull
     private Integer calculateCost(Delivery delivery) {
-        HashMap<MenuItem, Integer> items = delivery.getOrder().getItems();
+        HashMap<ObjectId, Integer> items = delivery.getOrder().getItems();
         Integer totalCost = 0;
 
-        for (MenuItem item : items.keySet()) {
+        for (ObjectId id : items.keySet()) {
             // Add quantity * price to total cost
-            int quantity = items.get(item);
-            totalCost += (item.getPrice() * quantity);
+            Integer itemPrice = menuItemController.getMenuItem(id).getPrice();
+            int quantity = items.get(id);
+            totalCost += (itemPrice * quantity);
         }
         return totalCost;
     }

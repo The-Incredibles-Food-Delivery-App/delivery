@@ -12,8 +12,7 @@ public class MenuItem implements Model {
     private ObjectId id;
 
     /**
-     * Checks that the MenuItem is valid, a valid menu item has a nonnull name
-     * and a non null price
+     * Checks that the MenuItem is valid, a valid menu item has a nonnull name and a non null price
      *
      * @return true if this MenuItem is valid
      */
@@ -21,5 +20,4 @@ public class MenuItem implements Model {
     public boolean isValid() {
         return name != null && price != null;
     }
-    
 }

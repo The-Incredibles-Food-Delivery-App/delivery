@@ -30,7 +30,7 @@ public class MenuItemController {
         final MenuItem defaultItem1 = new MenuItem();
         defaultItem1.setName("BBQ Pork Bun");
         defaultItem1.setPrice(499);
-        
+
         final MenuItem defaultItem2 = new MenuItem();
         defaultItem2.setName("Shrimp Dumpling");
         defaultItem2.setPrice(599);
@@ -73,7 +73,7 @@ public class MenuItemController {
      * @param item - the menu item to add
      * @throws InvalidOrderException - when the menu item given is invalid
      * @throws DuplicateKeyException - when the item id is already contained in the collection of
-     * menu items
+     *     menu items
      */
     public MenuItem addMenuItem(@Nonnull MenuItem item)
             throws InvalidObjectException, DuplicateKeyException {
@@ -89,6 +89,4 @@ public class MenuItemController {
         }
         return menuItems.add(item);
     }
-
-    
 }

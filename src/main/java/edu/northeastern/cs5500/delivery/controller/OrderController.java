@@ -24,8 +24,9 @@ public class OrderController {
     private final MenuItemController menuItemController;
 
     @Inject
-    OrderController(GenericRepository<Order> orderRepository,
-                    MenuItemController menuItemControllerInstance) {
+    OrderController(
+            GenericRepository<Order> orderRepository,
+            MenuItemController menuItemControllerInstance) {
         orders = orderRepository;
         menuItemController = menuItemControllerInstance;
 
@@ -71,7 +72,6 @@ public class OrderController {
         defaultCustomer.setLastName("Gato");
         defaultCustomer.setEmail("gatolover@gmail.com");
 
-
         // create order items
         HashMap<ObjectId, Integer> items = new HashMap<>();
         final MenuItem defaultItem1 = new MenuItem();
@@ -86,7 +86,8 @@ public class OrderController {
             items.put(item1Id, 1);
             items.put(item2Id, 2);
         } catch (Exception e) {
-            log.error("OrderController > construct > adding default menu items to order > failure?");
+            log.error(
+                    "OrderController > construct > adding default menu items to order > failure?");
             e.printStackTrace();
         }
 
