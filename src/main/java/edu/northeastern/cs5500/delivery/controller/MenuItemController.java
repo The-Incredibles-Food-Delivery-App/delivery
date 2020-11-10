@@ -19,7 +19,7 @@ public class MenuItemController {
     MenuItemController(GenericRepository<MenuItem> menuItemRepository) {
         menuItems = menuItemRepository;
 
-        log.info("OrderController > construct");
+        log.info("MenuItemController > construct");
 
         if (menuItems.count() > 0) {
             return;
@@ -39,7 +39,7 @@ public class MenuItemController {
             addMenuItem(defaultItem1);
             addMenuItem(defaultItem2);
         } catch (Exception e) {
-            log.error("OrderController > construct > adding default orders > failure?");
+            log.error("MenuItemController > construct > adding default menu items > failure?");
             e.printStackTrace();
         }
     }

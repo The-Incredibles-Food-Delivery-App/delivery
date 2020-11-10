@@ -21,10 +21,13 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class OrderController {
     private final GenericRepository<Order> orders;
+    private final MenuItemController menuItemController;
 
     @Inject
-    OrderController(GenericRepository<Order> orderRepository) {
+    OrderController(GenericRepository<Order> orderRepository,
+                    MenuItemController menuItemControllerInstance) {
         orders = orderRepository;
+        menuItemController = menuItemControllerInstance;
 
         log.info("OrderController > construct");
 
@@ -41,7 +44,7 @@ public class OrderController {
         HashMap<String, Integer> dimSumItems = new HashMap<>();
         dimSumItems.put("BBQ Pork Bun", 499);
         dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpliint with Pork", 499);
+        dimSumItems.put("Salty Dumpling with Pork", 499);
         dimSumItems.put("Sesame Ball", 499);
 
         HashMap<String, Integer> traditionalItems = new HashMap<>();
@@ -70,15 +73,22 @@ public class OrderController {
 
 
         // create order items
-        HashMap<MenuItem, Integer> items = new HashMap<>();
+        HashMap<ObjectId, Integer> items = new HashMap<>();
         final MenuItem defaultItem1 = new MenuItem();
         final MenuItem defaultItem2 = new MenuItem();
         defaultItem1.setName("BBQ Pork Bun");
         defaultItem1.setPrice(499);
         defaultItem2.setName("Shrimp Dumpling");
         defaultItem2.setPrice(599);
-        items.put(defaultItem1, 1);
-        items.put(defaultItem2, 2);
+        try {
+            ObjectId item1Id = menuItemController.addMenuItem(defaultItem1).getId();
+            ObjectId item2Id = menuItemController.addMenuItem(defaultItem2).getId();
+            items.put(item1Id, 1);
+            items.put(item2Id, 2);
+        } catch (Exception e) {
+            log.error("OrderController > construct > adding default menu items to order > failure?");
+            e.printStackTrace();
+        }
 
         // create the order
         final Order defaultorder1 = new Order();
@@ -135,8 +145,8 @@ public class OrderController {
         }
         // If one item in the order, ensure quantity is at least 1
         if (order.getItems().size() == 1) {
-            HashMap<MenuItem, Integer> items = order.getItems();
-            for (MenuItem item : items.keySet()) {
+            HashMap<ObjectId, Integer> items = order.getItems();
+            for (ObjectId item : items.keySet()) {
                 int quantity = items.get(item);
                 if (quantity < 1) {
                     return false;
