@@ -25,7 +25,8 @@ public class MongoDBService implements Service {
         if (databaseURI != null) {
             return databaseURI;
         }
-        return "mongodb://localhost:27017/delivery"; // connect to localhost by default
+        // Local host: "mongodb://localhost:27017/delivery"
+        return "https://incredibles-delivery.herokuapp.com/delivery";
     }
 
     @Getter private MongoDatabase mongoDatabase;

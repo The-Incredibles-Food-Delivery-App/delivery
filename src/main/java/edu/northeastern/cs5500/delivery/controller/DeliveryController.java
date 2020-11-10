@@ -4,10 +4,10 @@ import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
@@ -21,10 +21,14 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class DeliveryController {
     private final GenericRepository<Delivery> deliveries;
+    private final MenuItemController menuItemController;
 
     @Inject
-    DeliveryController(GenericRepository<Delivery> deliveryRepository) {
+    DeliveryController(
+            GenericRepository<Delivery> deliveryRepository,
+            MenuItemController menuItemControllerInstance) {
         deliveries = deliveryRepository;
+        menuItemController = menuItemControllerInstance;
 
         log.info("DeliveryController > construct");
 
@@ -67,20 +71,23 @@ public class DeliveryController {
         defaultCustomer.setLastName("Gato");
         defaultCustomer.setEmail("gatolover@gmail.com");
 
+        // create items and order
         final Delivery defaultDelivery1 = new Delivery();
-        defaultDelivery1.setDistance(11.25);
+        HashMap<MenuItem, Integer> items = new HashMap<>();
+        final MenuItem defaultItem1 = new MenuItem();
+        final MenuItem defaultItem2 = new MenuItem();
         final Order defaultorder1 = new Order();
-        HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
-        HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("Pho Small", 1000);
-        items.put(item1, 2);
-        defaultorder1.setItems(items);
-        defaultorder1.setOrderTime(LocalDateTime.now());
-        defaultorder1.setRestaurant(defaultRestaurant1);
-        defaultorder1.setCustomer(defaultCustomer);
+
+        defaultItem1.setName("BBQ Pork Bun");
+        defaultItem1.setPrice(499);
+        items.put(defaultItem1, 1);
+        defaultItem2.setName("Shrimp Dumpling");
+        defaultItem2.setPrice(599);
+        items.put(defaultItem2, 2);
 
         defaultDelivery1.setNotes("Place in the basket on the front porch");
         defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
+        defaultDelivery1.setDistance(11.25);
         defaultDelivery1.setOrder(defaultorder1);
 
         try {
@@ -100,14 +107,14 @@ public class DeliveryController {
      */
     @Nonnull
     private Integer calculateCost(Delivery delivery) {
-        HashMap<HashMap<String, Integer>, Integer> items = delivery.getOrder().getItems();
+        HashMap<ObjectId, Integer> items = delivery.getOrder().getItems();
         Integer totalCost = 0;
 
-        // TODO: Is this a good way to go about grabbing the price?
-        for (HashMap<String, Integer> item : items.keySet()) {
-            Integer price = (Integer) item.values().toArray()[0];
+        for (ObjectId id : items.keySet()) {
             // Add quantity * price to total cost
-            totalCost += (items.get(item) * price);
+            Integer itemPrice = menuItemController.getMenuItem(id).getPrice();
+            int quantity = items.get(id);
+            totalCost += (itemPrice * quantity);
         }
         return totalCost;
     }

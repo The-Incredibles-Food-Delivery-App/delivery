@@ -12,7 +12,7 @@ public class Order implements Model {
 
     private ObjectId id;
     private String currency;
-    private HashMap<HashMap<String, Integer>, Integer> items;
+    private HashMap<ObjectId, Integer> items;
     private LocalDateTime orderTime;
     private LocalDateTime completionTime;
     private OrderStatus orderStatus;

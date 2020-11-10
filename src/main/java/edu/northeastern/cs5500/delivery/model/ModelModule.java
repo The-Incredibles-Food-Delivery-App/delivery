@@ -37,6 +37,11 @@ public class ModelModule {
     }
 
     @Provides
+    public Class<MenuItem> provvideMenuItemClass() {
+        return MenuItem.class;
+    }
+
+    @Provides
     public Class<Customer> provideCustomerClass() {
         return Customer.class;
     }
