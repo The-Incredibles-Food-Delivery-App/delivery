@@ -16,6 +16,11 @@ public class RepositoryModule {
         return new InMemoryRepository<>();
     }
 
+    @Provides
+    public GenericRepository<MenuItem> provideMenuItemRepository() {
+        return new InMemoryRepository<>();
+    }
+
     // TODO: do I just make general User or separate Customer/ DeliveryDriver?
     @Provides
     public GenericRepository<Customer> provideCustomerRepository() {
@@ -29,11 +34,6 @@ public class RepositoryModule {
 
     @Provides
     public GenericRepository<Restaurant> provideRestaurantRepository() {
-        return new InMemoryRepository<>();
-    }
-
-    @Provides
-    public GenericRepository<MenuItem> provideMenuItemRepository() {
         return new InMemoryRepository<>();
     }
 
