@@ -69,7 +69,8 @@
 //                     creditCard = creditCardController.addCreditCard(creditCard);
 
 //                     response.redirect(
-//                             String.format("/creditcard/{}", creditCard.getId().toHexString()), 301);
+//                             String.format("/creditcard/{}", creditCard.getId().toHexString()),
+// 301);
 //                     return creditCard;
 //                 });
 

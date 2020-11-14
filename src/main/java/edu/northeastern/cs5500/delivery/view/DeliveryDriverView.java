@@ -58,7 +58,8 @@ public class DeliveryDriverView implements View {
                 "/deliverydriver",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
-                    DeliveryDriver deliveryDriver = mapper.readValue(request.body(), DeliveryDriver.class);
+                    DeliveryDriver deliveryDriver =
+                            mapper.readValue(request.body(), DeliveryDriver.class);
                     if (!deliveryDriver.isValid()) {
                         response.status(400);
                         return "";
@@ -69,7 +70,9 @@ public class DeliveryDriverView implements View {
                     deliveryDriver = deliveryDriverController.addDeliveryDriver(deliveryDriver);
 
                     response.redirect(
-                            String.format("/deliverydriver/{}", deliveryDriver.getId().toHexString()), 301);
+                            String.format(
+                                    "/deliverydriver/{}", deliveryDriver.getId().toHexString()),
+                            301);
                     return deliveryDriver;
                 });
 
@@ -77,7 +80,8 @@ public class DeliveryDriverView implements View {
                 "/deliverydriver",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
-                    DeliveryDriver deliveryDriver = mapper.readValue(request.body(), DeliveryDriver.class);
+                    DeliveryDriver deliveryDriver =
+                            mapper.readValue(request.body(), DeliveryDriver.class);
                     if (!deliveryDriver.isValid()) {
                         response.status(400);
                         return "";
@@ -91,7 +95,8 @@ public class DeliveryDriverView implements View {
                 "/deliverydriver",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
-                    DeliveryDriver deliveryDriver = mapper.readValue(request.body(), DeliveryDriver.class);
+                    DeliveryDriver deliveryDriver =
+                            mapper.readValue(request.body(), DeliveryDriver.class);
 
                     deliveryDriverController.deleteDeliveryDriver(deliveryDriver.getId());
                     return deliveryDriver;
