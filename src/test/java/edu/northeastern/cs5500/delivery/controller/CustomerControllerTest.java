@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.northeastern.cs5500.delivery.model.Customer;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
 import java.util.HashMap;
@@ -27,9 +28,9 @@ public class CustomerControllerTest {
     public HashMap<String, Integer> dimSumItems = new HashMap<>();
     public HashMap<String, Integer> traditionalItems = new HashMap<>();
     public Order defaultCustomerOrder = new Order();
-    public HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
-    public HashMap<String, Integer> item1 = new HashMap<>();
-    public HashMap<String, Integer> item2 = new HashMap<>();
+    private HashMap<ObjectId, Integer> defaultOrderItems = new HashMap<>();
+    public MenuItem item1 = new MenuItem();
+    public MenuItem item2 = new MenuItem();
     public HashSet<Order> customerOrderList = new HashSet<>();
 
     @BeforeEach
@@ -41,16 +42,22 @@ public class CustomerControllerTest {
         menu1.put("DimSum Menu", dimSumItems);
         menu1.put("Traditional Menu", traditionalItems);
 
-        // create a valid order with two items
-        HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("General Tso's Chicken", 1595);
-        items.put(item1, 1);
-        HashMap<String, Integer> item2 = new HashMap<>();
-        item1.put("BBQ Pork Bun", 499);
-        items.put(item2, 1);
+        // Menu Item 1
+        item1.setName("General Tso's Chicken");
+        item1.setPrice(1595);
+
+        // Menu Item 2
+        item2.setName("BBQ Pork Bun");
+        item2.setPrice(499);
 
         // complete setup of the new order
-        defaultCustomerOrder.setItems(items);
+        ObjectId item1Id = item1.getId();
+        ObjectId item2Id = item2.getId();
+
+        // complete setup of the new order
+        defaultOrderItems.put(item1Id, 1);
+        defaultOrderItems.put(item2Id, 2);
+        defaultCustomerOrder.setItems(defaultOrderItems);
         customerOrderList.add(defaultCustomerOrder);
 
         // Create a default Customer 1
@@ -79,13 +86,13 @@ public class CustomerControllerTest {
     }
 
     @Test
-    void testRegisterCreatesCustomers() {
+    void testRegisterCreatesCustomers() throws DuplicateKeyException, InvalidUserException {
         CustomerController customerController =
                 new CustomerController(new InMemoryRepository<Customer>());
 
-        // I'm not sure why this controller is empty! I can't get IsNotEmpty()
-        // test to pass :(
         assertThat(customerController.getCustomers()).isEmpty();
+        customerController.addCustomer(defaultCustomer1);
+        assertThat(customerController.getCustomers()).isNotEmpty();
     }
 
     @Test
@@ -124,12 +131,15 @@ public class CustomerControllerTest {
 
         Customer customerToUpdate = customerController.getCustomer(addedCustomerId);
 
-        HashMap<String, Integer> item1 = new HashMap<>();
-        item1.put("General Tso's Chicken", 1595);
-        items.put(item1, 2);
+        // Set a new menu item for the customer
+        MenuItem item1 = new MenuItem();
+        item1.setName("Kung Pao Chicken");
+        item1.setPrice(1695);
+        ObjectId item1Id = item1.getId();
 
         // complete setup of the new order
-        defaultCustomerOrder.setItems(items);
+        defaultOrderItems.put(item1Id, 1);
+        defaultCustomerOrder.setItems(defaultOrderItems);
         customerOrderList.add(defaultCustomerOrder);
         customerToUpdate.setOrders(customerOrderList);
 
