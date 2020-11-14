@@ -45,7 +45,8 @@
 //                     final String paramId = request.params(":id");
 //                     log.debug("/recommendation/:id<{}>", paramId);
 //                     final ObjectId id = new ObjectId(paramId);
-//                     Recommendation recommendation = recommendationController.getRecommendation(id);
+//                     Recommendation recommendation =
+// recommendationController.getRecommendation(id);
 //                     if (recommendation == null) {
 //                         halt(404);
 //                     }
@@ -58,7 +59,8 @@
 //                 "/recommendation",
 //                 (request, response) -> {
 //                     ObjectMapper mapper = new ObjectMapper();
-//                     Recommendation recommendation = mapper.readValue(request.body(), Recommendation.class);
+//                     Recommendation recommendation = mapper.readValue(request.body(),
+// Recommendation.class);
 //                     if (!recommendation.isValid()) {
 //                         response.status(400);
 //                         return "";
@@ -69,7 +71,8 @@
 //                     recommendation = recommendationController.addRecommendation(recommendation);
 
 //                     response.redirect(
-//                             String.format("/recommendation/{}", recommendation.getId().toHexString()), 301);
+//                             String.format("/recommendation/{}",
+// recommendation.getId().toHexString()), 301);
 //                     return recommendation;
 //                 });
 
@@ -77,7 +80,8 @@
 //                 "/recommendation",
 //                 (request, response) -> {
 //                     ObjectMapper mapper = new ObjectMapper();
-//                     Recommendation recommendation = mapper.readValue(request.body(), Recommendation.class);
+//                     Recommendation recommendation = mapper.readValue(request.body(),
+// Recommendation.class);
 //                     if (!recommendation.isValid()) {
 //                         response.status(400);
 //                         return "";
@@ -91,7 +95,8 @@
 //                 "/recommendation",
 //                 (request, response) -> {
 //                     ObjectMapper mapper = new ObjectMapper();
-//                     Recommendation recommendation = mapper.readValue(request.body(), Recommendation.class);
+//                     Recommendation recommendation = mapper.readValue(request.body(),
+// Recommendation.class);
 
 //                     recommendationController.deleteRecommendation(recommendation.getId());
 //                     return recommendation;
