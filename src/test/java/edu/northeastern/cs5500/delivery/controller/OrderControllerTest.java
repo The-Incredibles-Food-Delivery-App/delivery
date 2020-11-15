@@ -1,23 +1,21 @@
 package edu.northeastern.cs5500.delivery.controller;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class OrderControllerTest {
     public final Restaurant defaultRestaurant = new Restaurant();
@@ -38,7 +36,7 @@ public class OrderControllerTest {
     public void setup() {
         menuItemController = new MenuItemController(new InMemoryRepository<MenuItem>());
         orderController = new OrderController(new InMemoryRepository<Order>(), menuItemController);
-        
+
         // create a default restaurant
         dimSumItems.put("BBQ Pork Bun", 499);
         dimSumItems.put("Shrimp Dumpling", 599);
@@ -91,6 +89,11 @@ public class OrderControllerTest {
     }
 
     @Test
+    void testRegisterGetOrders() {
+        assertEquals(orderController.getOrders().size(), 1);
+    }
+
+    @Test
     void testCanAddOrderValidOrder() throws DuplicateKeyException, InvalidOrderException {
         assertTrue(neworder.isValid());
         assertTrue(neworder.getCurrency() == null);
@@ -102,7 +105,7 @@ public class OrderControllerTest {
         assertEquals(addedOrderInCollection, neworder);
     }
 
-	@Test
+    @Test
     void testCanUpdateOrder() throws Exception {
         // add new order
         Order addedOrder = orderController.addOrder(neworder);
@@ -138,9 +141,11 @@ public class OrderControllerTest {
     void testInvalidOrderNoCustomer() throws DuplicateKeyException, InvalidOrderException {
         // make an invalid order and try to add it
         neworder.setCustomer(null);
-        assertThrows(InvalidOrderException.class, () -> {
-            orderController.addOrder(neworder);
-          });
+        assertThrows(
+                InvalidOrderException.class,
+                () -> {
+                    orderController.addOrder(neworder);
+                });
     }
 
     @Test
@@ -148,9 +153,11 @@ public class OrderControllerTest {
         // make an invalid order and try to add it
         HashMap<ObjectId, Integer> emptyItems = new HashMap<>();
         neworder.setItems(emptyItems);
-        assertThrows(InvalidOrderException.class, () -> {
-            orderController.addOrder(neworder);
-          });
+        assertThrows(
+                InvalidOrderException.class,
+                () -> {
+                    orderController.addOrder(neworder);
+                });
     }
 
     @Test
@@ -160,25 +167,31 @@ public class OrderControllerTest {
         itemsWithZeroQuantity.put(item1Id, 0);
         itemsWithZeroQuantity.put(item2Id, 0);
         neworder.setItems(itemsWithZeroQuantity);
-        assertThrows(InvalidOrderException.class, () -> {
-            orderController.addOrder(neworder);
-          });
+        assertThrows(
+                InvalidOrderException.class,
+                () -> {
+                    orderController.addOrder(neworder);
+                });
     }
 
     @Test
     void testInvalidOrderTime() throws DuplicateKeyException, InvalidOrderException {
         // make an invalid order and try to add it
         LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime orderByInvalid = 
-            LocalDateTime.of(currentTime.getYear(), currentTime.getMonthValue(), 
-                             currentTime.getDayOfMonth(), 
-                             currentTime.getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV + 1, 
-                             currentTime.getMinute(), currentTime.getSecond());
+        LocalDateTime orderByInvalid =
+                LocalDateTime.of(
+                        currentTime.getYear(),
+                        currentTime.getMonthValue(),
+                        currentTime.getDayOfMonth(),
+                        currentTime.getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV + 1,
+                        currentTime.getMinute(),
+                        currentTime.getSecond());
 
         neworder.setOrderBy(orderByInvalid);
-        assertThrows(InvalidOrderException.class, () -> {
-            orderController.addOrder(neworder);
-          });
+        assertThrows(
+                InvalidOrderException.class,
+                () -> {
+                    orderController.addOrder(neworder);
+                });
     }
-
 }
