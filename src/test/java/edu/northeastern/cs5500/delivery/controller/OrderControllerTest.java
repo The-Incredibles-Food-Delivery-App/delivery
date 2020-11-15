@@ -95,14 +95,25 @@ public class OrderControllerTest {
 
     @Test
     void testCanAddOrderValidOrder() throws DuplicateKeyException, InvalidOrderException {
-        assertTrue(neworder.isValid());
-        assertTrue(neworder.getCurrency() == null);
         Order addedOrder = orderController.addOrder(neworder);
         // check that the order has been added to the Order repository
         ObjectId addedOrderId = addedOrder.getId();
         neworder.setId(addedOrderId);
         Order addedOrderInCollection = orderController.getOrder(addedOrderId);
         assertEquals(addedOrderInCollection, neworder);
+    }
+
+    @Test
+    void testAddOrderDuplicateKey() throws DuplicateKeyException, InvalidOrderException {
+        Order addedOrder = orderController.addOrder(neworder);
+        // try adding the order again
+        ObjectId addedOrderId = addedOrder.getId();
+        neworder.setId(addedOrderId);
+        assertThrows(
+            DuplicateKeyException.class,
+            () -> {
+                orderController.addOrder(neworder);
+            });
     }
 
     @Test
