@@ -3,41 +3,174 @@
  */
 package edu.northeastern.cs5500.delivery.controller;
 
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import edu.northeastern.cs5500.delivery.model.Customer;
+import edu.northeastern.cs5500.delivery.model.Delivery;
+import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
+import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import org.bson.types.ObjectId;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DeliveryControllerTest {
+    public Customer defaultCustomer;
+    public DeliveryDriver defaultDeliveryDriver;
+    public Order defaultOrder;
+    public MenuItem item1;
+    public ObjectId item1Id;
+    public MenuItem item2;
+    public ObjectId item2Id;
+    public MenuItem item3;
+    public ObjectId item3Id;
+    HashMap<ObjectId, Integer> items = new HashMap<>();
+    public MenuItemController menuItemController;
+    public DeliveryController deliveryController;
+    public Delivery newDelivery;
+
+    @BeforeEach
+    public void setup() {
+        menuItemController = new MenuItemController(new InMemoryRepository<MenuItem>());
+        deliveryController =
+                new DeliveryController(new InMemoryRepository<Delivery>(), menuItemController);
+        defaultCustomer = new Customer();
+        defaultDeliveryDriver = new DeliveryDriver();
+        defaultOrder = new Order();
+        item1 = new MenuItem();
+        item2 = new MenuItem();
+        item3 = new MenuItem();
+        newDelivery = new Delivery();
+
+        // create a Customer
+        defaultCustomer.setUserName("doglover26");
+        defaultCustomer.setFirstName("Sanket");
+        defaultCustomer.setLastName("Tekans");
+        defaultCustomer.setEmail("dogsrock@gmail.com");
+
+        // create delivery driver
+        defaultDeliveryDriver.setUserName("BobTheDriver");
+        defaultDeliveryDriver.setCurrentlyWorking(true);
+
+        // create a valid order with three items
+        item1.setName("Kimchi Soup");
+        item1.setPrice(999);
+        item2.setName("Bulgogi Beef");
+        item2.setPrice(1299);
+        item3.setName("Red Bean Mochi Cake");
+        item3.setPrice(325);
+        try {
+            item1Id = menuItemController.addMenuItem(item1).getId();
+            item2Id = menuItemController.addMenuItem(item2).getId();
+            item3Id = menuItemController.addMenuItem(item3).getId();
+            items.put(item1Id, 1);
+            items.put(item2Id, 1);
+            items.put(item3Id, 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        defaultOrder.setItems(items);
+        defaultOrder.setCustomer(defaultCustomer);
+
+        // complete setup of the new delivery
+        defaultDeliveryDriver.setCurrentOrder(defaultOrder);
+        newDelivery.setDistance(33.5);
+        newDelivery.setOrder(defaultOrder);
+        newDelivery.setDeliveryDriver(defaultDeliveryDriver);
+    }
+
     @Test
     void testRegisterCreatesDeliveries() {
-        //     DeliveryController deliveryController =
-        //             new DeliveryController(new InMemoryRepository<Delivery>());
-        //     assertThat(deliveryController.getDeliveries()).isNotEmpty();
+        assertThat(deliveryController.getDeliveries()).isNotEmpty();
     }
 
     @Test
     void testRegisterCreatesValidDeliveries() {
-        // DeliveryController deliveryController =
-        //         new DeliveryController(new InMemoryRepository<Delivery>());
-
-        // for (Delivery delivery : deliveryController.getDeliveries()) {
-        //     assertWithMessage(delivery.getNotes()).that(delivery.isValid()).isTrue();
-        // }
+        for (Delivery delivery : deliveryController.getDeliveries()) {
+            assertWithMessage(delivery.getNotes()).that(delivery.isValid()).isTrue();
+        }
     }
 
     @Test
-    void testCanAddDelivery() {
-        // This test should NOT call register
-        // TODO: implement this test.
+    void testCanAddDelivery() throws InvalidDeliveryException, DuplicateKeyException {
+        Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
+        // check that the delivery has been added to the Delivery repository
+        ObjectId addedDeliveryId = addedDelivery.getId();
+        newDelivery.setId(addedDeliveryId);
+        Delivery addedDeliveryInCollection = deliveryController.getDelivery(addedDeliveryId);
+        assertEquals(addedDeliveryInCollection, newDelivery);
     }
 
     @Test
-    void testCanReplaceDelivery() {
-        // This test should NOT call register
-        // TODO: implement this test.
+    void testCalculateCost() throws DuplicateKeyException, InvalidDeliveryException {
+        Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
+        ObjectId addedDeliveryId = addedDelivery.getId();
+        newDelivery.setId(addedDeliveryId);
+        Delivery addedDeliveryInCollection = deliveryController.getDelivery(addedDeliveryId);
+        assertEquals(addedDeliveryInCollection.getCost(), (Integer) 2948);
     }
 
     @Test
-    void testCanDeleteDelivery() {
-        // This test should NOT call register
-        // TODO: implement this test
+    void testCanUpdateDelivery() throws Exception {
+        Delivery deliveryToUpdate = deliveryController.addDelivery(newDelivery);
+        // check that the order has been added to the Order repository
+        ObjectId deliveryId = deliveryToUpdate.getId();
+        LocalDateTime deliveryCompletionTime = LocalDateTime.of(2021, 7, 7, 7, 11, 0);
+        deliveryToUpdate.setCompletionTime(deliveryCompletionTime);
+        deliveryController.updateDelivery(deliveryToUpdate);
+        assertEquals(
+                deliveryController.getDelivery(deliveryId).getCompletionTime(),
+                deliveryCompletionTime);
+    }
+
+    @Test
+    void testCanDeleteDelivery() throws Exception {
+        Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
+        ObjectId addedDeliveryId = addedDelivery.getId();
+        newDelivery.setId(addedDeliveryId);
+        deliveryController.deleteDelivery(addedDeliveryId);
+        assertEquals(deliveryController.getDelivery(addedDeliveryId), null);
+    }
+
+    @Test
+    void testAddInvalidDeliveryExceedsMaxDistance() 
+        throws InvalidDeliveryException, DuplicateKeyException {
+        newDelivery.setDistance(Delivery.MAXIMUM_DISTANCE + 0.001);
+        assertThrows(
+                InvalidDeliveryException.class,
+                () -> {
+                    deliveryController.addDelivery(newDelivery);
+                });
+    }
+
+    @Test
+    void testAddInvalidDeliveryNegativeDistance() 
+        throws InvalidDeliveryException, DuplicateKeyException {
+        newDelivery.setDistance(-0.001);
+        assertThrows(
+                InvalidDeliveryException.class,
+                () -> {
+                    deliveryController.addDelivery(newDelivery);
+                });
+    }
+
+    @Test
+    void testAddDuplicateDelivery() 
+        throws InvalidDeliveryException, DuplicateKeyException {
+        Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
+        ObjectId addedDeliveryId = addedDelivery.getId();
+        newDelivery.setId(addedDeliveryId);
+        assertThrows(
+                DuplicateKeyException.class,
+                () -> {
+                    deliveryController.addDelivery(newDelivery);
+                });
     }
 }
