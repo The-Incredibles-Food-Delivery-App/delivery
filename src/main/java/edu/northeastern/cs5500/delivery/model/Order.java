@@ -13,10 +13,8 @@ public class Order implements Model {
     private ObjectId id;
     private String currency;
     private HashMap<ObjectId, Integer> items;
-    private LocalDateTime orderTime;
-    private LocalDateTime completionTime;
     private OrderStatus orderStatus;
-    private LocalDateTime orderBy;
+    private LocalDateTime orderTime;
     private Customer customer;
     private Restaurant restaurant;
     private CreditCard payment;

@@ -166,13 +166,13 @@ public class OrderController {
      */
     private boolean verifyOrderByTime(@Nonnull Order order) throws InvalidOrderException {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
-        // QUESTION: Do we want to throw an exception if set in the past?
-        // QUESTION: Is this method chaining bad?
-        if (order.getOrderBy() == null || order.getOrderBy().isBefore(LocalDateTime.now())) {
-            order.setOrderBy(LocalDateTime.now());
+        // TODO: Do we want to throw an exception if set in the past?
+        // TODO: Is this method chaining bad?
+        if (order.getOrderTime() == null || order.getOrderTime().isBefore(LocalDateTime.now())) {
+            order.setOrderTime(LocalDateTime.now());
         }
         // if orderBy data/time is set too far in advance, throw an exception
-        LocalDateTime orderBy = order.getOrderBy();
+        LocalDateTime orderBy = order.getOrderTime();
         if (orderBy.isAfter(LocalDateTime.now())) {
             if (orderBy.getDayOfYear() != LocalDateTime.now().getDayOfYear()
                     || orderBy.getHour()
