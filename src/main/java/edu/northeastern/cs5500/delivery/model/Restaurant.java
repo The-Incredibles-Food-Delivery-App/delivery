@@ -1,7 +1,6 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
 import java.util.HashMap;
 import lombok.Data;
 import org.bson.types.ObjectId;
@@ -9,8 +8,6 @@ import org.bson.types.ObjectId;
 // @ Data annotation creates a constructor, getters, and setters
 @Data
 public class Restaurant implements Model {
-    // Maximum distance a restaurant will send food out?
-    // private static final Double MAX_DISTANCE = 5.0;
     private String restaurantName;
     private String website;
     private ObjectId id;
@@ -18,13 +15,11 @@ public class Restaurant implements Model {
     private String address;
     private CuisineType cuisineType;
     private String hours;
-    private ArrayList<ArrayList<Order>> pendingOrders;
-    // Arraylist for the purposes of breaking down breakfast/lunch/dinner of items with their
-    // pricing
-    private HashMap<String, HashMap<String, Integer>> menu;
+    // key is the id of the menu item, value is the menu item object itself
+    private HashMap<String, MenuItem> menuItems;
 
     /**
-     * A valid restuarant should have a name, a phone number, hours, and a menu
+     * A valid restuarant should have a name, a phone number, address, hours, and a menu
      *
      * @return true if this is a valid Restaurant
      */
@@ -33,7 +28,8 @@ public class Restaurant implements Model {
         return restaurantName != null
                 && phoneNumber != null
                 && address != null
-                && menu != null
+                && menuItems != null
                 && hours != null;
     }
 }
+
