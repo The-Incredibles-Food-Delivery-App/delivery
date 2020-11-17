@@ -61,9 +61,8 @@ public class OrderController {
         defaultRestaurant1.setAddress("123 Birch Lane");
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPendingOrders(null);
         defaultRestaurant1.setPhoneNumber("1234567890");
-        defaultRestaurant1.setMenu(menu1);
+
 
         // create the Customer
         Customer defaultCustomer = new Customer();
