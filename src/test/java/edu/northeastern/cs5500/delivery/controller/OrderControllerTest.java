@@ -5,7 +5,6 @@ import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
-import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +12,6 @@ import org.junit.jupiter.api.Test;
 // @TestInstance(Lifecycle.PER_CLASS)
 public class OrderControllerTest {
     public final Restaurant defaultRestaurant1 = new Restaurant();
-    public HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
-    public HashMap<String, Integer> dimSumItems = new HashMap<>();
-    public HashMap<String, Integer> traditionalItems = new HashMap<>();
     public Customer defaultCustomer = new Customer();
     public Order neworder = new Order();
     // public HashMap<HashMap<String, Integer>, Integer> items = new HashMap<>();
@@ -25,24 +21,11 @@ public class OrderControllerTest {
     @BeforeEach
     public void init() {
         // create a default restaurant
-        dimSumItems.put("BBQ Pork Bun", 499);
-        dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpling with Pork", 499);
-        dimSumItems.put("Sesame Ball", 499);
-
-        traditionalItems.put("General Tso's Chicken", 1595);
-        traditionalItems.put("Mongolian Beef", 1995);
-        traditionalItems.put("Tripple Delight", 2095);
-        traditionalItems.put("Honey Walnut Prawn", 1995);
-
-        menu1.put("DimSum Menu", dimSumItems);
-        menu1.put("Traditional Menu", traditionalItems);
 
         defaultRestaurant1.setRestaurantName("China Harbor");
         defaultRestaurant1.setAddress("123 Birch Lane");
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPendingOrders(null);
 
         // create a Customer
         defaultCustomer.setUserName("catlover11");
