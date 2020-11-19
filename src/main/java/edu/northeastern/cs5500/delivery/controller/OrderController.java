@@ -15,8 +15,6 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 
-// import java.util.Collection;
-
 @Singleton
 @Slf4j
 public class OrderController {
@@ -126,17 +124,18 @@ public class OrderController {
         if (order.getItems().isEmpty()) {
             return false;
         }
-        // If one item in the order, ensure quantity is at least 1
-        if (order.getItems().size() == 1) {
-            HashMap<ObjectId, Integer> items = order.getItems();
-            for (ObjectId item : items.keySet()) {
-                int quantity = items.get(item);
-                if (quantity < 1) {
-                    return false;
-                }
-            }
+        // ensure we have at least one item with quantity > 0
+        HashMap<ObjectId, Integer> items = order.getItems();
+        int totalItemCount = 0;
+        for (ObjectId item : items.keySet()) {
+            int itemQuantity = items.get(item);
+            totalItemCount += itemQuantity;
         }
-        return true;
+        if (totalItemCount > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

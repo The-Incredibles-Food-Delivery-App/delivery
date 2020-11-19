@@ -16,9 +16,10 @@ plugins {
 
     // Spotless to format code easily
     id "com.diffplug.gradle.spotless" version "3.27.1"
-
+    
     // jacoco test coverage report
     id "jacoco"
+
 }
 
 repositories {
@@ -68,6 +69,11 @@ application {
 test {
     // Use junit platform for unit tests
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
 // Heroku will run the 'stage' task on deployment via git
