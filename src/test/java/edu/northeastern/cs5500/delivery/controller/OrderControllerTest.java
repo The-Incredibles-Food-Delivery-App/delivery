@@ -193,7 +193,7 @@ public class OrderControllerTest {
                         currentTime.getYear(),
                         currentTime.getMonthValue(),
                         currentTime.getDayOfMonth(),
-                        currentTime.getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV + 1,
+                        currentTime.getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV + 5,
                         currentTime.getMinute(),
                         currentTime.getSecond());
 
