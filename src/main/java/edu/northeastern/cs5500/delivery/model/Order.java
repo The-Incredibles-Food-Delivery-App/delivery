@@ -28,6 +28,6 @@ public class Order implements Model {
     @JsonIgnore
     public boolean isValid() {
         // TODO: Do we check on the restaurantId instead? Should we check cost is not null?
-        return restaurant != null && this.customer != null;
+        return this.customer != null;
     }
 }

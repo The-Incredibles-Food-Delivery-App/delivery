@@ -26,7 +26,8 @@ public class MongoDBService implements Service {
             return databaseURI;
         }
         // Local host: "mongodb://localhost:27017/delivery"
-        return "https://incredibles-delivery.herokuapp.com/delivery";
+        // DB: "https://incredibles-delivery.herokuapp.com/delivery"
+        return "mongodb://localhost:27017/delivery";
     }
 
     @Getter private MongoDatabase mongoDatabase;

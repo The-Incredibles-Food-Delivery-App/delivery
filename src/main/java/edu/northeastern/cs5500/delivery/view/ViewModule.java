@@ -14,6 +14,12 @@ public class ViewModule {
 
     @Provides
     @IntoSet
+    public View provideOrderView(OrderView orderView) {
+        return orderView;
+    }
+
+    @Provides
+    @IntoSet
     public View provideStatusView(StatusView statusView) {
         return statusView;
     }
