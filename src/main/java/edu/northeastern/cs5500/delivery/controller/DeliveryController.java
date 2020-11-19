@@ -36,16 +36,6 @@ public class DeliveryController {
 
         log.info("DeliveryController > construct > adding default deliveries");
 
-
-        // create a default restaurant
-        final Restaurant defaultRestaurant1 = new Restaurant();
-
-        defaultRestaurant1.setRestaurantName("China Harbor");
-        defaultRestaurant1.setAddress("123 Birch Lane");
-        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
-        defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPhoneNumber("1234567890");
-
         // create items and order
         final Delivery defaultDelivery1 = new Delivery();
         HashMap<ObjectId, Integer> items = new HashMap<>();
@@ -138,8 +128,7 @@ public class DeliveryController {
                             + Delivery.MAXIMUM_DISTANCE
                             + " miles.";
             throw new InvalidDeliveryException(message);
-        }
-        else if (delivery.getDistance() < 0) {
+        } else if (delivery.getDistance() < 0) {
             throw new InvalidDeliveryException("Delivery distance must be nonnegative");
         } else {
             return true;

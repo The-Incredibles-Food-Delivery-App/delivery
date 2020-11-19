@@ -38,12 +38,6 @@ public class OrderControllerTest {
         orderController = new OrderController(new InMemoryRepository<Order>(), menuItemController);
 
         // create a default restaurant
-<<<<<<< HEAD
-        defaultRestaurant1.setRestaurantName("China Harbor");
-        defaultRestaurant1.setAddress("123 Birch Lane");
-        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
-        defaultRestaurant1.setHours("11-5");
-=======
         dimSumItems.put("BBQ Pork Bun", 499);
         dimSumItems.put("Shrimp Dumpling", 599);
         dimSumItems.put("Salty Dumpling with Pork", 499);
@@ -54,8 +48,6 @@ public class OrderControllerTest {
         defaultRestaurant.setAddress("1st Avenue");
         defaultRestaurant.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant.setHours("11-9");
-        defaultRestaurant.setPendingOrders(null);
->>>>>>> e19155261c9ae80e07518a08643d3971464471c3
 
         // create a Customer
         defaultCustomer.setUserName("catlover11");
@@ -117,10 +109,10 @@ public class OrderControllerTest {
         ObjectId addedOrderId = addedOrder.getId();
         neworder.setId(addedOrderId);
         assertThrows(
-            DuplicateKeyException.class,
-            () -> {
-                orderController.addOrder(neworder);
-            });
+                DuplicateKeyException.class,
+                () -> {
+                    orderController.addOrder(neworder);
+                });
     }
 
     @Test
@@ -205,7 +197,7 @@ public class OrderControllerTest {
                         currentTime.getMinute(),
                         currentTime.getSecond());
 
-        neworder.setOrderBy(orderByInvalid);
+        neworder.setOrderTime(orderByInvalid);
         assertThrows(
                 InvalidOrderException.class,
                 () -> {
