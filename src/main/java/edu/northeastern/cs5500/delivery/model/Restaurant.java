@@ -19,9 +19,10 @@ public class Restaurant implements Model {
     private HashMap<String, MenuItem> menuItems;
 
     /**
-     * A valid restuarant should have a name, a phone number, address, hours, and a menu
+     * A valid restuarant has a name, a phone number, address, hours, and a menu filled with menu
+     * items
      *
-     * @return true if this is a valid Restaurant
+     * @return true if this is a valid Restaurant, false otherwise
      */
     @JsonIgnore
     public boolean isValid() {
