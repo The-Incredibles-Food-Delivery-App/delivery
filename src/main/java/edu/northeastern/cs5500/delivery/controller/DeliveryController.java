@@ -128,8 +128,7 @@ public class DeliveryController {
                             + Delivery.MAXIMUM_DISTANCE
                             + " miles.";
             throw new InvalidDeliveryException(message);
-        }
-        else if (delivery.getDistance() < 0) {
+        } else if (delivery.getDistance() < 0) {
             throw new InvalidDeliveryException("Delivery distance must be nonnegative");
         } else {
             return true;

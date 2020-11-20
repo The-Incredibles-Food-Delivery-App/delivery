@@ -2,6 +2,7 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import com.mongodb.lang.Nullable;
 import edu.northeastern.cs5500.delivery.model.CuisineType;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
@@ -28,56 +29,7 @@ public class RestaurantController {
         }
 
         log.info("RestaurantController > construct > adding default restaurants");
-
-        final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
-        HashMap<String, Integer> dimSumItems = new HashMap<>();
-        dimSumItems.put("BBQ Pork Bun", 499);
-        dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpliint with Pork", 499);
-        dimSumItems.put("Sesame Ball", 499);
-
-        HashMap<String, Integer> traditionalItems = new HashMap<>();
-        traditionalItems.put("General Tso's Chicken", 1595);
-        traditionalItems.put("Mongolian Beef", 1995);
-        traditionalItems.put("Tripple Delight", 2095);
-        traditionalItems.put("Honey Walnut Prawn", 1995);
-
-        menu1.put("DimSum Menu", dimSumItems);
-        menu1.put("Traditional Menu", traditionalItems);
-
-        defaultRestaurant1.setRestaurantName("China Harbor");
-        defaultRestaurant1.setAddress("123 Birch Lane");
-        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
-        defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPendingOrders(null);
-        defaultRestaurant1.setPhoneNumber("1234567890");
-        defaultRestaurant1.setMenu(menu1);
-
-        final Restaurant defaultRestaurant2 = new Restaurant();
-
-        HashMap<String, HashMap<String, Integer>> menu2 = new HashMap<>();
-        HashMap<String, Integer> items = new HashMap<>();
-        items.put("Pho Small", 1000);
-        items.put("Pho Large", 1100);
-        items.put("Bun Bo Hue", 1400);
-        items.put("Pho Tron", 1100);
-
-        menu2.put("DimSum Menu", items);
-
-        defaultRestaurant2.setRestaurantName("Pho Bac");
-        defaultRestaurant2.setAddress("334 Walnut Road");
-        defaultRestaurant2.setHours("5-9");
-        defaultRestaurant2.setPhoneNumber("7096678546");
-        defaultRestaurant2.setMenu(menu2);
-
-        try {
-            addRestaurant(defaultRestaurant1);
-            addRestaurant(defaultRestaurant2);
-        } catch (Exception e) {
-            log.error("Restaurant Controller > construct > adding default restaurants > failure?");
-            e.printStackTrace();
-        }
+        this.initializeRestaurants();
     }
 
     @Nullable
@@ -98,7 +50,7 @@ public class RestaurantController {
         if (!restaurant.isValid()) {
             // TODO: replace with a real invalid object exception
             // probably not one exception per object type though...
-            throw new Exception("InvalidDeliveryException");
+            throw new Exception("Invalid Restaurant");
         }
 
         ObjectId id = restaurant.getId();
@@ -118,5 +70,78 @@ public class RestaurantController {
     public void deleteRestaurant(@Nonnull ObjectId id) throws Exception {
         log.debug("RestaurantController > deleteRestaurant(...)");
         restaurants.delete(id);
+    }
+
+    private void initializeRestaurants() {
+        final Restaurant defaultRestaurant1 = new Restaurant();
+        final Restaurant defaultRestaurant2 = new Restaurant();
+
+        defaultRestaurant1.setRestaurantName("China Harbor");
+        defaultRestaurant1.setAddress("123 Birch Lane");
+        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
+        defaultRestaurant1.setHours("11-5");
+        defaultRestaurant1.setPhoneNumber("1234567890");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu1 = new HashMap<>();
+        MenuItem item1 = new MenuItem();
+        MenuItem item2 = new MenuItem();
+        MenuItem item3 = new MenuItem();
+        MenuItem item4 = new MenuItem();
+        item1.setName("General Tso's Chicken");
+        item1.setPrice(1595);
+        item1.setId(new ObjectId());
+        item2.setName("Mongolian Beef");
+        item2.setPrice(1495);
+        item2.setId(new ObjectId());
+        item3.setName("BBQ Pork Bun");
+        item3.setPrice(499);
+        item3.setId(new ObjectId());
+        item4.setName("Shrimp Dumpling");
+        item4.setPrice(599);
+        item4.setId(new ObjectId());
+        menu1.put(item1.getId().toString(), item1);
+        menu1.put(item2.getId().toString(), item2);
+        menu1.put(item3.getId().toString(), item3);
+        menu1.put(item4.getId().toString(), item4);
+        defaultRestaurant1.setMenuItems(menu1);
+
+        defaultRestaurant2.setRestaurantName("Dosa House");
+        defaultRestaurant2.setAddress("4321 Pine Ave.");
+        defaultRestaurant2.setCuisineType(CuisineType.INDIAN);
+        defaultRestaurant2.setHours("11-11");
+        defaultRestaurant2.setPhoneNumber("9876543210");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu2 = new HashMap<>();
+        MenuItem item5 = new MenuItem();
+        MenuItem item6 = new MenuItem();
+        MenuItem item7 = new MenuItem();
+        MenuItem item8 = new MenuItem();
+        item5.setName("Masala Dosa");
+        item5.setPrice(899);
+        item5.setId(new ObjectId());
+        item6.setName("Upma Dosa");
+        item6.setPrice(850);
+        item6.setId(new ObjectId());
+        item7.setName("Samosa");
+        item7.setPrice(325);
+        item7.setId(new ObjectId());
+        item8.setName("Hakka Noodles");
+        item8.setPrice(799);
+        item8.setId(new ObjectId());
+        menu1.put(item5.getId().toString(), item5);
+        menu1.put(item6.getId().toString(), item6);
+        menu1.put(item7.getId().toString(), item7);
+        menu1.put(item8.getId().toString(), item8);
+        defaultRestaurant2.setMenuItems(menu2);
+
+        try {
+            addRestaurant(defaultRestaurant1);
+            addRestaurant(defaultRestaurant2);
+        } catch (Exception e) {
+            log.error("Restaurant Controller > construct > adding default restaurants > failure?");
+            e.printStackTrace();
+        }
     }
 }

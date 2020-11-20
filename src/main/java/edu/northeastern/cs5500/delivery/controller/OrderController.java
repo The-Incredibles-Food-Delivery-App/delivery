@@ -37,31 +37,13 @@ public class OrderController {
         log.info("OrderController > construct > adding default orders");
 
         // create the restaurant
-        // TODO: Update restaurant to use MenuItems instead of a hash map of hash maps
         final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
-        HashMap<String, Integer> dimSumItems = new HashMap<>();
-        dimSumItems.put("BBQ Pork Bun", 499);
-        dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpling with Pork", 499);
-        dimSumItems.put("Sesame Ball", 499);
-
-        HashMap<String, Integer> traditionalItems = new HashMap<>();
-        traditionalItems.put("General Tso's Chicken", 1595);
-        traditionalItems.put("Mongolian Beef", 1995);
-        traditionalItems.put("Tripple Delight", 2095);
-        traditionalItems.put("Honey Walnut Prawn", 1995);
-
-        menu1.put("DimSum Menu", dimSumItems);
-        menu1.put("Traditional Menu", traditionalItems);
 
         defaultRestaurant1.setRestaurantName("China Harbor");
         defaultRestaurant1.setAddress("123 Birch Lane");
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPendingOrders(null);
         defaultRestaurant1.setPhoneNumber("1234567890");
-        defaultRestaurant1.setMenu(menu1);
 
         // create the Customer
         Customer defaultCustomer = new Customer();
