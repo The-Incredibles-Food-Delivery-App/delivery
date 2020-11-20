@@ -1,12 +1,10 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
-import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,31 +36,28 @@ public class DeliveryController {
 
         log.info("DeliveryController > construct > adding default deliveries");
 
-        // create a default restaurant
-        final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
-        HashMap<String, Integer> dimSumItems = new HashMap<>();
-        dimSumItems.put("BBQ Pork Bun", 499);
-        dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpliint with Pork", 499);
-        dimSumItems.put("Sesame Ball", 499);
+        // create items and order
+        final Delivery defaultDelivery1 = new Delivery();
+        HashMap<ObjectId, Integer> items = new HashMap<>();
+        final MenuItem defaultItem1 = new MenuItem();
+        final MenuItem defaultItem2 = new MenuItem();
+        final Order defaultorder1 = new Order();
+        defaultItem1.setName("Masala Dosa");
+        defaultItem1.setPrice(899);
+        defaultItem2.setName("Hakka Noodles");
+        defaultItem2.setPrice(750);
 
-        HashMap<String, Integer> traditionalItems = new HashMap<>();
-        traditionalItems.put("General Tso's Chicken", 1595);
-        traditionalItems.put("Mongolian Beef", 1995);
-        traditionalItems.put("Tripple Delight", 2095);
-        traditionalItems.put("Honey Walnut Prawn", 1995);
-
-        menu1.put("DimSum Menu", dimSumItems);
-        menu1.put("Traditional Menu", traditionalItems);
-
-        defaultRestaurant1.setRestaurantName("China Harbor");
-        defaultRestaurant1.setAddress("123 Birch Lane");
-        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
-        defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPendingOrders(null);
-        defaultRestaurant1.setPhoneNumber("1234567890");
-        defaultRestaurant1.setMenu(menu1);
+        try {
+            ObjectId item1Id = menuItemController.addMenuItem(defaultItem1).getId();
+            ObjectId item2Id = menuItemController.addMenuItem(defaultItem2).getId();
+            items.put(item1Id, 1);
+            items.put(item2Id, 2);
+            defaultorder1.setItems(items);
+        } catch (Exception e) {
+            log.error(
+                    "DeliveryController > construct > adding default menu items to order > failure?");
+            e.printStackTrace();
+        }
 
         // create the Customer
         Customer defaultCustomer = new Customer();
@@ -70,21 +65,9 @@ public class DeliveryController {
         defaultCustomer.setFirstName("Ellie");
         defaultCustomer.setLastName("Gato");
         defaultCustomer.setEmail("gatolover@gmail.com");
+        defaultorder1.setCustomer(defaultCustomer);
 
-        // create items and order
-        final Delivery defaultDelivery1 = new Delivery();
-        HashMap<MenuItem, Integer> items = new HashMap<>();
-        final MenuItem defaultItem1 = new MenuItem();
-        final MenuItem defaultItem2 = new MenuItem();
-        final Order defaultorder1 = new Order();
-
-        defaultItem1.setName("BBQ Pork Bun");
-        defaultItem1.setPrice(499);
-        items.put(defaultItem1, 1);
-        defaultItem2.setName("Shrimp Dumpling");
-        defaultItem2.setPrice(599);
-        items.put(defaultItem2, 2);
-
+        // complete setup of delivery
         defaultDelivery1.setNotes("Place in the basket on the front porch");
         defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
         defaultDelivery1.setDistance(11.25);
@@ -92,7 +75,6 @@ public class DeliveryController {
 
         try {
             addDelivery(defaultDelivery1);
-            // addDelivery(defaultDelivery2);
         } catch (Exception e) {
             log.error("DeliveryController > construct > adding default deliveries > failure?");
             e.printStackTrace();
@@ -109,7 +91,6 @@ public class DeliveryController {
     private Integer calculateCost(Delivery delivery) {
         HashMap<ObjectId, Integer> items = delivery.getOrder().getItems();
         Integer totalCost = 0;
-
         for (ObjectId id : items.keySet()) {
             // Add quantity * price to total cost
             Integer itemPrice = menuItemController.getMenuItem(id).getPrice();
@@ -147,6 +128,8 @@ public class DeliveryController {
                             + Delivery.MAXIMUM_DISTANCE
                             + " miles.";
             throw new InvalidDeliveryException(message);
+        } else if (delivery.getDistance() < 0) {
+            throw new InvalidDeliveryException("Delivery distance must be nonnegative");
         } else {
             return true;
         }
@@ -162,8 +145,6 @@ public class DeliveryController {
         delivery.setCost(cost);
         // verify delivery is valid
         if (!delivery.isValid() || !verifyDistance(delivery)) {
-            // TODO: replace with a real invalid object exception
-            // probably not one exception per object type though...
             throw new InvalidDeliveryException("Invalid Delivery");
         }
 
@@ -172,13 +153,12 @@ public class DeliveryController {
         if (id != null && deliveries.get(id) != null) {
             throw new DuplicateKeyException("This delivery already exists");
         }
-
         return deliveries.add(delivery);
     }
 
-    public void updateDelivery(@Nonnull Delivery delivery) throws Exception {
+    public void updateDelivery(@Nonnull Delivery deliveryToUpdate) throws Exception {
         log.debug("DeliveryController > updateDelivery(...)");
-        deliveries.update(delivery);
+        deliveries.update(deliveryToUpdate);
     }
 
     public void deleteDelivery(@Nonnull ObjectId id) throws Exception {

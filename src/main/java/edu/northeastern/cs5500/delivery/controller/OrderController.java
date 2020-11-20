@@ -15,8 +15,6 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 
-// import java.util.Collection;
-
 @Singleton
 @Slf4j
 public class OrderController {
@@ -39,31 +37,13 @@ public class OrderController {
         log.info("OrderController > construct > adding default orders");
 
         // create the restaurant
-        // TODO: Update restaurant to use MenuItems instead of a hash map of hash maps
         final Restaurant defaultRestaurant1 = new Restaurant();
-        HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
-        HashMap<String, Integer> dimSumItems = new HashMap<>();
-        dimSumItems.put("BBQ Pork Bun", 499);
-        dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpling with Pork", 499);
-        dimSumItems.put("Sesame Ball", 499);
-
-        HashMap<String, Integer> traditionalItems = new HashMap<>();
-        traditionalItems.put("General Tso's Chicken", 1595);
-        traditionalItems.put("Mongolian Beef", 1995);
-        traditionalItems.put("Tripple Delight", 2095);
-        traditionalItems.put("Honey Walnut Prawn", 1995);
-
-        menu1.put("DimSum Menu", dimSumItems);
-        menu1.put("Traditional Menu", traditionalItems);
 
         defaultRestaurant1.setRestaurantName("China Harbor");
         defaultRestaurant1.setAddress("123 Birch Lane");
         defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPendingOrders(null);
         defaultRestaurant1.setPhoneNumber("1234567890");
-        defaultRestaurant1.setMenu(menu1);
 
         // create the Customer
         Customer defaultCustomer = new Customer();
@@ -144,17 +124,18 @@ public class OrderController {
         if (order.getItems().isEmpty()) {
             return false;
         }
-        // If one item in the order, ensure quantity is at least 1
-        if (order.getItems().size() == 1) {
-            HashMap<ObjectId, Integer> items = order.getItems();
-            for (ObjectId item : items.keySet()) {
-                int quantity = items.get(item);
-                if (quantity < 1) {
-                    return false;
-                }
-            }
+        // ensure we have at least one item with quantity > 0
+        HashMap<ObjectId, Integer> items = order.getItems();
+        int totalItemCount = 0;
+        for (ObjectId item : items.keySet()) {
+            int itemQuantity = items.get(item);
+            totalItemCount += itemQuantity;
         }
-        return true;
+        if (totalItemCount > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -167,13 +148,13 @@ public class OrderController {
      */
     private boolean verifyOrderByTime(@Nonnull Order order) throws InvalidOrderException {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
-        // QUESTION: Do we want to throw an exception if set in the past?
-        // QUESTION: Is this method chaining bad?
-        if (order.getOrderBy() == null || order.getOrderBy().isBefore(LocalDateTime.now())) {
-            order.setOrderBy(LocalDateTime.now());
+        // TODO: Do we want to throw an exception if set in the past?
+        // TODO: Is this method chaining bad?
+        if (order.getOrderTime() == null || order.getOrderTime().isBefore(LocalDateTime.now())) {
+            order.setOrderTime(LocalDateTime.now());
         }
         // if orderBy data/time is set too far in advance, throw an exception
-        LocalDateTime orderBy = order.getOrderBy();
+        LocalDateTime orderBy = order.getOrderTime();
         if (orderBy.isAfter(LocalDateTime.now())) {
             if (orderBy.getDayOfYear() != LocalDateTime.now().getDayOfYear()
                     || orderBy.getHour()
