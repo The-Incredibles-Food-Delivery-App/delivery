@@ -140,8 +140,8 @@ class DeliveryControllerTest {
     }
 
     @Test
-    void testAddInvalidDeliveryExceedsMaxDistance() 
-        throws InvalidDeliveryException, DuplicateKeyException {
+    void testAddInvalidDeliveryExceedsMaxDistance()
+            throws InvalidDeliveryException, DuplicateKeyException {
         newDelivery.setDistance(Delivery.MAXIMUM_DISTANCE + 0.001);
         assertThrows(
                 InvalidDeliveryException.class,
@@ -151,8 +151,8 @@ class DeliveryControllerTest {
     }
 
     @Test
-    void testAddInvalidDeliveryNegativeDistance() 
-        throws InvalidDeliveryException, DuplicateKeyException {
+    void testAddInvalidDeliveryNegativeDistance()
+            throws InvalidDeliveryException, DuplicateKeyException {
         newDelivery.setDistance(-0.001);
         assertThrows(
                 InvalidDeliveryException.class,
@@ -162,8 +162,7 @@ class DeliveryControllerTest {
     }
 
     @Test
-    void testAddDuplicateDelivery() 
-        throws InvalidDeliveryException, DuplicateKeyException {
+    void testAddDuplicateDelivery() throws InvalidDeliveryException, DuplicateKeyException {
         Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
         ObjectId addedDeliveryId = addedDelivery.getId();
         newDelivery.setId(addedDeliveryId);
