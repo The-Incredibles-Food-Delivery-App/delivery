@@ -11,7 +11,6 @@ import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +18,6 @@ import org.junit.jupiter.api.Test;
 
 public class OrderControllerTest {
     public final Restaurant defaultRestaurant = new Restaurant();
-    public HashMap<String, HashMap<String, Integer>> menu = new HashMap<>();
-    public HashMap<String, Integer> dimSumItems = new HashMap<>();
-    public HashMap<String, Integer> traditionalItems = new HashMap<>();
     public Customer defaultCustomer = new Customer();
     public Order neworder = new Order();
     public MenuItem item1 = new MenuItem();
@@ -36,13 +32,6 @@ public class OrderControllerTest {
     public void setup() {
         menuItemController = new MenuItemController(new InMemoryRepository<MenuItem>());
         orderController = new OrderController(new InMemoryRepository<Order>(), menuItemController);
-
-        // create a default restaurant
-        dimSumItems.put("BBQ Pork Bun", 499);
-        dimSumItems.put("Shrimp Dumpling", 599);
-        dimSumItems.put("Salty Dumpling with Pork", 499);
-        dimSumItems.put("Sesame Ball", 499);
-        menu.put("DimSum Menu", dimSumItems);
 
         defaultRestaurant.setRestaurantName("Harbor City");
         defaultRestaurant.setAddress("1st Avenue");

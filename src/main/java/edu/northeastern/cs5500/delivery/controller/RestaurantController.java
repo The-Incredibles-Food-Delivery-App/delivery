@@ -5,8 +5,10 @@ import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,49 +34,97 @@ public class RestaurantController {
         this.initializeRestaurants();
     }
 
+    /**
+     * Returns the restaurnt with the given Id
+     *
+     * @param uuid - the restaurant Id
+     * @return the restaurnt with the given Id
+     */
     @Nullable
     public Restaurant getRestaurant(@Nonnull ObjectId uuid) {
         log.debug("RestaurantController > getRestaurant({})", uuid);
         return restaurants.get(uuid);
     }
 
+    /**
+     * Returns all restaurants in the restaurant collection
+     *
+     * @return all restaurants in the restaurant collection
+     */
     @Nonnull
     public Collection<Restaurant> getRestaurants() {
         log.debug("RestaurantController > getRestaurants()");
         return restaurants.getAll();
     }
 
+    /**
+     * Adds the given restaurant to the restaurant collection
+     *
+     * @param restaurant - the restaurant to add
+     * @return the restaurant that was added to the collection
+     * @throws DuplicateKeyException - when the restaurant id already corresponds to a restaurant in
+     *     the collection
+     * @throws InvalidObjectException - when an invalid restaurant is given
+     */
     @Nonnull
-    public Restaurant addRestaurant(@Nonnull Restaurant restaurant) throws Exception {
+    public Restaurant addRestaurant(@Nonnull Restaurant restaurant)
+            throws DuplicateKeyException, InvalidObjectException {
         log.debug("RestaurantController > addRestaurant(...)");
         if (!restaurant.isValid()) {
-            // TODO: replace with a real invalid object exception
-            // probably not one exception per object type though...
-            throw new Exception("Invalid Restaurant");
+            throw new InvalidObjectException("Invalid Restaurant");
         }
 
         ObjectId id = restaurant.getId();
 
         if (id != null && restaurants.get(id) != null) {
-            // TODO: replace with a real duplicate key exception
-            throw new Exception("DuplicateKeyException");
+            throw new DuplicateKeyException("DuplicateKeyException");
         }
         return restaurants.add(restaurant);
     }
 
+    /**
+     * Returns all menu items for the given restaurant
+     *
+     * @param restaurant - the restaurant
+     * @return all menu items for the given restaurant
+     * @throws Exception
+     */
+    public List<MenuItem> getMenuItems(@Nonnull Restaurant restaurant) throws Exception {
+        log.debug("RestaurantController > gettingMenuItems(...)");
+        List<MenuItem> results = new ArrayList<>();
+        for (MenuItem item : restaurant.getMenuItems().values()) {
+            results.add(item);
+        }
+        return results;
+    }
+
+    /**
+     * Updates the given restaurant
+     *
+     * @param restaurant - the updated restaurant
+     * @throws Exception
+     */
     public void updateRestaurant(@Nonnull Restaurant restaurant) throws Exception {
         log.debug("RestaurantController > updateDelivery(...)");
         restaurants.update(restaurant);
     }
 
+    /**
+     * Deletes the restaurant corresponding to the given id
+     *
+     * @param id - the id of the restaurant to be deleted
+     * @throws Exception
+     */
     public void deleteRestaurant(@Nonnull ObjectId id) throws Exception {
         log.debug("RestaurantController > deleteRestaurant(...)");
         restaurants.delete(id);
     }
 
+    /** Initalizes the restaurant collection with restaurants */
     private void initializeRestaurants() {
         final Restaurant defaultRestaurant1 = new Restaurant();
         final Restaurant defaultRestaurant2 = new Restaurant();
+        final Restaurant defaultRestaurant3 = new Restaurant();
 
         defaultRestaurant1.setRestaurantName("China Harbor");
         defaultRestaurant1.setAddress("123 Birch Lane");
@@ -136,9 +186,40 @@ public class RestaurantController {
         menu1.put(item8.getId().toString(), item8);
         defaultRestaurant2.setMenuItems(menu2);
 
+        defaultRestaurant3.setRestaurantName("Queen Sheeba");
+        defaultRestaurant3.setAddress("1000 Broadway Ave., Seattle, WA 98017");
+        defaultRestaurant3.setCuisineType(CuisineType.AFRICAN);
+        defaultRestaurant3.setHours("M-Sat 4pm-11pm, Sun 4pm-10pm");
+        defaultRestaurant3.setPhoneNumber("1231231234");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu3 = new HashMap<>();
+        MenuItem item9 = new MenuItem();
+        MenuItem item10 = new MenuItem();
+        MenuItem item11 = new MenuItem();
+        MenuItem item12 = new MenuItem();
+        item9.setName("Doro Wat");
+        item9.setPrice(999);
+        item9.setId(new ObjectId());
+        item10.setName("Chicken Tibbs");
+        item10.setPrice(1099);
+        item10.setId(new ObjectId());
+        item12.setName("Fish Tibbs");
+        item12.setPrice(1199);
+        item12.setId(new ObjectId());
+        item11.setName("Bamia Beef");
+        item11.setPrice(1050);
+        item11.setId(new ObjectId());
+        menu3.put(item9.getId().toString(), item9);
+        menu3.put(item10.getId().toString(), item10);
+        menu3.put(item11.getId().toString(), item11);
+        menu3.put(item12.getId().toString(), item12);
+        defaultRestaurant1.setMenuItems(menu3);
+
         try {
             addRestaurant(defaultRestaurant1);
             addRestaurant(defaultRestaurant2);
+            addRestaurant(defaultRestaurant3);
         } catch (Exception e) {
             log.error("Restaurant Controller > construct > adding default restaurants > failure?");
             e.printStackTrace();
