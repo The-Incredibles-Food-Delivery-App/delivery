@@ -25,30 +25,7 @@ public class DeliveryDriverController {
         }
 
         log.info("DeliveryDriverController > construct > adding default drivers");
-
-        final DeliveryDriver defaultdriver1 = new DeliveryDriver();
-        defaultdriver1.setFirstName("Jonny");
-        defaultdriver1.setLastName("Jingleheimersmith");
-        defaultdriver1.setUserName("JJS");
-        defaultdriver1.setEmail("anemail@google.com");
-        defaultdriver1.setPhoneNumber("55555555555");
-        defaultdriver1.setCurrentlyWorking(true);
-
-        final DeliveryDriver defaultdriver2 = new DeliveryDriver();
-        defaultdriver2.setFirstName("Karen");
-        defaultdriver1.setLastName("Person");
-        defaultdriver1.setUserName("karen11");
-        defaultdriver1.setEmail("kperson@gmail.com");
-        defaultdriver1.setPhoneNumber("1112223333");
-        defaultdriver1.setCurrentlyWorking(false);
-
-        try {
-            addDeliveryDriver(defaultdriver1);
-            addDeliveryDriver(defaultdriver2);
-        } catch (Exception e) {
-            log.error("DeliveryDriverController > construct > adding default drivers > failure?");
-            e.printStackTrace();
-        }
+        this.initializeDrivers();
     }
 
     @Nullable
@@ -88,5 +65,32 @@ public class DeliveryDriverController {
     public void deleteDeliveryDriver(@Nonnull ObjectId id) throws Exception {
         log.debug("DeliveryDriverController > deleteDriver(...)");
         deliveryDrivers.delete(id);
+    }
+
+    /* Initializes the driver collection with drivers */
+    public void initializeDrivers() {
+        final DeliveryDriver defaultdriver1 = new DeliveryDriver();
+        defaultdriver1.setFirstName("Jonny");
+        defaultdriver1.setLastName("Jingleheimersmith");
+        defaultdriver1.setUserName("JJS");
+        defaultdriver1.setEmail("anemail@google.com");
+        defaultdriver1.setPhoneNumber("55555555555");
+        defaultdriver1.setCurrentlyWorking(true);
+
+        final DeliveryDriver defaultdriver2 = new DeliveryDriver();
+        defaultdriver2.setFirstName("Karen");
+        defaultdriver1.setLastName("Person");
+        defaultdriver1.setUserName("karen11");
+        defaultdriver1.setEmail("kperson@gmail.com");
+        defaultdriver1.setPhoneNumber("1112223333");
+        defaultdriver1.setCurrentlyWorking(false);
+
+        try {
+            addDeliveryDriver(defaultdriver1);
+            addDeliveryDriver(defaultdriver2);
+        } catch (Exception e) {
+            log.error("DeliveryDriverController > construct > adding default drivers > failure?");
+            e.printStackTrace();
+        }
     }
 }
