@@ -29,60 +29,10 @@ public class OrderController {
         menuItemController = menuItemControllerInstance;
 
         log.info("OrderController > construct");
+        initalizeOrders();
 
         if (orders.count() > 0) {
             return;
-        }
-
-        log.info("OrderController > construct > adding default orders");
-
-        // create the restaurant
-        final Restaurant defaultRestaurant1 = new Restaurant();
-
-        defaultRestaurant1.setRestaurantName("China Harbor");
-        defaultRestaurant1.setAddress("123 Birch Lane");
-        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
-        defaultRestaurant1.setHours("11-5");
-        defaultRestaurant1.setPhoneNumber("1234567890");
-
-        // create the Customer
-        Customer defaultCustomer = new Customer();
-        defaultCustomer.setUserName("catlover11");
-        defaultCustomer.setFirstName("Ellie");
-        defaultCustomer.setLastName("Gato");
-        defaultCustomer.setEmail("gatolover@gmail.com");
-
-        // create order items
-        HashMap<ObjectId, Integer> items = new HashMap<>();
-        final MenuItem defaultItem1 = new MenuItem();
-        final MenuItem defaultItem2 = new MenuItem();
-        defaultItem1.setName("BBQ Pork Bun");
-        defaultItem1.setPrice(499);
-        defaultItem2.setName("Shrimp Dumpling");
-        defaultItem2.setPrice(599);
-        try {
-            ObjectId item1Id = menuItemController.addMenuItem(defaultItem1).getId();
-            ObjectId item2Id = menuItemController.addMenuItem(defaultItem2).getId();
-            items.put(item1Id, 1);
-            items.put(item2Id, 2);
-        } catch (Exception e) {
-            log.error(
-                    "OrderController > construct > adding default menu items to order > failure?");
-            e.printStackTrace();
-        }
-
-        // create the order
-        final Order defaultorder1 = new Order();
-        defaultorder1.setOrderTime(LocalDateTime.now());
-        defaultorder1.setRestaurant(defaultRestaurant1);
-        defaultorder1.setCustomer(defaultCustomer);
-        defaultorder1.setItems(items);
-
-        try {
-            addOrder(defaultorder1);
-        } catch (Exception e) {
-            log.error("OrderController > construct > adding default orders > failure?");
-            e.printStackTrace();
         }
     }
 
@@ -189,5 +139,57 @@ public class OrderController {
             throw new DuplicateKeyException("Key already in use");
         }
         return orders.add(order);
+    }
+
+    private void initalizeOrders() {
+        log.info("OrderController > construct > adding default orders");
+        // create the restaurant
+        final Restaurant defaultRestaurant1 = new Restaurant();
+
+        defaultRestaurant1.setRestaurantName("China Harbor");
+        defaultRestaurant1.setAddress("123 Birch Lane");
+        defaultRestaurant1.setCuisineType(CuisineType.CHINESE);
+        defaultRestaurant1.setHours("11-5");
+        defaultRestaurant1.setPhoneNumber("1234567890");
+
+        // create the Customer
+        Customer defaultCustomer = new Customer();
+        defaultCustomer.setUserName("catlover11");
+        defaultCustomer.setFirstName("Ellie");
+        defaultCustomer.setLastName("Gato");
+        defaultCustomer.setEmail("gatolover@gmail.com");
+
+        // create order items
+        HashMap<ObjectId, Integer> items = new HashMap<>();
+        final MenuItem defaultItem1 = new MenuItem();
+        final MenuItem defaultItem2 = new MenuItem();
+        defaultItem1.setName("BBQ Pork Bun");
+        defaultItem1.setPrice(499);
+        defaultItem2.setName("Shrimp Dumpling");
+        defaultItem2.setPrice(599);
+        try {
+            ObjectId item1Id = menuItemController.addMenuItem(defaultItem1).getId();
+            ObjectId item2Id = menuItemController.addMenuItem(defaultItem2).getId();
+            items.put(item1Id, 1);
+            items.put(item2Id, 2);
+        } catch (Exception e) {
+            log.error(
+                    "OrderController > construct > adding default menu items to order > failure?");
+            e.printStackTrace();
+        }
+
+        // create the order
+        final Order defaultorder1 = new Order();
+        defaultorder1.setOrderTime(LocalDateTime.now());
+        defaultorder1.setRestaurant(defaultRestaurant1);
+        defaultorder1.setCustomer(defaultCustomer);
+        defaultorder1.setItems(items);
+
+        try {
+            addOrder(defaultorder1);
+        } catch (Exception e) {
+            log.error("OrderController > construct > adding default orders > failure?");
+            e.printStackTrace();
+        }
     }
 }
