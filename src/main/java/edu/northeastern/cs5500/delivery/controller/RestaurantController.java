@@ -4,7 +4,7 @@ import com.mongodb.lang.Nullable;
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
-import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.repository.GenericRestaurantRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,10 +18,10 @@ import org.bson.types.ObjectId;
 @Singleton
 @Slf4j
 public class RestaurantController {
-    private final GenericRepository<Restaurant> restaurants;
+    private final GenericRestaurantRepository restaurants;
 
     @Inject
-    RestaurantController(GenericRepository<Restaurant> restaurantRepository) {
+    RestaurantController(GenericRestaurantRepository restaurantRepository) {
         restaurants = restaurantRepository;
 
         log.info("RestaurantController > construct");
@@ -29,16 +29,25 @@ public class RestaurantController {
         if (restaurants.count() > 0) {
             return;
         }
-
         log.info("RestaurantController > construct > adding default restaurants");
         this.initializeRestaurants();
     }
 
     /**
-     * Returns the restaurnt with the given Id
+     * Returns the restaurants with the given name
+     *
+     * @param name - the restaurant name to search for
+     * @return the restaurants with the given name
+     */
+    public Collection<Restaurant> getRestaurantsByName(String name) {
+        return restaurants.getRestaurantByName(name);
+    }
+
+    /**
+     * Returns the restaurant with the given Id
      *
      * @param uuid - the restaurant Id
-     * @return the restaurnt with the given Id
+     * @return the restaurant with the given Id
      */
     @Nullable
     public Restaurant getRestaurant(@Nonnull ObjectId uuid) {
