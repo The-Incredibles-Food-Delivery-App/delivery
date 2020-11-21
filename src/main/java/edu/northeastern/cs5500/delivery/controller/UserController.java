@@ -29,29 +29,7 @@ public class UserController {
         }
 
         log.info("UserController > construct > adding default users");
-
-        final DeliveryDriver defaultDeliveryDriver1 = new DeliveryDriver();
-        defaultDeliveryDriver1.setFirstName("Rachel");
-        defaultDeliveryDriver1.setLastName("Woods");
-        defaultDeliveryDriver1.setPhoneNumber("2245678921");
-        defaultDeliveryDriver1.setUserName("Ra_wood");
-        defaultDeliveryDriver1.setEmail("ra_wood@hotmail.com");
-
-        final Customer defaultCustomer1 = new Customer();
-        defaultCustomer1.setFirstName("Sam");
-        defaultCustomer1.setLastName("Rockwell");
-        defaultCustomer1.setPhoneNumber("8892134567");
-        defaultCustomer1.setUserName("sam_rockwell666");
-        defaultCustomer1.setEmail("theOnlySamRockwell@gmail.com");
-        defaultCustomer1.setAddress("333 Hollywood Blvd");
-
-        try {
-            addUser(defaultDeliveryDriver1);
-            addUser(defaultCustomer1);
-        } catch (Exception e) {
-            log.error("UserController > construct > adding default Users > failure?");
-            e.printStackTrace();
-        }
+        this.initializeUsers();
     }
 
     @Nullable
@@ -90,5 +68,31 @@ public class UserController {
     public void deleteUser(@Nonnull ObjectId id) throws Exception {
         log.debug("UserController > deleteUser(...)");
         users.delete(id);
+    }
+
+    /* Initalizes the user collection with restaurants */
+    private void initializeUsers() {
+        final DeliveryDriver defaultDeliveryDriver1 = new DeliveryDriver();
+        defaultDeliveryDriver1.setFirstName("Rachel");
+        defaultDeliveryDriver1.setLastName("Woods");
+        defaultDeliveryDriver1.setPhoneNumber("2245678921");
+        defaultDeliveryDriver1.setUserName("Ra_wood");
+        defaultDeliveryDriver1.setEmail("ra_wood@hotmail.com");
+
+        final Customer defaultCustomer1 = new Customer();
+        defaultCustomer1.setFirstName("Sam");
+        defaultCustomer1.setLastName("Rockwell");
+        defaultCustomer1.setPhoneNumber("8892134567");
+        defaultCustomer1.setUserName("sam_rockwell666");
+        defaultCustomer1.setEmail("theOnlySamRockwell@gmail.com");
+        defaultCustomer1.setAddress("333 Hollywood Blvd");
+
+        try {
+            addUser(defaultDeliveryDriver1);
+            addUser(defaultCustomer1);
+        } catch (Exception e) {
+            log.error("UserController > construct > adding default Users > failure?");
+            e.printStackTrace();
+        }
     }
 }
