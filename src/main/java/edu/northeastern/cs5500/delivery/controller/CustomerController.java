@@ -24,7 +24,7 @@ public class CustomerController {
             return;
         }
 
-        log.info("DeliveryDriverController > construct > adding default drivers");
+        log.info("CustomerController > construct > adding default customers");
         this.initializeCustomers();
     }
 

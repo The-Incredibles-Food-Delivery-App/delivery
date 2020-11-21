@@ -4,7 +4,8 @@ import com.mongodb.lang.Nullable;
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
-import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.repository.RestaurantRepository;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,10 +19,10 @@ import org.bson.types.ObjectId;
 @Singleton
 @Slf4j
 public class RestaurantController {
-    private final GenericRepository<Restaurant> restaurants;
+    private final RestaurantRepository restaurants;
 
     @Inject
-    RestaurantController(GenericRepository<Restaurant> restaurantRepository) {
+    RestaurantController(RestaurantRepository restaurantRepository) {
         restaurants = restaurantRepository;
 
         log.info("RestaurantController > construct");
