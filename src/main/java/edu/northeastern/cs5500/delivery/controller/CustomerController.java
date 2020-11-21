@@ -25,28 +25,7 @@ public class CustomerController {
         }
 
         log.info("DeliveryDriverController > construct > adding default drivers");
-
-        final Customer defaultcustomer1 = new Customer();
-        defaultcustomer1.setFirstName("Ellie");
-        defaultcustomer1.setLastName("Gatto");
-        defaultcustomer1.setUserName("ellie7");
-        defaultcustomer1.setEmail("ellie7@gmail.com");
-        defaultcustomer1.setPhoneNumber("1111111111");
-
-        final Customer defaultcustomer2 = new Customer();
-        defaultcustomer2.setFirstName("Paul");
-        defaultcustomer2.setLastName("Hollywood");
-        defaultcustomer2.setUserName("phollywood");
-        defaultcustomer2.setEmail("phollywood@gbbo.com");
-        defaultcustomer2.setPhoneNumber("1234567890");
-
-        try {
-            addCustomer(defaultcustomer1);
-            addCustomer(defaultcustomer2);
-        } catch (Exception e) {
-            log.error("CustomerController > construct > adding default customers > failure?");
-            e.printStackTrace();
-        }
+        this.initializeCustomers();
     }
 
     @Nullable
@@ -86,5 +65,29 @@ public class CustomerController {
     public void deleteCustomer(@Nonnull ObjectId id) throws Exception {
         log.debug("CustomerController > deleteCustomer(...)");
         customers.delete(id);
+    }
+
+    private void initializeCustomers() {
+        final Customer defaultcustomer1 = new Customer();
+        defaultcustomer1.setFirstName("Ellie");
+        defaultcustomer1.setLastName("Gatto");
+        defaultcustomer1.setUserName("ellie7");
+        defaultcustomer1.setEmail("ellie7@gmail.com");
+        defaultcustomer1.setPhoneNumber("1111111111");
+
+        final Customer defaultcustomer2 = new Customer();
+        defaultcustomer2.setFirstName("Paul");
+        defaultcustomer2.setLastName("Hollywood");
+        defaultcustomer2.setUserName("phollywood");
+        defaultcustomer2.setEmail("phollywood@gbbo.com");
+        defaultcustomer2.setPhoneNumber("1234567890");
+
+        try {
+            addCustomer(defaultcustomer1);
+            addCustomer(defaultcustomer2);
+        } catch (Exception e) {
+            log.error("CustomerController > construct > adding default customers > failure?");
+            e.printStackTrace();
+        }
     }
 }
