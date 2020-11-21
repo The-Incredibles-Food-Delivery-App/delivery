@@ -19,11 +19,14 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class OrderController {
     private final GenericRepository<Order> orders;
+    private final MenuItemController menuItemController;
 
     @Inject
     OrderController(
-            GenericRepository<Order> orderRepository) {
+            GenericRepository<Order> orderRepository,
+            MenuItemController menuItemControllerInstance) {
         orders = orderRepository;
+        menuItemController = menuItemControllerInstance;
 
         log.info("OrderController > construct");
         initalizeOrders();
@@ -33,7 +36,6 @@ public class OrderController {
         }
     }
 
-    
     @Nullable
     public Order getOrder(@Nonnull ObjectId uuid) {
         log.debug("OrderController > getOrder({})", uuid);
@@ -189,6 +191,5 @@ public class OrderController {
             log.error("OrderController > construct > adding default orders > failure?");
             e.printStackTrace();
         }
-
     }
 }
