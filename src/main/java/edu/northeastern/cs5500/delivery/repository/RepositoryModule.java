@@ -33,8 +33,8 @@ public class RepositoryModule {
     }
 
     @Provides
-    public GenericRepository<Restaurant> provideRestaurantRepository() {
-        return new InMemoryRepository<>();
+    public GenericRestaurantRepository provideRestaurantRepository() {
+        return new InMemoryRestaurantRepository();
     }
 
     @Provides
