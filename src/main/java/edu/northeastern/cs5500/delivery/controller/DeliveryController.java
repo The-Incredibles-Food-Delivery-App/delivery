@@ -5,6 +5,7 @@ import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,14 +20,10 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class DeliveryController {
     private final GenericRepository<Delivery> deliveries;
-    private final MenuItemController menuItemController;
 
     @Inject
-    DeliveryController(
-            GenericRepository<Delivery> deliveryRepository,
-            MenuItemController menuItemControllerInstance) {
+    DeliveryController(GenericRepository<Delivery> deliveryRepository) {
         deliveries = deliveryRepository;
-        menuItemController = menuItemControllerInstance;
 
         log.info("DeliveryController > construct");
 
@@ -35,50 +32,7 @@ public class DeliveryController {
         }
 
         log.info("DeliveryController > construct > adding default deliveries");
-
-        // create items and order
-        final Delivery defaultDelivery1 = new Delivery();
-        HashMap<ObjectId, Integer> items = new HashMap<>();
-        final MenuItem defaultItem1 = new MenuItem();
-        final MenuItem defaultItem2 = new MenuItem();
-        final Order defaultorder1 = new Order();
-        defaultItem1.setName("Masala Dosa");
-        defaultItem1.setPrice(899);
-        defaultItem2.setName("Hakka Noodles");
-        defaultItem2.setPrice(750);
-
-        try {
-            ObjectId item1Id = menuItemController.addMenuItem(defaultItem1).getId();
-            ObjectId item2Id = menuItemController.addMenuItem(defaultItem2).getId();
-            items.put(item1Id, 1);
-            items.put(item2Id, 2);
-            defaultorder1.setItems(items);
-        } catch (Exception e) {
-            log.error(
-                    "DeliveryController > construct > adding default menu items to order > failure?");
-            e.printStackTrace();
-        }
-
-        // create the Customer
-        Customer defaultCustomer = new Customer();
-        defaultCustomer.setUserName("catlover11");
-        defaultCustomer.setFirstName("Ellie");
-        defaultCustomer.setLastName("Gato");
-        defaultCustomer.setEmail("gatolover@gmail.com");
-        defaultorder1.setCustomer(defaultCustomer);
-
-        // complete setup of delivery
-        defaultDelivery1.setNotes("Place in the basket on the front porch");
-        defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
-        defaultDelivery1.setDistance(11.25);
-        defaultDelivery1.setOrder(defaultorder1);
-
-        try {
-            addDelivery(defaultDelivery1);
-        } catch (Exception e) {
-            log.error("DeliveryController > construct > adding default deliveries > failure?");
-            e.printStackTrace();
-        }
+        initalizeDeliveries();
     }
 
     /**
@@ -89,11 +43,13 @@ public class DeliveryController {
      */
     @Nonnull
     private Integer calculateCost(Delivery delivery) {
-        HashMap<ObjectId, Integer> items = delivery.getOrder().getItems();
+        HashMap<String, Integer> items = delivery.getOrder().getItems();
         Integer totalCost = 0;
-        for (ObjectId id : items.keySet()) {
+        for (String id : items.keySet()) {
             // Add quantity * price to total cost
-            Integer itemPrice = menuItemController.getMenuItem(id).getPrice();
+            // TODO: Grab menu item and read its price- is this ok??
+            Restaurant restaurant = delivery.getOrder().getRestaurant();
+            Integer itemPrice = restaurant.getMenuItems().get(id).getPrice();
             int quantity = items.get(id);
             totalCost += (itemPrice * quantity);
         }
@@ -135,6 +91,30 @@ public class DeliveryController {
         }
     }
 
+    /**
+     * Verifies that the delivery order contains at least one item.
+     *
+     * @param delivery - the delivery to be validated
+     * @return true if the delivery order contains at least one item.
+     */
+    private boolean verifyOrderNonempty(@Nonnull Delivery delivery) {
+        if (delivery.getOrder().getItems().isEmpty()) {
+            return true;
+        }
+        // ensure we have at least one item with quantity > 0
+        HashMap<String, Integer> items = delivery.getOrder().getItems();
+        int totalItemCount = 0;
+        for (String item : items.keySet()) {
+            int itemQuantity = items.get(item);
+            totalItemCount += itemQuantity;
+        }
+        if (totalItemCount > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Nonnull
     public Delivery addDelivery(@Nonnull Delivery delivery)
             throws DuplicateKeyException, InvalidDeliveryException {
@@ -144,7 +124,7 @@ public class DeliveryController {
         Integer cost = calculateCost(delivery);
         delivery.setCost(cost);
         // verify delivery is valid
-        if (!delivery.isValid() || !verifyDistance(delivery)) {
+        if (!delivery.isValid() || !verifyDistance(delivery) || !verifyOrderNonempty(delivery)) {
             throw new InvalidDeliveryException("Invalid Delivery");
         }
 
@@ -164,5 +144,58 @@ public class DeliveryController {
     public void deleteDelivery(@Nonnull ObjectId id) throws Exception {
         log.debug("DeliveryController > deleteDelivery(...)");
         deliveries.delete(id);
+    }
+
+    private void initalizeDeliveries() {
+        // create items and order
+        final Delivery defaultDelivery1 = new Delivery();
+        // TODO: Figure out how to create default orders
+        final Order defaultorder1 = new Order();
+        // TODO: How to set the restaurant? Just creating dummy reataurant for now.
+        Restaurant defaultRestaurant = new Restaurant();
+        HashMap<String, MenuItem> defaultMenu = new HashMap<>();
+        final MenuItem defaultItem1 = new MenuItem();
+        final MenuItem defaultItem2 = new MenuItem();
+        defaultItem1.setName("Masala Dosa");
+        defaultItem1.setPrice(899);
+        defaultItem1.setId(new ObjectId());
+        defaultItem2.setName("Hakka Noodles");
+        defaultItem2.setPrice(750);
+        defaultItem2.setId(new ObjectId());
+        defaultMenu.put(defaultItem1.getId().toString(), defaultItem1);
+        defaultMenu.put(defaultItem2.getId().toString(), defaultItem2);
+        defaultRestaurant.setRestaurantName("Dosa House");
+        defaultRestaurant.setMenuItems(defaultMenu);
+        defaultRestaurant.setPhoneNumber("9876543212");
+        defaultRestaurant.setAddress("123 3rd Ave. Seattle WA 98017");
+        defaultRestaurant.setHours("M-F 11am-11pm, Sat 12pm-1am, Sun 12pm-9pm");
+        defaultorder1.setRestaurant(defaultRestaurant);
+
+        // set default order items
+        HashMap<String, Integer> items = new HashMap<>();
+        items.put(defaultItem1.getId().toString(), 1);
+        items.put(defaultItem2.getId().toString(), 2);
+        defaultorder1.setItems(items);
+
+        // create the Customer
+        Customer defaultCustomer = new Customer();
+        defaultCustomer.setUserName("catlover11");
+        defaultCustomer.setFirstName("Ellie");
+        defaultCustomer.setLastName("Gato");
+        defaultCustomer.setEmail("gatolover@gmail.com");
+        defaultorder1.setCustomer(defaultCustomer);
+
+        // complete setup of delivery
+        defaultDelivery1.setNotes("Place in the basket on the front porch");
+        defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
+        defaultDelivery1.setDistance(11.25);
+        defaultDelivery1.setOrder(defaultorder1);
+
+        try {
+            addDelivery(defaultDelivery1);
+        } catch (Exception e) {
+            log.error("DeliveryController > construct > adding default deliveries > failure?");
+            e.printStackTrace();
+        }
     }
 }

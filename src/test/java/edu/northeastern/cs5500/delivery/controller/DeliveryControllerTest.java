@@ -13,6 +13,7 @@ import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -24,22 +25,20 @@ class DeliveryControllerTest {
     public Customer defaultCustomer;
     public DeliveryDriver defaultDeliveryDriver;
     public Order defaultOrder;
+    public Restaurant defaultRestaurant;
     public MenuItem item1;
     public ObjectId item1Id;
     public MenuItem item2;
     public ObjectId item2Id;
     public MenuItem item3;
     public ObjectId item3Id;
-    HashMap<ObjectId, Integer> items = new HashMap<>();
-    public MenuItemController menuItemController;
+    HashMap<String, Integer> items = new HashMap<>();
     public DeliveryController deliveryController;
     public Delivery newDelivery;
 
     @BeforeEach
     public void setup() {
-        menuItemController = new MenuItemController(new InMemoryRepository<MenuItem>());
-        deliveryController =
-                new DeliveryController(new InMemoryRepository<Delivery>(), menuItemController);
+        deliveryController = new DeliveryController(new InMemoryRepository<Delivery>());
         defaultCustomer = new Customer();
         defaultDeliveryDriver = new DeliveryDriver();
         defaultOrder = new Order();
@@ -53,37 +52,45 @@ class DeliveryControllerTest {
         defaultCustomer.setFirstName("Sanket");
         defaultCustomer.setLastName("Tekans");
         defaultCustomer.setEmail("dogsrock@gmail.com");
+        defaultOrder.setCustomer(defaultCustomer);
 
         // create delivery driver
         defaultDeliveryDriver.setUserName("BobTheDriver");
         defaultDeliveryDriver.setCurrentlyWorking(true);
+        newDelivery.setDeliveryDriver(defaultDeliveryDriver);
 
         // create a valid order with three items
         item1.setName("Kimchi Soup");
         item1.setPrice(999);
+        item1.setId(new ObjectId());
+        item1Id = item1.getId();
         item2.setName("Bulgogi Beef");
         item2.setPrice(1299);
+        item2.setId(new ObjectId());
+        item2Id = item2.getId();
         item3.setName("Red Bean Mochi Cake");
         item3.setPrice(325);
-        try {
-            item1Id = menuItemController.addMenuItem(item1).getId();
-            item2Id = menuItemController.addMenuItem(item2).getId();
-            item3Id = menuItemController.addMenuItem(item3).getId();
-            items.put(item1Id, 1);
-            items.put(item2Id, 1);
-            items.put(item3Id, 2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        item3.setId(new ObjectId());
+        item3Id = item3.getId();
+        items.put(item1Id.toString(), 1);
+        items.put(item2Id.toString(), 1);
+        items.put(item3Id.toString(), 2);
         defaultOrder.setItems(items);
-        defaultOrder.setCustomer(defaultCustomer);
+
+        // create a restuarant with a menu that contains those items
+        defaultRestaurant = new Restaurant();
+        defaultRestaurant.setRestaurantName("Seoul Cafe");
+        HashMap<String, MenuItem> defaultMenu = new HashMap<>();
+        defaultMenu.put(item1Id.toString(), item1);
+        defaultMenu.put(item2Id.toString(), item2);
+        defaultMenu.put(item3Id.toString(), item3);
+        defaultRestaurant.setMenuItems(defaultMenu);
+        defaultOrder.setRestaurant(defaultRestaurant);
 
         // complete setup of the new delivery
         defaultDeliveryDriver.setCurrentOrder(defaultOrder);
         newDelivery.setDistance(33.5);
         newDelivery.setOrder(defaultOrder);
-        newDelivery.setDeliveryDriver(defaultDeliveryDriver);
     }
 
     @Test
@@ -106,6 +113,21 @@ class DeliveryControllerTest {
         newDelivery.setId(addedDeliveryId);
         Delivery addedDeliveryInCollection = deliveryController.getDelivery(addedDeliveryId);
         assertEquals(addedDeliveryInCollection, newDelivery);
+    }
+
+    @Test
+    void testInvalidOrderOneItemQuantityZero() throws DuplicateKeyException, InvalidOrderException {
+        // make a delivery with no items in the order and try to add it
+        HashMap<String, Integer> itemsWithZeroQuantity = new HashMap<>();
+        itemsWithZeroQuantity.put(item1Id.toString(), 0);
+        itemsWithZeroQuantity.put(item2Id.toString(), 0);
+        defaultOrder.setItems(itemsWithZeroQuantity);
+        newDelivery.setOrder(defaultOrder);
+        assertThrows(
+                InvalidDeliveryException.class,
+                () -> {
+                    deliveryController.addDelivery(newDelivery);
+                });
     }
 
     @Test
