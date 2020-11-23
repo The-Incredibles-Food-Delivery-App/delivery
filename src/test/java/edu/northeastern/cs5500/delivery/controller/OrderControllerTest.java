@@ -24,15 +24,13 @@ public class OrderControllerTest {
     public ObjectId item1Id;
     public MenuItem item2 = new MenuItem();
     public ObjectId item2Id;
-    HashMap<ObjectId, Integer> items = new HashMap<>();
+    HashMap<String, Integer> items = new HashMap<>();
     public MenuItemController menuItemController;
     public OrderController orderController;
 
     @BeforeEach
     public void setup() {
-        menuItemController = new MenuItemController(new InMemoryRepository<MenuItem>());
-        orderController = new OrderController(new InMemoryRepository<Order>(), menuItemController);
-
+        orderController = new OrderController(new InMemoryRepository<Order>());
         defaultRestaurant.setRestaurantName("Harbor City");
         defaultRestaurant.setAddress("1st Avenue");
         defaultRestaurant.setCuisineType(CuisineType.CHINESE);
@@ -47,16 +45,10 @@ public class OrderControllerTest {
         // create two items
         item1.setName("General Tso's Chicken");
         item1.setPrice(1595);
+        item1.setId(new ObjectId());
         item2.setName("Mongolian Beef");
         item2.setPrice(1999);
-        try {
-            item1Id = menuItemController.addMenuItem(item1).getId();
-            item2Id = menuItemController.addMenuItem(item2).getId();
-            items.put(item1Id, 2);
-            items.put(item2Id, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        item2.setId(new ObjectId());
 
         // complete setup of the new order
         neworder.setItems(items);
@@ -116,7 +108,7 @@ public class OrderControllerTest {
         newItem.setPrice(599);
         try {
             ObjectId newItemId = menuItemController.addMenuItem(newItem).getId();
-            orderToUpdate.getItems().put(newItemId, 1);
+            orderToUpdate.getItems().put(newItemId.toString(), 1);
             // Add an item to the order and check to see if order contains additional item
             orderController.updateOrder(orderToUpdate);
             assertEquals(3, orderController.getOrder(orderID).getItems().size());
@@ -140,32 +132,6 @@ public class OrderControllerTest {
     void testInvalidOrderNoCustomer() throws DuplicateKeyException, InvalidOrderException {
         // make an invalid order and try to add it
         neworder.setCustomer(null);
-        assertThrows(
-                InvalidOrderException.class,
-                () -> {
-                    orderController.addOrder(neworder);
-                });
-    }
-
-    @Test
-    void testInvalidOrderNoItems() throws DuplicateKeyException, InvalidOrderException {
-        // make an invalid order and try to add it
-        HashMap<ObjectId, Integer> emptyItems = new HashMap<>();
-        neworder.setItems(emptyItems);
-        assertThrows(
-                InvalidOrderException.class,
-                () -> {
-                    orderController.addOrder(neworder);
-                });
-    }
-
-    @Test
-    void testInvalidOrderOneItemQuantityZero() throws DuplicateKeyException, InvalidOrderException {
-        // make an invalid order and try to add it
-        HashMap<ObjectId, Integer> itemsWithZeroQuantity = new HashMap<>();
-        itemsWithZeroQuantity.put(item1Id, 0);
-        itemsWithZeroQuantity.put(item2Id, 0);
-        neworder.setItems(itemsWithZeroQuantity);
         assertThrows(
                 InvalidOrderException.class,
                 () -> {

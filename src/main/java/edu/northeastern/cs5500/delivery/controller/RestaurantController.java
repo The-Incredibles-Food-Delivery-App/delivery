@@ -29,6 +29,7 @@ public class RestaurantController {
         if (restaurants.count() > 0) {
             return;
         }
+
         log.info("RestaurantController > construct > adding default restaurants");
         this.initializeRestaurants();
     }
@@ -44,10 +45,10 @@ public class RestaurantController {
     }
 
     /**
-     * Returns the restaurant with the given Id
+     * Returns the restaurnt with the given Id
      *
      * @param uuid - the restaurant Id
-     * @return the restaurant with the given Id
+     * @return the restaurnt with the given Id
      */
     @Nullable
     public Restaurant getRestaurant(@Nonnull ObjectId uuid) {

@@ -12,7 +12,7 @@ public class Order implements Model {
 
     private ObjectId id;
     private String currency;
-    private HashMap<ObjectId, Integer> items;
+    private HashMap<String, Integer> items;
     private OrderStatus orderStatus;
     private LocalDateTime orderTime;
     private Customer customer;
@@ -27,7 +27,6 @@ public class Order implements Model {
      */
     @JsonIgnore
     public boolean isValid() {
-        // TODO: Do we check on the restaurantId instead? Should we check cost is not null?
-        return this.customer != null;
+        return this.customer != null && this.restaurant != null;
     }
 }

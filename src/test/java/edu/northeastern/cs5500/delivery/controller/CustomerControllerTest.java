@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,42 +22,36 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 // CONVERT THIS TO A CUSTOMER
 @TestInstance(Lifecycle.PER_CLASS)
 public class CustomerControllerTest {
-    final Customer defaultCustomer1 = new Customer();
-    final Customer defaultCustomer2 = new Customer();;
-    final Customer defaultInvalidCustomer = new Customer();
-    public HashMap<String, HashMap<String, Integer>> menu1 = new HashMap<>();
-    public HashMap<String, Integer> dimSumItems = new HashMap<>();
-    public HashMap<String, Integer> traditionalItems = new HashMap<>();
+    public final Customer defaultCustomer1 = new Customer();
+    public final Customer defaultCustomer2 = new Customer();;
+    public final Customer defaultInvalidCustomer = new Customer();
+    public final Restaurant defaultRestaurant = new Restaurant();
     public Order defaultCustomerOrder = new Order();
-    private HashMap<ObjectId, Integer> defaultOrderItems = new HashMap<>();
+    private HashMap<String, Integer> defaultOrderItems = new HashMap<>();
     public MenuItem item1 = new MenuItem();
     public MenuItem item2 = new MenuItem();
     public HashSet<Order> customerOrderList = new HashSet<>();
 
     @BeforeEach
     public void init() {
-        // create a default restaurant
-        dimSumItems.put("BBQ Pork Bun", 499);
-        traditionalItems.put("General Tso's Chicken", 1595);
-
-        menu1.put("DimSum Menu", dimSumItems);
-        menu1.put("Traditional Menu", traditionalItems);
-
         // Menu Item 1
         item1.setName("General Tso's Chicken");
         item1.setPrice(1595);
+        item1.setId(new ObjectId());
 
         // Menu Item 2
         item2.setName("BBQ Pork Bun");
         item2.setPrice(499);
+        item2.setId(new ObjectId());
 
         // complete setup of the new order
         ObjectId item1Id = item1.getId();
         ObjectId item2Id = item2.getId();
 
         // complete setup of the new order
-        defaultOrderItems.put(item1Id, 1);
-        defaultOrderItems.put(item2Id, 2);
+        defaultOrderItems.put(item1Id.toString(), 1);
+        defaultOrderItems.put(item2Id.toString(), 2);
+        defaultCustomerOrder.setRestaurant(defaultRestaurant);
         defaultCustomerOrder.setItems(defaultOrderItems);
         customerOrderList.add(defaultCustomerOrder);
 
@@ -132,13 +127,14 @@ public class CustomerControllerTest {
         Customer customerToUpdate = customerController.getCustomer(addedCustomerId);
 
         // Set a new menu item for the customer
-        MenuItem item1 = new MenuItem();
-        item1.setName("Kung Pao Chicken");
+        MenuItem item3 = new MenuItem();
+        item3.setName("Kung Pao Chicken");
         item1.setPrice(1695);
-        ObjectId item1Id = item1.getId();
+        item3.setId(new ObjectId());
+        ObjectId item3Id = item3.getId();
 
         // complete setup of the new order
-        defaultOrderItems.put(item1Id, 1);
+        defaultOrderItems.put(item3Id.toString(), 1);
         defaultCustomerOrder.setItems(defaultOrderItems);
         customerOrderList.add(defaultCustomerOrder);
         customerToUpdate.setOrders(customerOrderList);
