@@ -11,6 +11,7 @@ import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -139,25 +140,29 @@ public class OrderControllerTest {
                 });
     }
 
-    // TODO: Figure out why this test only fails on GitHub
-    // @Test
-    // void testInvalidOrderTime() throws DuplicateKeyException, InvalidOrderException {
-    //     // make an invalid order and try to add it
-    //     LocalDateTime currentTime = LocalDateTime.now();
-    //     LocalDateTime orderByInvalid =
-    //             LocalDateTime.of(
-    //                     currentTime.getYear(),
-    //                     currentTime.getMonthValue(),
-    //                     currentTime.getDayOfMonth(),
-    //                     currentTime.getHour() + Order.MAXIMUM_HOURS_ORDER_IN_ADV + 5,
-    //                     currentTime.getMinute(),
-    //                     currentTime.getSecond());
+    @Test
+    void testInvalidOrderTime() throws DuplicateKeyException, InvalidOrderException {
+        // make an invalid order and try to add it
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime orderByInvalid = currentTime.plusHours(Order.MAXIMUM_HOURS_ORDER_IN_ADV + 1);
+        neworder.setOrderTime(orderByInvalid);
+        assertThrows(
+                InvalidOrderException.class,
+                () -> {
+                    orderController.addOrder(neworder);
+                });
+    }
 
-    //     neworder.setOrderTime(orderByInvalid);
-    //     assertThrows(
-    //             InvalidOrderException.class,
-    //             () -> {
-    //                 orderController.addOrder(neworder);
-    //             });
-    // }
+    @Test
+    public void testAddItemToOrder() throws Exception {
+        // Add a new order and then proceed to add another item to it
+        orderController.addOrder(neworder);
+        ObjectId itemIdToAdd = new ObjectId();
+        ObjectId orderId = neworder.getId();
+        Integer quantity = 2;
+        orderController.addItemToOrder(orderId, itemIdToAdd, quantity);
+        // assert both the key and correct value (quantity) are in the order items
+        assertTrue(neworder.getItems().containsKey(itemIdToAdd.toString()));
+        assertEquals(quantity, neworder.getItems().get(itemIdToAdd.toString()));
+    }
 }

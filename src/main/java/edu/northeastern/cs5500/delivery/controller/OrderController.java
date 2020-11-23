@@ -1,6 +1,7 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.Customer;
+import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
@@ -59,6 +60,7 @@ public class OrderController {
      * @param order - the updated order
      * @throws Exception
      */
+    // TODO: Do we want to throw something else other than Exception?
     public void updateOrder(@Nonnull Order order) throws Exception {
         log.debug("OrderController > updateOrder(...)");
         // TODO: Do we need to check that the order id exists in the repo?
@@ -129,6 +131,16 @@ public class OrderController {
         return orders.add(order);
     }
 
+    // TODO: Should parameters just be String instead to avoid all these conversions?
+    public Order addItemToOrder(ObjectId orderId, ObjectId itemId, Integer quantity)
+            throws Exception {
+        Order order = getOrder(orderId);
+        // TODO: make sure order Id is valid?
+        order.getItems().put(itemId.toString(), quantity);
+        updateOrder(order);
+        return order;
+    }
+
     /** Creates default orders to add to the order repository */
     private void initalizeOrders() {
         log.info("OrderController > construct > adding default orders");
@@ -142,6 +154,11 @@ public class OrderController {
 
         // create order items
         HashMap<String, Integer> items = new HashMap<>();
+        MenuItem item1 = new MenuItem();
+        item1.setName("Kimchi Soup");
+        item1.setPrice(899);
+        item1.setId(new ObjectId());
+        items.put(item1.getId().toString(), 2);
 
         // create the order
         final Order defaultorder1 = new Order();

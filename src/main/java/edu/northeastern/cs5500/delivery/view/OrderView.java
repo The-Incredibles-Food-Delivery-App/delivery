@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.OrderController;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.OrderStatus;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -53,27 +54,29 @@ public class OrderView implements View {
                 },
                 jsonTransformer);
 
-        // TODO: is this allowed with multiple params?
         put(
-                "order/:orderid/additem/:itemid", 
+                "/additem",
                 (request, response) -> {
-                    final String orderParam = request.params(":orderid");
-                    final String itemParam = request.params(":itemid");
+                    final String orderParam = request.queryParams("orderId");
+                    final String itemParam = request.queryParams("itemId");
+                    final String quantityParam = request.queryParams("quantity");
                     log.debug("/order/additem/:itemid<{}>", itemParam);
                     final ObjectId orderId = new ObjectId(orderParam);
                     final ObjectId itemId = new ObjectId(itemParam);
-                    orderController.addItemToOrder(itemId);
-                    Order order = orderController.getOrder(orderId);
-                    if (order == null) {
+                    // TODO: Make sure frontend enforces that quantity is a valid int! Or enforce
+                    // here??
+                    final Integer quantity = Integer.parseInt(quantityParam);
+                    Order revisedOrder = orderController.addItemToOrder(orderId, itemId, quantity);
+                    if (revisedOrder == null) {
                         halt(404);
                     }
                     response.type("application/json");
-                    return order;
+                    return revisedOrder;
                 },
                 jsonTransformer);
 
         post(
-                "/order",
+                "/neworder",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Order order = mapper.readValue(request.body(), Order.class);
@@ -81,11 +84,11 @@ public class OrderView implements View {
                         response.status(400);
                         return "";
                     }
-
                     // Ignore the user-provided ID if there is one
                     order.setId(null);
+                    // Set the order status to not confirmed
+                    order.setOrderStatus(OrderStatus.NOT_CONFIRMED);
                     order = orderController.addOrder(order);
-
                     response.redirect(String.format("/order/{}", order.getId().toHexString()), 301);
                     return order;
                 });
