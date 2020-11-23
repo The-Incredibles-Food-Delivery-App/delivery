@@ -19,14 +19,10 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class OrderController {
     private final GenericRepository<Order> orders;
-    private final MenuItemController menuItemController;
 
     @Inject
-    OrderController(
-            GenericRepository<Order> orderRepository,
-            MenuItemController menuItemControllerInstance) {
+    OrderController(GenericRepository<Order> orderRepository) {
         orders = orderRepository;
-        menuItemController = menuItemControllerInstance;
 
         log.info("OrderController > construct");
         initalizeOrders();
@@ -139,6 +135,18 @@ public class OrderController {
             throw new DuplicateKeyException("Key already in use");
         }
         return orders.add(order);
+    }
+
+    // TODO: Complete this method after my last PR is merged!
+    /**
+     * 
+     * @param itemId
+     */
+    public void addItemToOrder(ObjectId orderId, ObjectId itemId) {
+        Order order = getOrder(orderId);
+        Restaurant restaurant = order.getRestaurant();
+        HashMap<ObjectId, Integer> items = order.getItems();
+        items.put(itemId, restaurant.getMenuItems().get(itemId));
     }
 
     private void initalizeOrders() {

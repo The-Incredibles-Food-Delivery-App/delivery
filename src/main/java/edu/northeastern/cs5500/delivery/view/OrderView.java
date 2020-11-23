@@ -23,7 +23,6 @@ public class OrderView implements View {
     OrderView() {}
 
     @Inject JsonTransformer jsonTransformer;
-
     @Inject OrderController orderController;
 
     @Override
@@ -46,6 +45,25 @@ public class OrderView implements View {
                     log.debug("/order/:id<{}>", paramId);
                     final ObjectId id = new ObjectId(paramId);
                     Order order = orderController.getOrder(id);
+                    if (order == null) {
+                        halt(404);
+                    }
+                    response.type("application/json");
+                    return order;
+                },
+                jsonTransformer);
+
+        // TODO: is this allowed with multiple params?
+        put(
+                "order/:orderid/additem/:itemid", 
+                (request, response) -> {
+                    final String orderParam = request.params(":orderid");
+                    final String itemParam = request.params(":itemid");
+                    log.debug("/order/additem/:itemid<{}>", itemParam);
+                    final ObjectId orderId = new ObjectId(orderParam);
+                    final ObjectId itemId = new ObjectId(itemParam);
+                    orderController.addItemToOrder(itemId);
+                    Order order = orderController.getOrder(orderId);
                     if (order == null) {
                         halt(404);
                     }
