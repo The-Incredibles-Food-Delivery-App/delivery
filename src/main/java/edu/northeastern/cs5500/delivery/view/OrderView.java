@@ -65,6 +65,9 @@ public class OrderView implements View {
                     final ObjectId itemId = new ObjectId(itemParam);
                     // TODO: Make sure frontend enforces that quantity is a valid int! Or enforce
                     // here??
+                    /* UPDATE (CSM):
+                     enforce it on the frontend for sure!
+                     */
                     final Integer quantity = Integer.parseInt(quantityParam);
                     Order revisedOrder = orderController.addItemToOrder(orderId, itemId, quantity);
                     if (revisedOrder == null) {
@@ -100,6 +103,11 @@ public class OrderView implements View {
                     log.debug("/submitorder/:orderid<{}>", orderParam);
                     final ObjectId orderId = new ObjectId(orderParam);
                     // TODO: Do I need to validate the order obtained is good?
+                    /* UPDATE (CSM):
+                    We could force validation via our front end, ie are all
+                    the fields filled out? no? okay customer doesnt move forward
+                    until mandatory fields are not null
+                    */
                     Order order = orderController.getOrder(orderId);
                     order.setOrderStatus(OrderStatus.CONFIRMED);
                     // TODO: Create new delivery object and pass off to delivery controller

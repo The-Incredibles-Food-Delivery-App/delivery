@@ -58,12 +58,21 @@ public class OrderController {
      * Updates the given order
      *
      * @param order - the updated order
-     * @throws Exception
+     * @throws OrderIncompleteException
+     * @throws InvalidOrderException
      */
-    // TODO: Do we want to throw something else other than Exception?
-    public void updateOrder(@Nonnull Order order) throws Exception {
+    public void updateOrder(@Nonnull Order order) throws OrderIncompleteException, InvalidOrderException {
         log.debug("OrderController > updateOrder(...)");
-        // TODO: Do we need to check that the order id exists in the repo?
+        ObjectId id = order.getId();
+        // Check order for Id
+        // if order is not in the system, throw exception
+        if (id == null) {
+            throw new InvalidOrderException("This order does not exist");
+        }
+        // if order time is before today, throw exception
+        if (order.getOrderTime().isBefore(LocalDateTime.now())) {
+            throw new InvalidOrderException("This order has already been completed");
+        }
         orders.update(order);
     }
 
