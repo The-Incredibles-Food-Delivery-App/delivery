@@ -20,7 +20,7 @@ public class Order implements Model {
     private CreditCard payment;
 
     /**
-     * Validates the order. A valId order has a user, a valid associated restaurant, at least one
+     * Validates the order. A valid order has a user, a valid associated restaurant, at least one
      * item, does not exceeded the maximum distance, and has a valid cost.
      *
      * @return true if this order is valid.

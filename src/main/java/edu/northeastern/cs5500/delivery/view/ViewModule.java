@@ -20,6 +20,24 @@ public class ViewModule {
 
     @Provides
     @IntoSet
+    public View provideRestaurantView(RestaurantView restaurantView) {
+        return restaurantView;
+    }
+
+    @Provides
+    @IntoSet
+    public View provideCustomerView(CustomerView customerView) {
+        return customerView;
+    }
+
+    @Provides
+    @IntoSet
+    public View provideCreditCardView(CreditCardView creditCardView) {
+        return creditCardView;
+    }
+
+    @Provides
+    @IntoSet
     public View provideStatusView(StatusView statusView) {
         return statusView;
     }
