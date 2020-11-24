@@ -61,18 +61,19 @@ public class OrderController {
      * @throws OrderIncompleteException
      * @throws InvalidOrderException
      */
-    public void updateOrder(@Nonnull Order order) throws OrderIncompleteException, InvalidOrderException {
+    public void updateOrder(@Nonnull Order order)
+            throws OrderIncompleteException, InvalidOrderException {
         log.debug("OrderController > updateOrder(...)");
-        ObjectId id = order.getId();
+        // ObjectId id = order.getId();
         // Check order for Id
         // if order is not in the system, throw exception
-        if (id == null) {
-            throw new InvalidOrderException("This order does not exist");
-        }
+        // if (id == null) {
+        //     throw new InvalidOrderException("This order does not exist");
+        // }
         // if order time is before today, throw exception
-        if (order.getOrderTime().isBefore(LocalDateTime.now())) {
-            throw new InvalidOrderException("This order has already been completed");
-        }
+        // if (order.getOrderTime().isBefore(LocalDateTime.now())) {
+        //     throw new InvalidOrderException("This order has already been completed");
+        // }
         orders.update(order);
     }
 

@@ -66,8 +66,8 @@ public class OrderView implements View {
                     // TODO: Make sure frontend enforces that quantity is a valid int! Or enforce
                     // here??
                     /* UPDATE (CSM):
-                     enforce it on the frontend for sure!
-                     */
+                    enforce it on the frontend for sure!
+                    */
                     final Integer quantity = Integer.parseInt(quantityParam);
                     Order revisedOrder = orderController.addItemToOrder(orderId, itemId, quantity);
                     if (revisedOrder == null) {

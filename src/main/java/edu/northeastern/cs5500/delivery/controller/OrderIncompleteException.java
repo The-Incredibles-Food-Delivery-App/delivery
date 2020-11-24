@@ -11,5 +11,4 @@ public class OrderIncompleteException extends Exception {
     public OrderIncompleteException(String message) {
         super(message);
     }
-    
 }
