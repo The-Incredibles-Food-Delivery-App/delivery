@@ -79,7 +79,7 @@ public class OrderView implements View {
                 jsonTransformer);
 
         post(
-                "/neworder",
+                "/order",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Order order = mapper.readValue(request.body(), Order.class);
@@ -117,13 +117,13 @@ public class OrderView implements View {
                 jsonTransformer);
 
         delete(
-                "/deleteorder",
+                "/order",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Order order = mapper.readValue(request.body(), Order.class);
-                    orderController.deleteOrder(order.getId());
+                    final String orderParam = request.queryParams("orderId");
+                    final ObjectId orderId = new ObjectId(orderParam);
+                    orderController.deleteOrder(orderId);
                     response.type("application/json");
-                    return order;
+                    return "Successfully Deleted";
                 });
     }
 }

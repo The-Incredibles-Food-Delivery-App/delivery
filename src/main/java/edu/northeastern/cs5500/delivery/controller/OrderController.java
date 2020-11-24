@@ -61,8 +61,7 @@ public class OrderController {
      * @throws OrderIncompleteException
      * @throws InvalidOrderException
      */
-    public void updateOrder(@Nonnull Order order)
-            throws OrderIncompleteException, InvalidOrderException {
+    public void updateOrder(@Nonnull Order order) throws InvalidOrderException {
         log.debug("OrderController > updateOrder(...)");
         // ObjectId id = order.getId();
         // Check order for Id
