@@ -86,34 +86,35 @@ public class OrderView implements View {
                     }
                     // Ignore the user-provided ID if there is one
                     order.setId(null);
-                    // Set the order status to not confirmed
+                    // Set the order status
                     order.setOrderStatus(OrderStatus.NOT_CONFIRMED);
                     order = orderController.addOrder(order);
-                    response.redirect(String.format("/order/{}", order.getId().toHexString()), 301);
+                    response.redirect(String.format("/order/{}", order.getId().toHexString(), 301));
                     return order;
                 });
 
         put(
-                "/order",
+                "/submitorder",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Order order = mapper.readValue(request.body(), Order.class);
-                    if (!order.isValid()) {
-                        response.status(400);
-                        return "";
-                    }
-
+                    final String orderParam = request.queryParams("orderId");
+                    log.debug("/submitorder/:orderid<{}>", orderParam);
+                    final ObjectId orderId = new ObjectId(orderParam);
+                    // TODO: Do I need to validate the order obtained is good?
+                    Order order = orderController.getOrder(orderId);
+                    order.setOrderStatus(OrderStatus.CONFIRMED);
+                    // TODO: Create new delivery object and pass off to delivery controller
                     orderController.updateOrder(order);
                     return order;
-                });
+                },
+                jsonTransformer);
 
         delete(
-                "/order",
+                "/deleteorder",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Order order = mapper.readValue(request.body(), Order.class);
-
                     orderController.deleteOrder(order.getId());
+                    response.type("application/json");
                     return order;
                 });
     }
