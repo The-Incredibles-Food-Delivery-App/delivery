@@ -51,6 +51,11 @@ public class RepositoryModule {
     public GenericRepository<Recommendation> provideRecommendationRepository() {
         return new InMemoryRepository<>();
     }
+
+    @Provides
+    public GenericRepository<User> provideUserRepository() {
+        return new InMemoryRepository<>();
+    }
 }
 
 /*
