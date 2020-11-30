@@ -7,6 +7,7 @@ import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
@@ -56,12 +57,23 @@ public class DeliveryController {
         return totalCost;
     }
 
+    /**
+     * Returns the delivery corresponding to the given id
+     *
+     * @param uuid - the id of the delivery
+     * @return the delivery corresponding to the given id
+     */
     @Nullable
     public Delivery getDelivery(@Nonnull ObjectId uuid) {
         log.debug("DeliveryController > getDelivery({})", uuid);
         return deliveries.get(uuid);
     }
 
+    /**
+     * Returns all deliveries in the delivery repository
+     *
+     * @return all deliveries
+     */
     @Nonnull
     public Collection<Delivery> getDeliveries() {
         log.debug("DeliveryController > getDeliveries()");
@@ -115,6 +127,14 @@ public class DeliveryController {
         }
     }
 
+    /**
+     * Adds the given deliery to the delivery repository
+     *
+     * @param delivery - the delivery to add, returns the newly added delivery
+     * @return the newly added delivery
+     * @throws DuplicateKeyException
+     * @throws InvalidDeliveryException
+     */
     @Nonnull
     public Delivery addDelivery(@Nonnull Delivery delivery)
             throws DuplicateKeyException, InvalidDeliveryException {
@@ -136,16 +156,67 @@ public class DeliveryController {
         return deliveries.add(delivery);
     }
 
+    /**
+     * Completed the given delivery by setting status and completion time, returns the complete
+     * delivery
+     *
+     * @param delivery - the delivery be be completed
+     * @return the complete delivery
+     * @throws Exception
+     */
+    @Nonnull
+    public Delivery completeDelivery(@Nonnull Delivery delivery) throws Exception {
+        delivery.setDeliveryStatus(DeliveryStatus.DELIVERED);
+        delivery.setCompletionTime(LocalDateTime.now());
+        updateDelivery(delivery);
+        // TODO: Add the completed order to the Customer's order history?
+        return delivery;
+    }
+
+    // TODO: is this needed method needed? Should I just make a POST request from the frontend??
+    /**
+     * Creates a new delivery for the given order, returns the newly created delivery
+     *
+     * @param order - the order associated with the new delivery object
+     * @return the newly created delivery object for the order
+     * @throws InvalidDeliveryException
+     * @throws DuplicateKeyException
+     */
+    @Nonnull
+    public Delivery createDelivery(@Nonnull Order order)
+            throws DuplicateKeyException, InvalidDeliveryException {
+        // create a new delivery object for the given order
+        Delivery delivery = new Delivery();
+        delivery.setOrder(order);
+        delivery.setCost(calculateCost(delivery));
+        // TODO: Find and set a delivery driver for the new delivery
+        // Add delivery to the delivery repository
+        return getDelivery(addDelivery(delivery).getId());
+    }
+
+    /**
+     * Updates the given delivery
+     *
+     * @param deliveryToUpdate - the delivery object to update
+     * @throws Exception
+     */
     public void updateDelivery(@Nonnull Delivery deliveryToUpdate) throws Exception {
         log.debug("DeliveryController > updateDelivery(...)");
         deliveries.update(deliveryToUpdate);
     }
 
+    /**
+     * Deletes the delivery corresponding to the given id
+     *
+     * @param id - the id corresponding to the delivery to delete
+     * @throws Exception
+     */
     public void deleteDelivery(@Nonnull ObjectId id) throws Exception {
         log.debug("DeliveryController > deleteDelivery(...)");
         deliveries.delete(id);
     }
 
+    /** Initializes the delivery repository with default data */
     private void initalizeDeliveries() {
         // create items and order
         final Delivery defaultDelivery1 = new Delivery();
@@ -187,7 +258,7 @@ public class DeliveryController {
 
         // complete setup of delivery
         defaultDelivery1.setNotes("Place in the basket on the front porch");
-        defaultDelivery1.setDeliveryStatus(DeliveryStatus.ENROUTE);
+        defaultDelivery1.setDeliveryStatus(DeliveryStatus.IN_PROGRESS);
         defaultDelivery1.setDistance(11.25);
         defaultDelivery1.setOrder(defaultorder1);
 

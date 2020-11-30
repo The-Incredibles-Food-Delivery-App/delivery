@@ -9,6 +9,7 @@ import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.OrderStatus;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
 import java.time.LocalDateTime;
@@ -127,6 +128,15 @@ public class OrderControllerTest {
         // delete the new order
         orderController.deleteOrder(orderId);
         assertEquals(orderController.getOrders().size(), 1);
+    }
+
+    @Test
+    void testSubmitOrder() throws InvalidOrderException, DuplicateKeyException {
+        Order orderAdded = orderController.addOrder(neworder);
+        ObjectId addedOrderId = orderAdded.getId();
+        orderController.submitOrder(orderAdded);
+        assertEquals(
+                OrderStatus.CONFIRMED, orderController.getOrder(addedOrderId).getOrderStatus());
     }
 
     @Test

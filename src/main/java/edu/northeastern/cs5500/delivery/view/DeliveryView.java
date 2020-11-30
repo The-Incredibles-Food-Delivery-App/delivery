@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.DeliveryController;
 import edu.northeastern.cs5500.delivery.model.Delivery;
+import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -67,11 +68,28 @@ public class DeliveryView implements View {
                     // Ignore the user-provided ID if there is one
                     delivery.setId(null);
                     delivery = deliveryController.addDelivery(delivery);
-
                     response.redirect(
                             String.format("/delivery/{}", delivery.getId().toHexString()), 301);
                     return delivery;
                 });
+
+        put(
+                "/deliver",
+                (request, response) -> {
+                    final String deliveryParam = request.queryParams("deliveryId");
+                    log.debug("/deliver/:deliveryid<{}>", deliveryParam);
+                    final ObjectId deliveryId = new ObjectId(deliveryParam);
+                    Delivery delivery = deliveryController.getDelivery(deliveryId);
+                    if (delivery == null || !delivery.isValid()) {
+                        response.status(400);
+                        return "";
+                    }
+                    // TODO: assign a delivery driver to the delivery
+                    delivery.setDeliveryStatus(DeliveryStatus.OUT_FOR_DELIVERY);
+                    deliveryController.updateDelivery(delivery);
+                    return delivery;
+                },
+                jsonTransformer);
 
         put(
                 "/delivery",
@@ -87,14 +105,33 @@ public class DeliveryView implements View {
                     return delivery;
                 });
 
+        put(
+                "/completeDelivery",
+                (request, response) -> {
+                    final String deliveryParam = request.queryParams("deliveryId");
+                    log.debug("/completeDelivery/:deliveryid<{}>", deliveryParam);
+                    final ObjectId deliveryId = new ObjectId(deliveryParam);
+                    Delivery delivery = deliveryController.getDelivery(deliveryId);
+                    if (delivery == null || !delivery.isValid()) {
+                        response.status(400);
+                        return "";
+                    }
+                    Delivery completedDelivery = deliveryController.completeDelivery(delivery);
+                    // TODO: Add the order to the Customers order history
+                    return completedDelivery;
+                },
+                jsonTransformer);
+
         delete(
                 "/delivery",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Delivery delivery = mapper.readValue(request.body(), Delivery.class);
-
-                    deliveryController.deleteDelivery(delivery.getId());
-                    return delivery;
+                    final String deliveryParam = request.queryParams("deliveryId");
+                    final ObjectId deliveryId = new ObjectId(deliveryParam);
+                    deliveryController.deleteDelivery(deliveryId);
+                    response.type("application/json");
+                    log.debug("Successfully Deleted Delivery id <{}>", deliveryId);
+                    // TODO: Is this appropriate?
+                    return null;
                 });
     }
 }
