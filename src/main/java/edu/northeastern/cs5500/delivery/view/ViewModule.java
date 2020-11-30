@@ -41,4 +41,16 @@ public class ViewModule {
     public View provideStatusView(StatusView statusView) {
         return statusView;
     }
+
+    @Provides
+    @IntoSet
+    public View provideDeliveryDriverView(DeliveryDriverView deliveryDriverView) {
+        return deliveryDriverView;
+    }
+
+    @Provides
+    @IntoSet
+    public View provideUserView(UserView userView) {
+        return userView;
+    }
 }
