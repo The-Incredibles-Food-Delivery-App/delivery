@@ -3,6 +3,7 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
+import edu.northeastern.cs5500.delivery.model.OrderStatus;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
@@ -58,22 +59,26 @@ public class OrderController {
      * Updates the given order
      *
      * @param order - the updated order
-     * @throws OrderIncompleteException
-     * @throws InvalidOrderException
      */
-    public void updateOrder(@Nonnull Order order) throws InvalidOrderException {
+    public void updateOrder(@Nonnull Order order) {
         log.debug("OrderController > updateOrder(...)");
-        // ObjectId id = order.getId();
-        // Check order for Id
-        // if order is not in the system, throw exception
-        // if (id == null) {
-        //     throw new InvalidOrderException("This order does not exist");
-        // }
-        // if order time is before today, throw exception
-        // if (order.getOrderTime().isBefore(LocalDateTime.now())) {
-        //     throw new InvalidOrderException("This order has already been completed");
-        // }
         orders.update(order);
+    }
+
+    /**
+     * Submits the given order by creating a delivery for that order
+     *
+     * @param order
+     */
+    @Nonnull
+    public void submitOrder(@Nonnull Order order) {
+        // TODO: Isn't delivery controller singleton? inject it?
+        // DeliveryController deliveryController = DeliveryController.getInstance();
+        log.debug("OrderController > submitOrder(...)");
+        // TODO: or use POST request in Delivery View?
+        // deliveryController.createDelivery(order);
+        order.setOrderStatus(OrderStatus.CONFIRMED);
+        updateOrder(order);
     }
 
     /**

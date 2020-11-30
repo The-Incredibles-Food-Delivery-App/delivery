@@ -109,7 +109,7 @@ public class OrderView implements View {
                     until mandatory fields are not null
                     */
                     Order order = orderController.getOrder(orderId);
-                    order.setOrderStatus(OrderStatus.CONFIRMED);
+                    orderController.submitOrder(order);
                     // TODO: Create new delivery object and pass off to delivery controller
                     orderController.updateOrder(order);
                     return order;
@@ -123,6 +123,7 @@ public class OrderView implements View {
                     final ObjectId orderId = new ObjectId(orderParam);
                     orderController.deleteOrder(orderId);
                     response.type("application/json");
+                    // TODO: should we return something else? Maybe null?
                     return "Successfully Deleted";
                 });
     }

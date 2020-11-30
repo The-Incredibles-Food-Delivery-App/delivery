@@ -1,7 +1,9 @@
 package edu.northeastern.cs5500.delivery.model;
 
 public enum DeliveryStatus {
-    ENROUTE,
     FAILED,
-    DELIVERED;
+    IN_PROGRESS,
+    OUT_FOR_DELIVERY,
+    CANCELLED,
+    DELIVERED
 }

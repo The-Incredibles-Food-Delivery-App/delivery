@@ -6,11 +6,13 @@ package edu.northeastern.cs5500.delivery.controller;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
+import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
@@ -136,7 +138,23 @@ class DeliveryControllerTest {
         ObjectId addedDeliveryId = addedDelivery.getId();
         newDelivery.setId(addedDeliveryId);
         Delivery addedDeliveryInCollection = deliveryController.getDelivery(addedDeliveryId);
-        assertEquals(addedDeliveryInCollection.getCost(), (Integer) 2948);
+        assertEquals((Integer) 2948, addedDeliveryInCollection.getCost());
+    }
+
+    @Test
+    void testCreateDelivery() throws DuplicateKeyException, InvalidDeliveryException {
+        Delivery createdDelivery = deliveryController.createDelivery(defaultOrder);
+        ObjectId createdDeliveryId = createdDelivery.getId();
+        assertEquals(defaultOrder, deliveryController.getDelivery(createdDeliveryId).getOrder());
+        assertEquals((Integer) 2948, deliveryController.getDelivery(createdDeliveryId).getCost());
+    }
+
+    @Test
+    void testCompleteDelivery() throws Exception {
+        Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
+        Delivery completedDelivery = deliveryController.completeDelivery(addedDelivery);
+        assertEquals(DeliveryStatus.DELIVERED, completedDelivery.getDeliveryStatus());
+        assertNotNull(completedDelivery.getCompletionTime());
     }
 
     @Test
