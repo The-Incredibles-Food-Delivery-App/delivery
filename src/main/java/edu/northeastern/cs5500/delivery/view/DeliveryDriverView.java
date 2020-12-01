@@ -68,6 +68,7 @@ public class DeliveryDriverView implements View {
                     // Ignore the user-provided ID if there is one
                     deliveryDriver.setId(null);
                     deliveryDriver = deliveryDriverController.addDeliveryDriver(deliveryDriver);
+                    deliveryDriver.setCurrentlyWorking(false);
 
                     response.redirect(
                             String.format(
