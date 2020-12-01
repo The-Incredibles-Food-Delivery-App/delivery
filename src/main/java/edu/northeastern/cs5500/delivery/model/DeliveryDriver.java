@@ -13,6 +13,6 @@ public class DeliveryDriver extends User {
     /** @return true if this delivery driver is valid */
     @JsonIgnore
     public boolean isValid() {
-        return currentlyWorking != null;
+        return this.currentlyWorking != null;
     }
 }
