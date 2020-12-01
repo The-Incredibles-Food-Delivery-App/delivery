@@ -106,6 +106,7 @@ public class DeliveryDriverController {
         defaultdriver1.setUserName("JJS");
         defaultdriver1.setEmail("anemail@google.com");
         defaultdriver1.setPhoneNumber("55555555555");
+        defaultdriver1.setAddress("111 S Apple St");
         defaultdriver1.setCurrentlyWorking(true);
         defaultdriver1.setCurrentOrder(defaultorder1);
 
