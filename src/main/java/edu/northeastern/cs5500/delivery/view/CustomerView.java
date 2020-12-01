@@ -7,7 +7,6 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.CustomerController;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import javax.inject.Inject;
@@ -22,7 +21,7 @@ public class CustomerView implements View {
     @Inject
     CustomerView() {}
 
-    @Inject JsonTransformer jsonTransformer;
+    // @Inject JsonTransformer jsonTransformer;
 
     @Inject CustomerController customerController;
 
@@ -36,8 +35,9 @@ public class CustomerView implements View {
                     log.debug("/customer");
                     response.type("application/json");
                     return customerController.getCustomers();
-                },
-                jsonTransformer);
+                });
+        // jsonTransformer
+        // );
 
         get(
                 "/customer/:id",
@@ -51,8 +51,8 @@ public class CustomerView implements View {
                     }
                     response.type("application/json");
                     return customer;
-                },
-                jsonTransformer);
+                });
+        // jsonTransformer);
 
         post(
                 "/customer",
