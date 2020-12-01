@@ -15,9 +15,9 @@ public class Order implements Model {
     private HashMap<String, Integer> items;
     private OrderStatus orderStatus;
     private LocalDateTime orderTime;
-    private Customer customer;
+    private ObjectId customerId;
     private Restaurant restaurant;
-    private CreditCard payment;
+    private ObjectId paymentId;
 
     /**
      * Validates the order. A valid order has a user, a valid associated restaurant, at least one
@@ -27,6 +27,6 @@ public class Order implements Model {
      */
     @JsonIgnore
     public boolean isValid() {
-        return this.customer != null && this.restaurant != null;
+        return this.customerId != null && this.restaurant != null;
     }
 }
