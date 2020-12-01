@@ -66,19 +66,23 @@ public class OrderController {
     }
 
     /**
-     * Submits the given order by creating a delivery for that order
+     * Submits the given order by creating a delivery for that order, returns True if order is
+     * submitted successfully, false otherwise
      *
-     * @param order
+     * @param order - the order to submit
+     * @return
      */
     @Nonnull
-    public void submitOrder(@Nonnull Order order) {
-        // TODO: Isn't delivery controller singleton? inject it?
-        // DeliveryController deliveryController = DeliveryController.getInstance();
+    public Boolean submitOrder(@Nonnull Order order) {
         log.debug("OrderController > submitOrder(...)");
-        // TODO: or use POST request in Delivery View?
-        // deliveryController.createDelivery(order);
-        order.setOrderStatus(OrderStatus.CONFIRMED);
+        // validate order
+        if (!order.isValid()) {
+            return false;
+        }
+        // TODO: call createDelivery method of delivery controller?
         updateOrder(order);
+        order.setOrderStatus(OrderStatus.CONFIRMED);
+        return true;
     }
 
     /**
@@ -102,8 +106,6 @@ public class OrderController {
      */
     private boolean verifyOrderTime(@Nonnull Order order) throws InvalidOrderException {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
-        // TODO: Do we want to throw an exception if set in the past?
-        // TODO: Is this method chaining bad?
         if (order.getOrderTime() == null || order.getOrderTime().isBefore(LocalDateTime.now())) {
             order.setOrderTime(LocalDateTime.now());
         }
@@ -145,11 +147,9 @@ public class OrderController {
         return orders.add(order);
     }
 
-    // TODO: Should parameters just be String instead to avoid all these conversions?
     public Order addItemToOrder(ObjectId orderId, ObjectId itemId, Integer quantity)
             throws Exception {
         Order order = getOrder(orderId);
-        // TODO: make sure order Id is valid?
         order.getItems().put(itemId.toString(), quantity);
         updateOrder(order);
         return order;
@@ -177,9 +177,9 @@ public class OrderController {
         // create the order
         final Order defaultorder1 = new Order();
         defaultorder1.setOrderTime(LocalDateTime.now());
-        // TODO: How to set the restaurant? Just creating dummy reataurant for now.
+        // Creating dummy restaurant for the fake order
         defaultorder1.setRestaurant(new Restaurant());
-        defaultorder1.setCustomer(defaultCustomer);
+        defaultorder1.setCustomerId(new ObjectId());
         defaultorder1.setItems(items);
 
         try {
