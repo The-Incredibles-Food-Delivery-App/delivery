@@ -91,7 +91,7 @@ public class CustomerController {
         Order defaultOrder = new Order();
         defaultOrder.setOrderTime(LocalDateTime.now());
         defaultOrder.setRestaurant(new Restaurant());
-        defaultOrder.setCustomer(defaultcustomer1);
+        defaultOrder.setCustomerId(defaultcustomer1.getId());
         defaultOrder.setItems(items);
 
         HashSet<Order> customerOrder = new HashSet<>();

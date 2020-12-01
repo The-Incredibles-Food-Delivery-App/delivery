@@ -59,6 +59,7 @@ public class CustomerControllerTest {
         // complete setup of order
         defaultCustomerOrder.setRestaurant(defaultRestaurant);
         defaultCustomerOrder.setItems(defaultOrderItems);
+        defaultCustomerOrder.setCustomerId(defaultCustomer1.getId());
 
         customerOrderList.add(defaultCustomerOrder);
 
