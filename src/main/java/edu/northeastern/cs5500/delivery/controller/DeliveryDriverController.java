@@ -97,7 +97,7 @@ public class DeliveryDriverController {
         defaultorder1.setOrderTime(LocalDateTime.now());
         // TODO: How to set the restaurant? Just creating dummy reataurant for now.
         defaultorder1.setRestaurant(new Restaurant());
-        defaultorder1.setCustomer(defaultCustomer);
+        defaultorder1.setCustomerId(new ObjectId());
         defaultorder1.setItems(items);
 
         final DeliveryDriver defaultdriver1 = new DeliveryDriver();
