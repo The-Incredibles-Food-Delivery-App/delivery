@@ -94,12 +94,14 @@ public class DeliveryDriverView implements View {
         delete(
                 "/deliverydriver",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    DeliveryDriver deliveryDriver =
-                            mapper.readValue(request.body(), DeliveryDriver.class);
+                    final String deliveryDriverParam = request.queryParams("deliveryDriverId");
+                    final ObjectId deliveryDriverId = new ObjectId(deliveryDriverParam);
+                    deliveryDriverController.deleteDeliveryDriver(deliveryDriverId);
 
-                    deliveryDriverController.deleteDeliveryDriver(deliveryDriver.getId());
-                    return deliveryDriver;
+                    response.type("application/json");
+                    log.debug("Successfully Deleted Delivery Driver id <{}>", deliveryDriverId);
+                    // TODO: Is this appropriate?
+                    return null;
                 });
     }
 }
