@@ -48,10 +48,6 @@ public class CustomerControllerTest {
         item2.setPrice(499);
         item2.setId(new ObjectId());
 
-        // complete setup of the new order
-        // ObjectId item1Id = item1.getId();
-        // ObjectId item2Id = item2.getId();
-
         // complete setup of list of order items
         defaultOrderItems.put(item1.getId().toString(), 1);
         defaultOrderItems.put(item2.getId().toString(), 2);
@@ -80,12 +76,6 @@ public class CustomerControllerTest {
         defaultCustomer2.setEmail("theOnlySamRockwell@gmail.com");
         defaultCustomer2.setAddress("333 Hollywood Blvd");
         defaultCustomer2.setOrders(null);
-
-        // Create a Default Invalid Customer
-        // defaultInvalidCustomer.setFirstName("Alaska");
-        // defaultInvalidCustomer.setLastName("Mills");
-        // defaultInvalidCustomer.setUserName("a_mills");
-        // defaultInvalidCustomer.setEmail("a_mills23@gmail.com");
     }
 
     @Test
@@ -97,16 +87,6 @@ public class CustomerControllerTest {
         // customerController.addCustomer(defaultCustomer1);
         assertThat(customerController.getCustomers()).isNotEmpty();
     }
-
-    // @Test
-    // void testRegisterCreatesValidCustomers() {
-    //     CustomerController customerController =
-    //             new CustomerController(new InMemoryRepository<Customer>());
-
-    //     for (Customer customer : customerController.getCustomers()) {
-    //         assertTrue(customer.isValid());
-    //     }
-    // }
 
     @Test
     void testRegisterCanAddValidCustomer() throws DuplicateKeyException, InvalidUserException {
@@ -164,16 +144,4 @@ public class CustomerControllerTest {
         customerController.deleteCustomer(addedCustomerId);
         assertNull(customerController.getCustomer(addedCustomerId));
     }
-
-    // @Test
-    // void testInvalidUser() throws DuplicateKeyException {
-    //     CustomerController customerController =
-    //             new CustomerController(new InMemoryRepository<Customer>());
-
-    //     assertThrows(
-    //             InvalidUserException.class,
-    //             () -> {
-    //                 customerController.addCustomer(defaultInvalidCustomer);
-    //             });
-    // }
 }
