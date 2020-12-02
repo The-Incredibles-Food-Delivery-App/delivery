@@ -76,25 +76,34 @@ public class CreditCardView implements View {
         put(
                 "/creditcard",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    CreditCard creditCard = mapper.readValue(request.body(), CreditCard.class);
+                    final String creditCardParam = request.queryParams("creditCardId");
+                    final String creditCardNum = request.queryParams("number");
+                    log.debug("/creditcard/:creditcardid<{}>", creditCardParam);
+                    final ObjectId creditCardId = new ObjectId(creditCardParam);
+                    CreditCard creditCard = creditCardController.getCreditCard(creditCardId);
+
                     if (!creditCard.isValid()) {
                         response.status(400);
                         return "";
                     }
+                    long updatedNumber = Long.parseLong(creditCardNum);
+                    creditCard.setCardNumber(updatedNumber);
 
                     creditCardController.updateCreditCard(creditCard);
                     return creditCard;
-                });
+                },
+                jsonTransformer);
 
         delete(
                 "/creditcard",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    CreditCard creditCard = mapper.readValue(request.body(), CreditCard.class);
+                    final String creditCardParam = request.queryParams("creditCardId");
+                    final ObjectId creditCardId = new ObjectId(creditCardParam);
+                    creditCardController.deleteCreditCard(creditCardId);
 
-                    creditCardController.deleteCreditCard(creditCard.getId());
-                    return creditCard;
+                    response.type("application/json");
+                    log.debug("Successfully Deleted Credit Card id <{}>", creditCardId);
+                    return null;
                 });
     }
 }
