@@ -17,7 +17,8 @@ public class Order implements Model {
     private LocalDateTime orderTime;
     private ObjectId customerId;
     private Restaurant restaurant;
-    private ObjectId paymentId;
+    private CreditCard payment;
+    private Integer cost;
 
     /**
      * Validates the order. A valid order has a user, a valid associated restaurant, at least one

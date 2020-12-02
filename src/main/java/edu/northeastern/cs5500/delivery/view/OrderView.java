@@ -8,6 +8,7 @@ import static spark.Spark.put;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
+import edu.northeastern.cs5500.delivery.controller.DeliveryManager;
 import edu.northeastern.cs5500.delivery.controller.OrderController;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.OrderStatus;
@@ -25,6 +26,7 @@ public class OrderView implements View {
 
     @Inject JsonTransformer jsonTransformer;
     @Inject OrderController orderController;
+    @Inject DeliveryManager deliveryManager;
 
     @Override
     public void register() {
@@ -63,7 +65,7 @@ public class OrderView implements View {
                     log.debug("/order/additem/:itemid<{}>", itemParam);
                     final ObjectId orderId = new ObjectId(orderParam);
                     final ObjectId itemId = new ObjectId(itemParam);
-                    // TODO: Make sure frontend enforces that quantity is a valid int!
+                    // TODO: CSM response: Make sure frontend enforces that quantity is a valid int
                     final Integer quantity = Integer.parseInt(quantityParam);
                     Order revisedOrder = orderController.addItemToOrder(orderId, itemId, quantity);
                     if (revisedOrder == null) {
@@ -98,12 +100,9 @@ public class OrderView implements View {
                     final String orderParam = request.queryParams("orderId");
                     log.debug("/submitorder/:orderid<{}>", orderParam);
                     final ObjectId orderId = new ObjectId(orderParam);
-                    // TODO: validate the order obtained is good on frontend!
                     Order order = orderController.getOrder(orderId);
-                    Boolean orderSubmitted = orderController.submitOrder(order);
-                    // TODO: Create new delivery object and pass off to delivery controller
-                    // TODO: Test this updated put request works with Postman
-                    return orderSubmitted;
+                    deliveryManager.submitOrder(order);
+                    return order;
                 },
                 jsonTransformer);
 
@@ -114,7 +113,7 @@ public class OrderView implements View {
                     final ObjectId orderId = new ObjectId(orderParam);
                     orderController.deleteOrder(orderId);
                     response.type("application/json");
-                    // TODO: should we return something else? Is null appropriate?
+                    // TODO: should we return something else?
                     return null;
                 });
     }

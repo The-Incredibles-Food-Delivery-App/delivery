@@ -9,6 +9,10 @@
 # Compiled class file
 *.class
 
+
+# dotenv environment variables file
+.env
+
 # Log file
 *.log
 

@@ -36,27 +36,6 @@ public class DeliveryController {
     }
 
     /**
-     * Calculates the total cost of all items in the delivery order
-     *
-     * @param delivery - the given delivery
-     * @return - the total cost of the delivery order
-     */
-    @Nonnull
-    private Integer calculateCost(Delivery delivery) {
-        HashMap<String, Integer> items = delivery.getOrder().getItems();
-        Integer totalCost = 0;
-        for (String id : items.keySet()) {
-            // Add quantity * price to total cost
-            // TODO: Grab menu item and read its price- is this ok??
-            Restaurant restaurant = delivery.getOrder().getRestaurant();
-            Integer itemPrice = restaurant.getMenuItems().get(id).getPrice();
-            int quantity = items.get(id);
-            totalCost += (itemPrice * quantity);
-        }
-        return totalCost;
-    }
-
-    /**
      * Returns the delivery corresponding to the given id
      *
      * @param uuid - the id of the delivery
@@ -138,10 +117,6 @@ public class DeliveryController {
     public Delivery addDelivery(@Nonnull Delivery delivery)
             throws DuplicateKeyException, InvalidDeliveryException {
         log.debug("DeliveryController > addDelivery(...)");
-
-        // First compute the total cost
-        Integer cost = calculateCost(delivery);
-        delivery.setCost(cost);
         // verify delivery is valid
         if (!delivery.isValid() || !verifyDistance(delivery) || !verifyOrderNonempty(delivery)) {
             throw new InvalidDeliveryException("Invalid Delivery");
@@ -168,11 +143,9 @@ public class DeliveryController {
         delivery.setDeliveryStatus(DeliveryStatus.DELIVERED);
         delivery.setCompletionTime(LocalDateTime.now());
         updateDelivery(delivery);
-        // TODO: Add the completed order to the Customer's order history?
         return delivery;
     }
 
-    // TODO: is this needed method needed? Should I just make a POST request from the frontend??
     /**
      * Creates a new delivery for the given order, returns the newly created delivery
      *
@@ -184,12 +157,9 @@ public class DeliveryController {
     @Nonnull
     public Delivery createDelivery(@Nonnull Order order)
             throws DuplicateKeyException, InvalidDeliveryException {
-        // create a new delivery object for the given order
         Delivery delivery = new Delivery();
+        // assign the submitted order to the newly created delivery
         delivery.setOrder(order);
-        delivery.setCost(calculateCost(delivery));
-        // TODO: Find and set a delivery driver for the new delivery
-        // Add delivery to the delivery repository
         return getDelivery(addDelivery(delivery).getId());
     }
 
@@ -217,15 +187,14 @@ public class DeliveryController {
 
     /** Initializes the delivery repository with default data */
     private void initalizeDeliveries() {
-        // create items and order
+        // create default items and order
         final Delivery defaultDelivery1 = new Delivery();
-        // TODO: Figure out how to create default orders
         final Order defaultorder1 = new Order();
-        // TODO: How to set the restaurant? Just creating dummy reataurant for now.
         Restaurant defaultRestaurant = new Restaurant();
         HashMap<String, MenuItem> defaultMenu = new HashMap<>();
         final MenuItem defaultItem1 = new MenuItem();
         final MenuItem defaultItem2 = new MenuItem();
+
         defaultItem1.setName("Masala Dosa");
         defaultItem1.setPrice(899);
         defaultItem1.setId(new ObjectId());

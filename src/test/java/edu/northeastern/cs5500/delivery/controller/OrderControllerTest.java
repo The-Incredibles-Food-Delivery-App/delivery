@@ -24,9 +24,10 @@ public class OrderControllerTest {
     public ObjectId item1Id;
     public MenuItem item2 = new MenuItem();
     public ObjectId item2Id;
-    HashMap<String, Integer> items = new HashMap<>();
-    public MenuItemController menuItemController;
+    public HashMap<String, MenuItem> menu = new HashMap<>();
+    public HashMap<String, Integer> items = new HashMap<>();
     public OrderController orderController;
+    public ObjectId defaultCustomer;
 
     @BeforeEach
     public void setup() {
@@ -36,13 +37,27 @@ public class OrderControllerTest {
         defaultRestaurant.setCuisineType(CuisineType.CHINESE);
         defaultRestaurant.setHours("11-9");
 
-        // create two items
-        item1.setName("General Tso's Chicken");
-        item1.setPrice(1595);
+        // creating a default menu for the restaurant
+        item1.setName("Kimchi Soup");
+        item1.setPrice(999);
         item1.setId(new ObjectId());
-        item2.setName("Mongolian Beef");
-        item2.setPrice(1999);
+        item2.setName("Bulgogi Beef");
+        item2.setPrice(1299);
         item2.setId(new ObjectId());
+        item1Id = new ObjectId();
+        item1.setId(item1Id);
+        item2Id = new ObjectId();
+        item2.setId(item2Id);
+        menu.put(item1Id.toString(), item1);
+        menu.put(item2Id.toString(), item2);
+        defaultRestaurant.setMenuItems(menu);
+
+        // create a Customer
+        defaultCustomer = new ObjectId();
+
+        // create an order with two items
+        items.put(item1Id.toString(), 2);
+        items.put(item2Id.toString(), 1);
 
         // complete setup of the new order
         neworder.setItems(items);
@@ -95,20 +110,11 @@ public class OrderControllerTest {
         // add new order
         Order addedOrder = orderController.addOrder(neworder);
         ObjectId orderID = addedOrder.getId();
-
         Order orderToUpdate = orderController.getOrder(orderID);
-        MenuItem newItem = new MenuItem();
-        newItem.setName("Shrimp Dumpling");
-        newItem.setPrice(599);
-        try {
-            ObjectId newItemId = menuItemController.addMenuItem(newItem).getId();
-            orderToUpdate.getItems().put(newItemId.toString(), 1);
-            // Add an item to the order and check to see if order contains additional item
-            orderController.updateOrder(orderToUpdate);
-            assertEquals(3, orderController.getOrder(orderID).getItems().size());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        orderToUpdate.setOrderStatus(OrderStatus.CONFIRMED);
+        orderController.updateOrder(orderToUpdate);
+        Order updatedOrder = orderController.getOrder(orderID);
+        assertEquals(OrderStatus.CONFIRMED, updatedOrder.getOrderStatus());
     }
 
     @Test
@@ -123,12 +129,9 @@ public class OrderControllerTest {
     }
 
     @Test
-    void testSubmitOrder() throws InvalidOrderException, DuplicateKeyException {
-        Order orderAdded = orderController.addOrder(neworder);
-        ObjectId addedOrderId = orderAdded.getId();
-        orderController.submitOrder(orderAdded);
-        assertEquals(
-                OrderStatus.CONFIRMED, orderController.getOrder(addedOrderId).getOrderStatus());
+    void testCalculateCost() throws DuplicateKeyException, InvalidOrderException {
+        Order addedOrder = orderController.addOrder(neworder);
+        assertEquals((Integer) 3297, orderController.calculateCost(addedOrder));
     }
 
     @Test

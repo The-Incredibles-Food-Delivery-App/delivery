@@ -3,7 +3,6 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
-import edu.northeastern.cs5500.delivery.model.OrderStatus;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
@@ -63,26 +62,6 @@ public class OrderController {
     public void updateOrder(@Nonnull Order order) {
         log.debug("OrderController > updateOrder(...)");
         orders.update(order);
-    }
-
-    /**
-     * Submits the given order by creating a delivery for that order, returns True if order is
-     * submitted successfully, false otherwise
-     *
-     * @param order - the order to submit
-     * @return
-     */
-    @Nonnull
-    public Boolean submitOrder(@Nonnull Order order) {
-        log.debug("OrderController > submitOrder(...)");
-        // validate order
-        if (!order.isValid()) {
-            return false;
-        }
-        // TODO: call createDelivery method of delivery controller?
-        updateOrder(order);
-        order.setOrderStatus(OrderStatus.CONFIRMED);
-        return true;
     }
 
     /**
@@ -147,6 +126,37 @@ public class OrderController {
         return orders.add(order);
     }
 
+    /**
+     * Calculates the total cost of all items in the order and updates the cost of the order
+     *
+     * @param order - the given order
+     * @return - the total cost of the order
+     */
+    @Nonnull
+    public Integer calculateCost(@Nonnull Order order) {
+        HashMap<String, Integer> items = order.getItems();
+        Integer totalCost = 0;
+        for (String id : items.keySet()) {
+            // Add quantity * price to total cost
+            Restaurant restaurant = order.getRestaurant();
+            Integer itemPrice = restaurant.getMenuItems().get(id).getPrice();
+            int quantity = items.get(id);
+            totalCost += (itemPrice * quantity);
+        }
+        order.setCost(totalCost);
+        updateOrder(order);
+        return totalCost;
+    }
+
+    /**
+     * Adds the given item with the specified quantity to the order
+     *
+     * @param orderId - the Id of the order to add an item to
+     * @param itemId - the Id of the item to add to the order
+     * @param quantity - the quantity of the item to add to the order
+     * @return the order with the item added
+     * @throws Exception
+     */
     public Order addItemToOrder(ObjectId orderId, ObjectId itemId, Integer quantity)
             throws Exception {
         Order order = getOrder(orderId);

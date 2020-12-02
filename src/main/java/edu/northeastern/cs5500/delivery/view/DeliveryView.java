@@ -9,8 +9,8 @@ import static spark.Spark.put;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.DeliveryController;
+import edu.northeastern.cs5500.delivery.controller.DeliveryManager;
 import edu.northeastern.cs5500.delivery.model.Delivery;
-import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class DeliveryView implements View {
     DeliveryView() {}
 
     @Inject JsonTransformer jsonTransformer;
-
+    @Inject DeliveryManager deliveryManager;
     @Inject DeliveryController deliveryController;
 
     @Override
@@ -85,8 +85,7 @@ public class DeliveryView implements View {
                         return "";
                     }
                     // TODO: assign a delivery driver to the delivery
-                    delivery.setDeliveryStatus(DeliveryStatus.OUT_FOR_DELIVERY);
-                    deliveryController.updateDelivery(delivery);
+                    deliveryManager.sendForDelivery(delivery);
                     return delivery;
                 },
                 jsonTransformer);
@@ -117,7 +116,6 @@ public class DeliveryView implements View {
                         return "";
                     }
                     Delivery completedDelivery = deliveryController.completeDelivery(delivery);
-                    // TODO: Add the order to the Customers order history
                     return completedDelivery;
                 },
                 jsonTransformer);

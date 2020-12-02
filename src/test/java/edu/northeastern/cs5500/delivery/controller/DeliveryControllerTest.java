@@ -133,20 +133,10 @@ class DeliveryControllerTest {
     }
 
     @Test
-    void testCalculateCost() throws DuplicateKeyException, InvalidDeliveryException {
-        Delivery addedDelivery = deliveryController.addDelivery(newDelivery);
-        ObjectId addedDeliveryId = addedDelivery.getId();
-        newDelivery.setId(addedDeliveryId);
-        Delivery addedDeliveryInCollection = deliveryController.getDelivery(addedDeliveryId);
-        assertEquals((Integer) 2948, addedDeliveryInCollection.getCost());
-    }
-
-    @Test
     void testCreateDelivery() throws DuplicateKeyException, InvalidDeliveryException {
         Delivery createdDelivery = deliveryController.createDelivery(defaultOrder);
         ObjectId createdDeliveryId = createdDelivery.getId();
         assertEquals(defaultOrder, deliveryController.getDelivery(createdDeliveryId).getOrder());
-        assertEquals((Integer) 2948, deliveryController.getDelivery(createdDeliveryId).getCost());
     }
 
     @Test
