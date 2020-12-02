@@ -68,6 +68,7 @@ public class DeliveryDriverView implements View {
                     // Ignore the user-provided ID if there is one
                     deliveryDriver.setId(null);
                     deliveryDriver = deliveryDriverController.addDeliveryDriver(deliveryDriver);
+                    deliveryDriver.setCurrentlyWorking(false);
 
                     response.redirect(
                             String.format(
@@ -79,17 +80,41 @@ public class DeliveryDriverView implements View {
         put(
                 "/deliverydriver",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
+                    final String deliveryDriverParam = request.queryParams("deliveryDriverId");
+                    log.debug("/deliverydriver/:deliverydriverid<{}>", deliveryDriverParam);
+                    final ObjectId deliveryDriverId = new ObjectId(deliveryDriverParam);
                     DeliveryDriver deliveryDriver =
-                            mapper.readValue(request.body(), DeliveryDriver.class);
-                    if (!deliveryDriver.isValid()) {
+                            deliveryDriverController.getDeliveryDriver(deliveryDriverId);
+                    if (deliveryDriver == null || !deliveryDriver.isValid()) {
                         response.status(400);
                         return "";
                     }
-
+                    Boolean flippedWorking = deliveryDriver.getCurrentlyWorking();
+                    if (deliveryDriver.getCurrentlyWorking() == false) {
+                        flippedWorking = true;
+                    } else {
+                        flippedWorking = false;
+                    }
+                    deliveryDriver.setCurrentlyWorking(flippedWorking);
                     deliveryDriverController.updateDeliveryDriver(deliveryDriver);
                     return deliveryDriver;
-                });
+                },
+                jsonTransformer);
+
+        // put(
+        //         "/deliverydriver",
+        //         (request, response) -> {
+        //             ObjectMapper mapper = new ObjectMapper();
+        //             DeliveryDriver deliveryDriver =
+        //                     mapper.readValue(request.body(), DeliveryDriver.class);
+        //             if (!deliveryDriver.isValid()) {
+        //                 response.status(400);
+        //                 return "";
+        //             }
+
+        //             deliveryDriverController.updateDeliveryDriver(deliveryDriver);
+        //             return deliveryDriver;
+        //         });
 
         delete(
                 "/deliverydriver",
