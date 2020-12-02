@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import edu.northeastern.cs5500.delivery.model.CuisineType;
-import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.OrderStatus;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.Test;
 
 public class OrderControllerTest {
     public final Restaurant defaultRestaurant = new Restaurant();
-    public Customer defaultCustomer = new Customer();
     public Order neworder = new Order();
     public MenuItem item1 = new MenuItem();
     public ObjectId item1Id;
@@ -29,6 +27,7 @@ public class OrderControllerTest {
     public HashMap<String, MenuItem> menu = new HashMap<>();
     public HashMap<String, Integer> items = new HashMap<>();
     public OrderController orderController;
+    public ObjectId defaultCustomer;
 
     @BeforeEach
     public void setup() {
@@ -54,10 +53,7 @@ public class OrderControllerTest {
         defaultRestaurant.setMenuItems(menu);
 
         // create a Customer
-        defaultCustomer.setUserName("catlover11");
-        defaultCustomer.setFirstName("Ellie");
-        defaultCustomer.setLastName("Gato");
-        defaultCustomer.setEmail("gatolover@gmail.com");
+        defaultCustomer = new ObjectId();
 
         // create an order with two items
         items.put(item1Id.toString(), 2);
@@ -65,7 +61,7 @@ public class OrderControllerTest {
 
         // complete setup of the new order
         neworder.setItems(items);
-        neworder.setCustomer(defaultCustomer);
+        neworder.setCustomerId(new ObjectId());
         neworder.setRestaurant(defaultRestaurant);
     }
 
@@ -141,7 +137,7 @@ public class OrderControllerTest {
     @Test
     void testInvalidOrderNoCustomer() throws DuplicateKeyException, InvalidOrderException {
         // make an invalid order and try to add it
-        neworder.setCustomer(null);
+        neworder.setCustomerId(null);
         assertThrows(
                 InvalidOrderException.class,
                 () -> {

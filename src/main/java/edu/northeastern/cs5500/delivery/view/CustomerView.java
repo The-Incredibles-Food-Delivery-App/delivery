@@ -59,11 +59,6 @@ public class CustomerView implements View {
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Customer customer = mapper.readValue(request.body(), Customer.class);
-                    if (!customer.isValid()) {
-                        response.status(400);
-                        return "";
-                    }
-
                     // Ignore the user-provided ID if there is one
                     customer.setId(null);
                     customer = customerController.addCustomer(customer);
@@ -74,14 +69,10 @@ public class CustomerView implements View {
                 });
 
         put(
-                "/customer",
+                "/updatecustomer",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Customer customer = mapper.readValue(request.body(), Customer.class);
-                    if (!customer.isValid()) {
-                        response.status(400);
-                        return "";
-                    }
 
                     customerController.updateCustomer(customer);
                     return customer;

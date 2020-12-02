@@ -1,6 +1,5 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
@@ -77,49 +76,53 @@ public class DeliveryDriverController {
     public void initializeDrivers() {
         log.info("DeliveryDriverController > construct > adding default drivers");
 
-        // create the Customer.
-        Customer defaultCustomer = new Customer();
-        defaultCustomer.setUserName("catlover11");
-        defaultCustomer.setFirstName("Ellie");
-        defaultCustomer.setLastName("Gato");
-        defaultCustomer.setEmail("gatolover@gmail.com");
-
-        // create order items
-        HashMap<String, Integer> items = new HashMap<>();
-        MenuItem item1 = new MenuItem();
-        item1.setName("Kimchi Soup");
-        item1.setPrice(899);
-        item1.setId(new ObjectId());
-        items.put(item1.getId().toString(), 2);
-
-        // create the order
+        // create the order (restaurant, menuitem)
         final Order defaultorder1 = new Order();
         defaultorder1.setOrderTime(LocalDateTime.now());
-        // TODO: How to set the restaurant? Just creating dummy reataurant for now.
-        defaultorder1.setRestaurant(new Restaurant());
-        defaultorder1.setCustomer(defaultCustomer);
-        defaultorder1.setItems(items);
+        Restaurant defaultRestaurant = new Restaurant();
+        HashMap<String, MenuItem> defaultMenu = new HashMap<>();
+        final MenuItem defaultItem1 = new MenuItem();
+        final MenuItem defaultItem2 = new MenuItem();
+        defaultItem1.setName("Masala Dosa");
+        defaultItem1.setPrice(899);
+        defaultItem1.setId(new ObjectId());
+        defaultItem2.setName("Hakka Noodles");
+        defaultItem2.setPrice(750);
+        defaultItem2.setId(new ObjectId());
+        defaultMenu.put(defaultItem1.getId().toString(), defaultItem1);
+        defaultMenu.put(defaultItem2.getId().toString(), defaultItem2);
+        defaultRestaurant.setRestaurantName("Dosa House");
+        defaultRestaurant.setMenuItems(defaultMenu);
+        defaultRestaurant.setPhoneNumber("9876543212");
+        defaultRestaurant.setAddress("123 3rd Ave. Seattle WA 98017");
+        defaultRestaurant.setHours("M-F 11am-11pm, Sat 12pm-1am, Sun 12pm-9pm");
+        defaultorder1.setRestaurant(defaultRestaurant);
+        defaultorder1.setCustomerId(new ObjectId());
 
+        // Create delivery driver
         final DeliveryDriver defaultdriver1 = new DeliveryDriver();
         defaultdriver1.setFirstName("Jonny");
         defaultdriver1.setLastName("Jingleheimersmith");
         defaultdriver1.setUserName("JJS");
         defaultdriver1.setEmail("anemail@google.com");
         defaultdriver1.setPhoneNumber("55555555555");
-        defaultdriver1.setCurrentlyWorking(true);
+        defaultdriver1.setAddress("111 Apple St");
         defaultdriver1.setCurrentOrder(defaultorder1);
+        defaultdriver1.setCurrentlyWorking(false);
 
-        // final DeliveryDriver defaultdriver2 = new DeliveryDriver();
-        // defaultdriver2.setFirstName("Karen");
-        // defaultdriver2.setLastName("Person");
-        // defaultdriver2.setUserName("karen11");
-        // defaultdriver2.setEmail("kperson@gmail.com");
-        // defaultdriver2.setPhoneNumber("1112223333");
-        // defaultdriver2.setCurrentlyWorking(false);
+        final DeliveryDriver defaultdriver2 = new DeliveryDriver();
+        defaultdriver2.setFirstName("Karen");
+        defaultdriver2.setLastName("Person");
+        defaultdriver2.setUserName("karen11");
+        defaultdriver2.setEmail("kperson@gmail.com");
+        defaultdriver2.setPhoneNumber("1112223333");
+        defaultdriver2.setAddress("111 Apple St");
+        defaultdriver2.setCurrentOrder(defaultorder1);
+        defaultdriver2.setCurrentlyWorking(false);
 
         try {
             addDeliveryDriver(defaultdriver1);
-            // addDeliveryDriver(defaultdriver2);
+            addDeliveryDriver(defaultdriver2);
         } catch (Exception e) {
             log.error("DeliveryDriverController > construct > adding default drivers > failure?");
             e.printStackTrace();

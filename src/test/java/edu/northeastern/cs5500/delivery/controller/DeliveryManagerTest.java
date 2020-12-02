@@ -2,7 +2,6 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import static org.junit.Assert.assertEquals;
 
-import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
@@ -20,7 +19,7 @@ public class DeliveryManagerTest {
     public OrderController orderController;
     public DeliveryManager deliveryManager;
     public Order defaultOrder;
-    public Customer defaultCustomer;
+    public ObjectId defaultCustomer;
     public Restaurant defaultRestaurant;
     public MenuItem item1;
     public ObjectId item1Id;
@@ -37,18 +36,11 @@ public class DeliveryManagerTest {
         orderController = new OrderController(new InMemoryRepository<Order>());
         deliveryManager = new DeliveryManager(deliveryController, orderController);
 
-        defaultCustomer = new Customer();
+        defaultCustomer = new ObjectId();
         defaultOrder = new Order();
         item1 = new MenuItem();
         item2 = new MenuItem();
         item3 = new MenuItem();
-
-        // create a Customer
-        defaultCustomer.setUserName("doglover26");
-        defaultCustomer.setFirstName("Sanket");
-        defaultCustomer.setLastName("Tekans");
-        defaultCustomer.setEmail("dogsrock@gmail.com");
-        defaultOrder.setCustomer(defaultCustomer);
 
         // create a valid order with three items
         item1.setName("Kimchi Soup");

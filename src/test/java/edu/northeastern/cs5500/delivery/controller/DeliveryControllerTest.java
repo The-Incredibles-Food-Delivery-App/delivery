@@ -54,7 +54,7 @@ class DeliveryControllerTest {
         defaultCustomer.setFirstName("Sanket");
         defaultCustomer.setLastName("Tekans");
         defaultCustomer.setEmail("dogsrock@gmail.com");
-        defaultOrder.setCustomer(defaultCustomer);
+        defaultOrder.setCustomerId(new ObjectId());
 
         // create delivery driver
         defaultDeliveryDriver.setUserName("BobTheDriver");

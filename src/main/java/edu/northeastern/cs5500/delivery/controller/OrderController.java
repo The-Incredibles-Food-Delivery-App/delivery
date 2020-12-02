@@ -187,8 +187,9 @@ public class OrderController {
         // create the order
         final Order defaultorder1 = new Order();
         defaultorder1.setOrderTime(LocalDateTime.now());
+        // Creating dummy restaurant for the fake order
         defaultorder1.setRestaurant(new Restaurant());
-        defaultorder1.setCustomer(defaultCustomer);
+        defaultorder1.setCustomerId(new ObjectId());
         defaultorder1.setItems(items);
 
         try {

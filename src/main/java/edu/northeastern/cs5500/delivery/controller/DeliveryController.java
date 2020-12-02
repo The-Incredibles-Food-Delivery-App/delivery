@@ -1,6 +1,5 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
@@ -218,12 +217,7 @@ public class DeliveryController {
         defaultorder1.setItems(items);
 
         // create the Customer
-        Customer defaultCustomer = new Customer();
-        defaultCustomer.setUserName("catlover11");
-        defaultCustomer.setFirstName("Ellie");
-        defaultCustomer.setLastName("Gato");
-        defaultCustomer.setEmail("gatolover@gmail.com");
-        defaultorder1.setCustomer(defaultCustomer);
+        defaultorder1.setCustomerId(new ObjectId());
 
         // complete setup of delivery
         defaultDelivery1.setNotes("Place in the basket on the front porch");
