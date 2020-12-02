@@ -16,8 +16,6 @@ public class MongoDBRestaurantRepository extends MongoDBRepository<Restaurant>
 
     @Override
     public Collection<Restaurant> getRestaurantByName(String name) {
-        // TODO: how to filter on name? {"restaurantName" : name}
-
         /* UPDATE (CSM):
         I think this is how u would do that?
         Collection<Restaurant> restaurants = this.getAll();
@@ -27,6 +25,8 @@ public class MongoDBRestaurantRepository extends MongoDBRepository<Restaurant>
         */
 
         // TODO: Index the Restaurants collection by name for faster lookup
+        // TODO: Figure out how to use this filter with the supplied name parameter
+        // return collection.find({ "restaurantName": { $regex: /^name/ }}).into(new ArrayList<>());
         return collection.find().into(new ArrayList<>());
     }
 }

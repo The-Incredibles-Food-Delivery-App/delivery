@@ -68,8 +68,8 @@ public class RestaurantControllerTest {
 
     @Test
     void testRegisterGetRestaurants() {
-        // Repository should have 2 restaurants that are loaded in the controller init method
-        assertEquals(restaurantController.getRestaurants().size(), 2);
+        // Repository should have restaurants that are loaded in the controller init method
+        assertTrue(restaurantController.getRestaurants().size() > 0);
     }
 
     @Test
@@ -177,10 +177,10 @@ public class RestaurantControllerTest {
     void testCanDeleteRestaurant() throws Exception {
         // add the new restaurant
         Restaurant addedRestaurant = restaurantController.addRestaurant(newRestaurant);
-        assertEquals(restaurantController.getRestaurants().size(), 3);
+        int currentSize = restaurantController.getRestaurants().size();
         ObjectId restaurantId = addedRestaurant.getId();
         // delete the new order
         restaurantController.deleteRestaurant(restaurantId);
-        assertEquals(restaurantController.getRestaurants().size(), 2);
+        assertEquals(currentSize - 1, restaurantController.getRestaurants().size());
     }
 }

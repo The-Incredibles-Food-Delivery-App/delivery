@@ -8,6 +8,7 @@ import static spark.Spark.put;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
+import edu.northeastern.cs5500.delivery.controller.DeliveryManager;
 import edu.northeastern.cs5500.delivery.controller.OrderController;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.OrderStatus;
@@ -25,6 +26,7 @@ public class OrderView implements View {
 
     @Inject JsonTransformer jsonTransformer;
     @Inject OrderController orderController;
+    @Inject DeliveryManager deliveryManager;
 
     @Override
     public void register() {
@@ -63,11 +65,7 @@ public class OrderView implements View {
                     log.debug("/order/additem/:itemid<{}>", itemParam);
                     final ObjectId orderId = new ObjectId(orderParam);
                     final ObjectId itemId = new ObjectId(itemParam);
-                    // TODO: Make sure frontend enforces that quantity is a valid int! Or enforce
-                    // here??
-                    /* UPDATE (CSM):
-                    enforce it on the frontend for sure!
-                    */
+                    // TODO: CSM response: Make sure frontend enforces that quantity is a valid int
                     final Integer quantity = Integer.parseInt(quantityParam);
                     Order revisedOrder = orderController.addItemToOrder(orderId, itemId, quantity);
                     if (revisedOrder == null) {
@@ -102,16 +100,8 @@ public class OrderView implements View {
                     final String orderParam = request.queryParams("orderId");
                     log.debug("/submitorder/:orderid<{}>", orderParam);
                     final ObjectId orderId = new ObjectId(orderParam);
-                    // TODO: Do I need to validate the order obtained is good?
-                    /* UPDATE (CSM):
-                    We could force validation via our front end, ie are all
-                    the fields filled out? no? okay customer doesnt move forward
-                    until mandatory fields are not null
-                    */
                     Order order = orderController.getOrder(orderId);
-                    orderController.submitOrder(order);
-                    // TODO: Create new delivery object and pass off to delivery controller
-                    orderController.updateOrder(order);
+                    deliveryManager.submitOrder(order);
                     return order;
                 },
                 jsonTransformer);
@@ -123,8 +113,8 @@ public class OrderView implements View {
                     final ObjectId orderId = new ObjectId(orderParam);
                     orderController.deleteOrder(orderId);
                     response.type("application/json");
-                    // TODO: should we return something else? Maybe null?
-                    return "Successfully Deleted";
+                    // TODO: should we return something else?
+                    return null;
                 });
     }
 }

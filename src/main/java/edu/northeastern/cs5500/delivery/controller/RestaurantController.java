@@ -190,10 +190,10 @@ public class RestaurantController {
         item8.setName("Hakka Noodles");
         item8.setPrice(799);
         item8.setId(new ObjectId());
-        menu1.put(item5.getId().toString(), item5);
-        menu1.put(item6.getId().toString(), item6);
-        menu1.put(item7.getId().toString(), item7);
-        menu1.put(item8.getId().toString(), item8);
+        menu2.put(item5.getId().toString(), item5);
+        menu2.put(item6.getId().toString(), item6);
+        menu2.put(item7.getId().toString(), item7);
+        menu2.put(item8.getId().toString(), item8);
         defaultRestaurant2.setMenuItems(menu2);
 
         defaultRestaurant3.setRestaurantName("Queen Sheeba");
@@ -214,17 +214,17 @@ public class RestaurantController {
         item10.setName("Chicken Tibbs");
         item10.setPrice(1099);
         item10.setId(new ObjectId());
-        item12.setName("Fish Tibbs");
-        item12.setPrice(1199);
-        item12.setId(new ObjectId());
         item11.setName("Bamia Beef");
         item11.setPrice(1050);
         item11.setId(new ObjectId());
+        item12.setName("Fish Tibbs");
+        item12.setPrice(1199);
+        item12.setId(new ObjectId());
         menu3.put(item9.getId().toString(), item9);
         menu3.put(item10.getId().toString(), item10);
         menu3.put(item11.getId().toString(), item11);
         menu3.put(item12.getId().toString(), item12);
-        defaultRestaurant1.setMenuItems(menu3);
+        defaultRestaurant3.setMenuItems(menu3);
 
         try {
             addRestaurant(defaultRestaurant1);

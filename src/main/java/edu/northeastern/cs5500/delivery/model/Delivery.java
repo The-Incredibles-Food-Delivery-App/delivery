@@ -15,7 +15,6 @@ public class Delivery implements Model {
     private double distance;
     private Order order;
     private String notes;
-    private Integer cost;
     private LocalDateTime completionTime;
 
     /**

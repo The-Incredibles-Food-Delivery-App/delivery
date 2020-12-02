@@ -3,7 +3,6 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
-import edu.northeastern.cs5500.delivery.model.OrderStatus;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
@@ -66,22 +65,6 @@ public class OrderController {
     }
 
     /**
-     * Submits the given order by creating a delivery for that order
-     *
-     * @param order
-     */
-    @Nonnull
-    public void submitOrder(@Nonnull Order order) {
-        // TODO: Isn't delivery controller singleton? inject it?
-        // DeliveryController deliveryController = DeliveryController.getInstance();
-        log.debug("OrderController > submitOrder(...)");
-        // TODO: or use POST request in Delivery View?
-        // deliveryController.createDelivery(order);
-        order.setOrderStatus(OrderStatus.CONFIRMED);
-        updateOrder(order);
-    }
-
-    /**
      * Deletes the given order from the repository
      *
      * @param id - the ID of the order to delete
@@ -102,8 +85,6 @@ public class OrderController {
      */
     private boolean verifyOrderTime(@Nonnull Order order) throws InvalidOrderException {
         // if OrderBy date/time is not set or set to the past, set to current timestamp
-        // TODO: Do we want to throw an exception if set in the past?
-        // TODO: Is this method chaining bad?
         if (order.getOrderTime() == null || order.getOrderTime().isBefore(LocalDateTime.now())) {
             order.setOrderTime(LocalDateTime.now());
         }
@@ -145,11 +126,40 @@ public class OrderController {
         return orders.add(order);
     }
 
-    // TODO: Should parameters just be String instead to avoid all these conversions?
+    /**
+     * Calculates the total cost of all items in the order and updates the cost of the order
+     *
+     * @param order - the given order
+     * @return - the total cost of the order
+     */
+    @Nonnull
+    public Integer calculateCost(@Nonnull Order order) {
+        HashMap<String, Integer> items = order.getItems();
+        Integer totalCost = 0;
+        for (String id : items.keySet()) {
+            // Add quantity * price to total cost
+            Restaurant restaurant = order.getRestaurant();
+            Integer itemPrice = restaurant.getMenuItems().get(id).getPrice();
+            int quantity = items.get(id);
+            totalCost += (itemPrice * quantity);
+        }
+        order.setCost(totalCost);
+        updateOrder(order);
+        return totalCost;
+    }
+
+    /**
+     * Adds the given item with the specified quantity to the order
+     *
+     * @param orderId - the Id of the order to add an item to
+     * @param itemId - the Id of the item to add to the order
+     * @param quantity - the quantity of the item to add to the order
+     * @return the order with the item added
+     * @throws Exception
+     */
     public Order addItemToOrder(ObjectId orderId, ObjectId itemId, Integer quantity)
             throws Exception {
         Order order = getOrder(orderId);
-        // TODO: make sure order Id is valid?
         order.getItems().put(itemId.toString(), quantity);
         updateOrder(order);
         return order;
@@ -177,7 +187,6 @@ public class OrderController {
         // create the order
         final Order defaultorder1 = new Order();
         defaultorder1.setOrderTime(LocalDateTime.now());
-        // TODO: How to set the restaurant? Just creating dummy reataurant for now.
         defaultorder1.setRestaurant(new Restaurant());
         defaultorder1.setCustomer(defaultCustomer);
         defaultorder1.setItems(items);
