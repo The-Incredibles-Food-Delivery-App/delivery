@@ -3,6 +3,8 @@ package edu.northeastern.cs5500.delivery.controller;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import edu.northeastern.cs5500.delivery.model.CuisineType;
 import edu.northeastern.cs5500.delivery.model.Customer;
@@ -63,7 +65,8 @@ public class CustomerControllerTest {
         defaultCustomer1.setFirstName("Rachel");
         defaultCustomer1.setLastName("Woods");
         defaultCustomer1.setPhoneNumber("2245678921");
-        defaultCustomer1.setUserName("Ra_wood");
+        defaultCustomer1.setUsername("Ra_wood");
+        defaultCustomer1.setPassword("rawood123");
         defaultCustomer1.setEmail("ra_wood@hotmail.com");
         defaultCustomer1.setAddress("444 Bollywood Blvd");
         defaultCustomer1.setOrders(customerOrderList);
@@ -72,10 +75,18 @@ public class CustomerControllerTest {
         defaultCustomer2.setFirstName("Sam");
         defaultCustomer2.setLastName("Rockwell");
         defaultCustomer2.setPhoneNumber("8892134567");
-        defaultCustomer2.setUserName("sam_rockwell666");
+        defaultCustomer2.setUsername("sam_rockwell666");
+        defaultCustomer2.setPassword("samfox345");
         defaultCustomer2.setEmail("theOnlySamRockwell@gmail.com");
         defaultCustomer2.setAddress("333 Hollywood Blvd");
         defaultCustomer2.setOrders(null);
+
+        // Create an invalid customer
+        defaultInvalidCustomer.setFirstName("Ivan");
+        defaultInvalidCustomer.setLastName("Invalid");
+        defaultInvalidCustomer.setPhoneNumber("1234567890");
+        defaultInvalidCustomer.setEmail("ivaninvalid@hotmail.com");
+        defaultInvalidCustomer.setAddress("1234 Madeup Lane");
     }
 
     @Test
@@ -89,6 +100,16 @@ public class CustomerControllerTest {
     }
 
     @Test
+    void testRegisterCreatesValidDeliveryDrivers() {
+        CustomerController customerController =
+                new CustomerController(new InMemoryRepository<Customer>());
+
+        for (Customer customer : customerController.getCustomers()) {
+            assertTrue(customer.isValid());
+        }
+    }
+
+    @Test
     void testRegisterCanAddValidCustomer() throws DuplicateKeyException, InvalidUserException {
         CustomerController customerController =
                 new CustomerController(new InMemoryRepository<Customer>());
@@ -98,7 +119,8 @@ public class CustomerControllerTest {
         Customer addedCustomerInCollection = customerController.getCustomer(addedCustomerId);
 
         assertEquals(defaultCustomer1.getAddress(), addedCustomerInCollection.getAddress());
-        assertEquals(defaultCustomer1.getUserName(), addedCustomerInCollection.getUserName());
+        assertEquals(defaultCustomer1.getUsername(), addedCustomerInCollection.getUsername());
+        assertEquals(defaultCustomer1.getPassword(), addedCustomerInCollection.getPassword());
         assertEquals(defaultCustomer1.getEmail(), addedCustomerInCollection.getEmail());
         assertEquals(defaultCustomer1.getLastName(), addedCustomerInCollection.getLastName());
         assertEquals(defaultCustomer1.getFirstName(), addedCustomerInCollection.getFirstName());
@@ -143,5 +165,17 @@ public class CustomerControllerTest {
         ObjectId addedCustomerId = addedCustomer.getId();
         customerController.deleteCustomer(addedCustomerId);
         assertNull(customerController.getCustomer(addedCustomerId));
+    }
+
+    @Test
+    void testInvalidUser() throws InvalidUserException {
+        CustomerController customerController =
+                new CustomerController(new InMemoryRepository<Customer>());
+
+        assertThrows(
+                InvalidUserException.class,
+                () -> {
+                    customerController.addCustomer(defaultInvalidCustomer);
+                });
     }
 }

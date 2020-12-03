@@ -59,6 +59,10 @@ public class CustomerView implements View {
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Customer customer = mapper.readValue(request.body(), Customer.class);
+                    if (!customer.isValid()) {
+                        response.status(400);
+                        return "";
+                    }
                     // Ignore the user-provided ID if there is one
                     customer.setId(null);
                     customer = customerController.addCustomer(customer);
@@ -69,10 +73,14 @@ public class CustomerView implements View {
                 });
 
         put(
-                "/updatecustomer",
+                "/customer",
                 (request, response) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     Customer customer = mapper.readValue(request.body(), Customer.class);
+                    if (!customer.isValid()) {
+                        response.status(400);
+                        return "";
+                    }
 
                     customerController.updateCustomer(customer);
                     return customer;
@@ -81,11 +89,15 @@ public class CustomerView implements View {
         delete(
                 "/customer",
                 (request, response) -> {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Customer customer = mapper.readValue(request.body(), Customer.class);
+                    final String customerParam = request.queryParams("customerId");
+                    final ObjectId customerId = new ObjectId(customerParam);
+                    customerController.deleteCustomer(customerId);
+                    // ObjectMapper mapper = new ObjectMapper();
+                    // Customer customer = mapper.readValue(request.body(), Customer.class);
 
-                    customerController.deleteCustomer(customer.getId());
-                    return customer;
+                    log.debug("Successfully deleted Customer id <{}>", customerId);
+                    // customerController.deleteCustomer(customer.getId());
+                    return null;
                 });
     }
 }

@@ -106,6 +106,21 @@ public class OrderView implements View {
                 },
                 jsonTransformer);
 
+        put(
+                "/order",
+                (request, response) -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Order order = mapper.readValue(request.body(), Order.class);
+                    if (!order.isValid()) {
+                        response.status(400);
+                        return "";
+                    }
+                    orderController.updateOrder(order);
+                    response.type("application/json");
+                    return order;
+                },
+                jsonTransformer);
+
         delete(
                 "/order",
                 (request, response) -> {
