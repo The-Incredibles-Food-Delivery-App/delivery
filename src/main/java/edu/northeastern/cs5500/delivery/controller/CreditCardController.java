@@ -2,7 +2,6 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.CreditCard;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
-import java.time.LocalDate;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,24 +26,7 @@ public class CreditCardController {
         }
 
         log.info("CreditCardController > construct > adding default creditCards");
-
-        final CreditCard defaultCreditCard1 = new CreditCard();
-        defaultCreditCard1.setCardNumber(1234567891234567L);
-        defaultCreditCard1.setExpirationDate(LocalDate.now());
-        defaultCreditCard1.setUsername("Mary Poppins");
-
-        final CreditCard defaultCreditCard2 = new CreditCard();
-        defaultCreditCard2.setCardNumber(1234567891234569L);
-        defaultCreditCard2.setExpirationDate(LocalDate.now());
-        defaultCreditCard2.setUsername("Spider Man");
-
-        try {
-            addCreditCard(defaultCreditCard1);
-            addCreditCard(defaultCreditCard2);
-        } catch (Exception e) {
-            log.error("CreditCardController > construct > adding default creditCards > failure?");
-            e.printStackTrace();
-        }
+        this.initializeCreditCards();
     }
 
     @Nullable
@@ -98,26 +80,26 @@ public class CreditCardController {
      *     date
      * @return true if the creditcard's expiration date is equal to today or later
      */
-    public boolean verifyCardExpirationDate(@Nonnull CreditCard creditCard)
-            throws InvalidCreditCardException {
-        if (creditCard.getExpirationDate().isBefore(LocalDate.now())) {
-            String message =
-                    "Credit card expiration date is before the current day and has thus expired.";
-            throw new InvalidCreditCardException(message);
-        } else {
-            return true;
-        }
-    }
+    // public boolean verifyCardExpirationDate(@Nonnull CreditCard creditCard)
+    //         throws InvalidCreditCardException {
+    //     if (creditCard.getExpirationDate().isBefore(LocalDateTime.now())) {
+    //         String message =
+    //                 "Credit card expiration date is before the current day and has thus
+    // expired.";
+    //         throw new InvalidCreditCardException(message);
+    //     } else {
+    //         return true;
+    //     }
+    // }
 
     @Nonnull
     public CreditCard addCreditCard(@Nonnull CreditCard creditCard)
             throws DuplicateKeyException, InvalidCreditCardException {
         log.debug("CreditCardController > addCreditCard(...)");
-        if (!creditCard.isValid()
-                || !this.verifyCardNumber(creditCard)
-                || !this.verifyCardExpirationDate(creditCard)) {
-            // TODO: replace with a real invalid object exception
-            // probably not one exception per object type though...
+        if (!creditCard.isValid() || !this.verifyCardNumber(creditCard)) {
+
+            // || !this.verifyCardExpirationDate(creditCard)) {
+
             throw new InvalidCreditCardException("Invalid CreditCard");
         }
 
@@ -138,5 +120,29 @@ public class CreditCardController {
     public void deleteCreditCard(@Nonnull ObjectId id) throws Exception {
         log.debug("CreditCardController > deleteCreditCard(...)");
         creditCards.delete(id);
+    }
+
+    private void initializeCreditCards() {
+        log.info("CreditCardController > construct > adding default creditcards");
+
+        final CreditCard defaultCreditCard1 = new CreditCard();
+        defaultCreditCard1.setCardNumber(1234567891234567L);
+        // defaultCreditCard1.setExpirationDate(LocalDateTime.now());
+        defaultCreditCard1.setUsername("Mary Poppins");
+        defaultCreditCard1.setIsDefault(false);
+
+        final CreditCard defaultCreditCard2 = new CreditCard();
+        defaultCreditCard2.setCardNumber(1234567891234569L);
+        // defaultCreditCard2.setExpirationDate(LocalDateTime.now());
+        defaultCreditCard2.setUsername("Spider Man");
+        defaultCreditCard2.setIsDefault(false);
+
+        try {
+            addCreditCard(defaultCreditCard1);
+            addCreditCard(defaultCreditCard2);
+        } catch (Exception e) {
+            log.error("CreditCardController > construct > adding default creditCards > failure?");
+            e.printStackTrace();
+        }
     }
 }

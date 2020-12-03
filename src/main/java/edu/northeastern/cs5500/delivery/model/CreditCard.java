@@ -1,7 +1,6 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.time.LocalDate;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -11,9 +10,9 @@ public class CreditCard implements Model {
 
     private ObjectId id;
     private Long cardNumber;
-    private LocalDate expirationDate;
+    // Removed the expirationDate because the POST request in the CreditCard View will not deserialize the LocalDateTime object to a string
+    // private LocalDateTime expirationDate;
     private String username;
-    // TODO: isDefault was on the UML but unsure what this meant
     private Boolean isDefault;
 
     /**
@@ -24,6 +23,6 @@ public class CreditCard implements Model {
      */
     @JsonIgnore
     public boolean isValid() {
-        return cardNumber != null && expirationDate != null && username != null;
+        return this.cardNumber != null && this.username != null;
     }
 }
