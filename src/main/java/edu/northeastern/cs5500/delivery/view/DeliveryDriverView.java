@@ -9,6 +9,7 @@ import static spark.Spark.put;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.DeliveryDriverController;
+import edu.northeastern.cs5500.delivery.controller.DeliveryDriverManager;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,6 +26,7 @@ public class DeliveryDriverView implements View {
     @Inject JsonTransformer jsonTransformer;
 
     @Inject DeliveryDriverController deliveryDriverController;
+    @Inject DeliveryDriverManager deliveryDriverManager;
 
     @Override
     public void register() {
@@ -54,6 +56,7 @@ public class DeliveryDriverView implements View {
                 },
                 jsonTransformer);
 
+
         post(
                 "/deliverydriver",
                 (request, response) -> {
@@ -69,6 +72,8 @@ public class DeliveryDriverView implements View {
                     deliveryDriver.setId(null);
                     deliveryDriver = deliveryDriverController.addDeliveryDriver(deliveryDriver);
                     deliveryDriver.setCurrentlyWorking(false);
+                    // Fills the queue of the deliveryDriverManager queue with the newly added driver (currently working == false)
+                    deliveryDriverManager.fillQueue(deliveryDriver);
 
                     response.redirect(
                             String.format(

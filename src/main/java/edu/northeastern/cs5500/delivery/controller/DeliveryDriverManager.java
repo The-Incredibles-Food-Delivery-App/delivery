@@ -3,11 +3,7 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
-import edu.northeastern.cs5500.delivery.model.Order;
-import edu.northeastern.cs5500.delivery.model.OrderStatus;
-
 import java.util.Queue;
-
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,7 +20,6 @@ public class DeliveryDriverManager {
     private final DeliveryDriverController deliveryDriverController;
     private Queue<DeliveryDriver> availableDriverQueue;
 
-    // private final OrderController orderController;
 
     @Inject
     DeliveryDriverManager(
@@ -38,24 +33,12 @@ public class DeliveryDriverManager {
         log.info("DeliveryDriverManager > construct");
     }
 
-    // @Nonnull
-    // public Delivery submitOrder(@Nonnull Order order)
-    //         throws DuplicateKeyException, InvalidDeliveryException {
-    //     log.debug("OrderManager > submitOrder(...)");
-    //     // update order status
-    //     order.setOrderStatus(OrderStatus.CONFIRMED);
-    //     orderController.updateOrder(order);
-    //     // create a new delivery
-    //     Delivery delivery = deliveryController.createDelivery(order);
-    //     return delivery;
-    // }
 
     /**
-     * Submits the given order by creating a delivery for that order
+     * Fills the availableDirverQueue with this deliveryDriver
      *
-     * @param order - the order to be submitted
+     * @param deliveryDriver - the deliveryDriver to be added to the queue
      * @throws InvalidUserException
-     * @throws InvalidDeliveryException
      * @throws DuplicateKeyException
      */
     @Nonnull
@@ -69,6 +52,11 @@ public class DeliveryDriverManager {
     }
     // Put this fillQueue method in the POST reuqest of delivery driver?
 
+  
+    
+    // Put this fillQueue method in the PUT reuqest of delivery driver?
+    // DeliveryDriver driverReadyToBeAssigned = availableDriverQueue.remove();
+    
 
 
     /**
@@ -95,6 +83,18 @@ public class DeliveryDriverManager {
         return delivery;
     }
     
+
+     // @Nonnull
+    // public Delivery submitOrder(@Nonnull Order order)
+    //         throws DuplicateKeyException, InvalidDeliveryException {
+    //     log.debug("OrderManager > submitOrder(...)");
+    //     // update order status
+    //     order.setOrderStatus(OrderStatus.CONFIRMED);
+    //     orderController.updateOrder(order);
+    //     // create a new delivery
+    //     Delivery delivery = deliveryController.createDelivery(order);
+    //     return delivery;
+    // }
 
     // ADDITIONAL QUESTIONS:
     // Need to check where these methods are being called in other files
