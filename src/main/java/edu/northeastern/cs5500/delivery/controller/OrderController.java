@@ -171,7 +171,8 @@ public class OrderController {
 
         // create the Customer.
         Customer defaultCustomer = new Customer();
-        defaultCustomer.setUserName("catlover11");
+        defaultCustomer.setUsername("catlover11");
+        defaultCustomer.setPassword("ellecat111");
         defaultCustomer.setFirstName("Ellie");
         defaultCustomer.setLastName("Gato");
         defaultCustomer.setEmail("gatolover@gmail.com");

@@ -84,7 +84,6 @@ public class DeliveryView implements View {
                         response.status(400);
                         return "";
                     }
-                    // TODO: assign a delivery driver to the delivery
                     deliveryManager.sendForDelivery(delivery);
                     return delivery;
                 },

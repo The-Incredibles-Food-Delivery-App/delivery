@@ -103,7 +103,6 @@ public class DeliveryDriverController {
         final DeliveryDriver defaultdriver1 = new DeliveryDriver();
         defaultdriver1.setFirstName("Jonny");
         defaultdriver1.setLastName("Jingleheimersmith");
-        defaultdriver1.setUserName("JJS");
         defaultdriver1.setEmail("anemail@google.com");
         defaultdriver1.setPhoneNumber("55555555555");
         defaultdriver1.setAddress("111 Apple St");
@@ -113,7 +112,6 @@ public class DeliveryDriverController {
         final DeliveryDriver defaultdriver2 = new DeliveryDriver();
         defaultdriver2.setFirstName("Karen");
         defaultdriver2.setLastName("Person");
-        defaultdriver2.setUserName("karen11");
         defaultdriver2.setEmail("kperson@gmail.com");
         defaultdriver2.setPhoneNumber("1112223333");
         defaultdriver2.setAddress("111 Apple St");

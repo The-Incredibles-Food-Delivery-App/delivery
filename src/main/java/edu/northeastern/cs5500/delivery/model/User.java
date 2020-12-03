@@ -9,7 +9,6 @@ public abstract class User implements Model {
     private ObjectId id;
     private String firstName;
     private String lastName;
-    public String userName;
     private String email;
     private String phoneNumber;
     private String address;
@@ -19,7 +18,6 @@ public abstract class User implements Model {
     public boolean isValid() {
         return firstName != null
                 && lastName != null
-                && userName != null
                 && phoneNumber != null
                 && address != null
                 && email != null;
