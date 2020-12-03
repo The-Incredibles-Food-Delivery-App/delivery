@@ -27,7 +27,6 @@ public class DeliveryDriverTest {
         defaultDriver1.setFirstName("Rachel");
         defaultDriver1.setLastName("Woods");
         defaultDriver1.setPhoneNumber("2245678921");
-        defaultDriver1.setUserName("Ra_wood");
         defaultDriver1.setEmail("ra_wood@hotmail.com");
         defaultDriver1.setAddress("444 Bollywood Blvd");
         defaultDriver1.setCurrentlyWorking(true);
@@ -36,7 +35,6 @@ public class DeliveryDriverTest {
         defaultDriver2.setFirstName("Sam");
         defaultDriver2.setLastName("Rockwell");
         defaultDriver2.setPhoneNumber("8892134567");
-        defaultDriver2.setUserName("sam_rockwell666");
         defaultDriver2.setEmail("theOnlySamRockwell@gmail.com");
         defaultDriver2.setAddress("333 Hollywood Blvd");
         defaultDriver2.setCurrentlyWorking(false);
@@ -44,7 +42,6 @@ public class DeliveryDriverTest {
         // Create a Default Invalid User
         defaultInvalidDriver.setFirstName("Alaska");
         defaultInvalidDriver.setLastName("Mills");
-        defaultInvalidDriver.setUserName("a_mills");
         defaultInvalidDriver.setEmail("a_mills23@gmail.com");
     }
 
@@ -76,7 +73,6 @@ public class DeliveryDriverTest {
         DeliveryDriver addedDriverInCollection =
                 deliveryDriverController.getDeliveryDriver(addedDriverId);
         assertEquals(defaultDriver1.getAddress(), addedDriverInCollection.getAddress());
-        assertEquals(defaultDriver1.getUserName(), addedDriverInCollection.getUserName());
         assertEquals(defaultDriver1.getEmail(), addedDriverInCollection.getEmail());
         assertEquals(defaultDriver1.getLastName(), addedDriverInCollection.getLastName());
         assertEquals(defaultDriver1.getFirstName(), addedDriverInCollection.getFirstName());
@@ -114,7 +110,7 @@ public class DeliveryDriverTest {
     }
 
     @Test
-    void testInvalidUser() throws DuplicateKeyException {
+    void testInvalidUser() throws InvalidUserException {
         DeliveryDriverController deliveryDriverController =
                 new DeliveryDriverController(new InMemoryRepository<DeliveryDriver>());
 

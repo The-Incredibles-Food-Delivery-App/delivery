@@ -76,14 +76,16 @@ public class UserController {
         defaultDeliveryDriver1.setFirstName("Rachel");
         defaultDeliveryDriver1.setLastName("Woods");
         defaultDeliveryDriver1.setPhoneNumber("2245678921");
-        defaultDeliveryDriver1.setUserName("Ra_wood");
         defaultDeliveryDriver1.setEmail("ra_wood@hotmail.com");
+        defaultDeliveryDriver1.setAddress("344 Wood Lane");
+        defaultDeliveryDriver1.setCurrentlyWorking(false);
 
         final Customer defaultCustomer1 = new Customer();
         defaultCustomer1.setFirstName("Sam");
         defaultCustomer1.setLastName("Rockwell");
         defaultCustomer1.setPhoneNumber("8892134567");
-        defaultCustomer1.setUserName("sam_rockwell666");
+        defaultCustomer1.setUsername("sam_rockwell666");
+        defaultCustomer1.setPassword("samrockx666");
         defaultCustomer1.setEmail("theOnlySamRockwell@gmail.com");
         defaultCustomer1.setAddress("333 Hollywood Blvd");
 

@@ -48,9 +48,9 @@ public class CustomerController {
     public Customer addCustomer(@Nonnull Customer customer)
             throws DuplicateKeyException, InvalidUserException {
         log.debug("CutomerController > addCustomer(...)");
-        // if (!customer.isValid()) {
-        //     throw new InvalidUserException("Invalid Customer");
-        // }
+        if (!customer.isValid()) {
+            throw new InvalidUserException("Invalid Customer");
+        }
 
         ObjectId id = customer.getId();
 
@@ -77,9 +77,11 @@ public class CustomerController {
         Customer defaultcustomer1 = new Customer();
         defaultcustomer1.setFirstName("Ellie");
         defaultcustomer1.setLastName("Gatto");
-        defaultcustomer1.setUserName("ellie7");
+        defaultcustomer1.setUsername("ellie7");
+        defaultcustomer1.setPassword("elle777");
         defaultcustomer1.setEmail("ellie7@gmail.com");
         defaultcustomer1.setPhoneNumber("1111111111");
+        defaultcustomer1.setAddress("123 Kimchi Road");
 
         HashMap<String, Integer> items = new HashMap<>();
         MenuItem item1 = new MenuItem();
@@ -102,9 +104,11 @@ public class CustomerController {
         Customer defaultcustomer2 = new Customer();
         defaultcustomer2.setFirstName("Paul");
         defaultcustomer2.setLastName("Hollywood");
-        defaultcustomer2.setUserName("phollywood");
+        defaultcustomer2.setUsername("phollywood");
+        defaultcustomer2.setPassword("phollywoods123");
         defaultcustomer2.setEmail("phollywood@gbbo.com");
         defaultcustomer2.setPhoneNumber("1234567890");
+        defaultcustomer2.setAddress("555 Hollywood Blvd");
         defaultcustomer2.setOrders(null);
 
         try {
