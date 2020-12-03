@@ -73,15 +73,11 @@ public class CustomerView implements View {
                 });
 
         put(
-                "/updatecustomer",
+                "/customer",
                 (request, response) -> {
-                    final String customerParam = request.queryParams("customerId");
-                    log.debug("/customer/:customerid<{}>", customerParam);
-                    final ObjectId customerId = new ObjectId(customerParam);
-                    Customer customer = customerController.getCustomer(customerId);
-                    // ObjectMapper mapper = new ObjectMapper();
-                    // Customer customer = mapper.readValue(request.body(), Customer.class);
-                    if (customer == null || !customer.isValid()) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Customer customer = mapper.readValue(request.body(), Customer.class);
+                    if (!customer.isValid()) {
                         response.status(400);
                         return "";
                     }

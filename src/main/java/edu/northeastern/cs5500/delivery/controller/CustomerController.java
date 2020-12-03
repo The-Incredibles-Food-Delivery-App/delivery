@@ -1,14 +1,8 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.Customer;
-import edu.northeastern.cs5500.delivery.model.MenuItem;
-import edu.northeastern.cs5500.delivery.model.Order;
-import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -83,24 +77,6 @@ public class CustomerController {
         defaultcustomer1.setPhoneNumber("1111111111");
         defaultcustomer1.setAddress("123 Kimchi Road");
 
-        HashMap<String, Integer> items = new HashMap<>();
-        MenuItem item1 = new MenuItem();
-        item1.setName("Kimchi Soup");
-        item1.setPrice(899);
-        item1.setId(new ObjectId());
-        items.put(item1.getId().toString(), 2);
-
-        Order defaultOrder = new Order();
-        defaultOrder.setOrderTime(LocalDateTime.now());
-        defaultOrder.setRestaurant(new Restaurant());
-        defaultOrder.setCustomerId(defaultcustomer1.getId());
-        defaultOrder.setItems(items);
-
-        HashSet<Order> customerOrder = new HashSet<>();
-        customerOrder.add(defaultOrder);
-
-        defaultcustomer1.setOrders(customerOrder);
-
         Customer defaultcustomer2 = new Customer();
         defaultcustomer2.setFirstName("Paul");
         defaultcustomer2.setLastName("Hollywood");
@@ -109,7 +85,6 @@ public class CustomerController {
         defaultcustomer2.setEmail("phollywood@gbbo.com");
         defaultcustomer2.setPhoneNumber("1234567890");
         defaultcustomer2.setAddress("555 Hollywood Blvd");
-        defaultcustomer2.setOrders(null);
 
         try {
             addCustomer(defaultcustomer1);
