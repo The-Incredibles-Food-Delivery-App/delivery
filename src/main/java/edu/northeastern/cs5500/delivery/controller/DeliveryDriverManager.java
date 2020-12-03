@@ -34,8 +34,10 @@ public class DeliveryDriverManager {
     }
 
 
+
+    // Put this fillQueue method in the POST reuqest of delivery driver && When a delivery is completed, will re-add the deliverydriver to this queue
     /**
-     * Fills the availableDirverQueue with this deliveryDriver
+     * Fills the availableDriverQueue with this deliveryDriver
      *
      * @param deliveryDriver - the deliveryDriver to be added to the queue
      * @throws InvalidUserException
@@ -50,14 +52,6 @@ public class DeliveryDriverManager {
           deliveryDriverController.addDeliveryDriver(deliveryDriver);
         }
     }
-    // Put this fillQueue method in the POST reuqest of delivery driver?
-
-  
-    
-    // Put this fillQueue method in the PUT reuqest of delivery driver?
-    // DeliveryDriver driverReadyToBeAssigned = availableDriverQueue.remove();
-    
-
 
     /**
      * Sends a delivery out to be delivered. Assigns a delivery driver to the delivery.
@@ -68,11 +62,11 @@ public class DeliveryDriverManager {
      */
     @Nonnull
     public Delivery sendForDelivery(@Nonnull Delivery delivery) throws Exception {
-        // Assign delivery driver to delivery, have a  delivery driver controller
         if (availableDriverQueue.peek() != null) {
           DeliveryDriver firstInLineDriver= availableDriverQueue.remove();
+          // Assign delivery driver to delivery, have a  delivery driver controller
           delivery.setDeliveryDriver(firstInLineDriver);
-          // Does this update the current working status to true?
+          // This individual needs the PUT request to happen on them so they FLIP their working status to true
           deliveryDriverController.updateDeliveryDriver(firstInLineDriver);
         }
         // Once a driver is obtained, change delivery status and change delivery driver currently working status
@@ -82,21 +76,23 @@ public class DeliveryDriverManager {
         }
         return delivery;
     }
+
+    /**
+     * This method must be called when the delivery is complete (Maybe in Delivery Manager)
+     * When a delivery is completed, update the currently working status of the driver to false, 
+     * and re-add into the queue
+     *
+     * @param delivery - the delivery that has completed delivery
+     * @throws Exception
+     */
+    @Nonnull
+    public void completedDelivery(@Nonnull Delivery delivery) throws Exception {
+        DeliveryDriver driverCompletedDelivery = delivery.getDeliveryDriver();
+        deliveryDriverController.updateDeliveryDriver(driverCompletedDelivery);
+        fillQueue(driverCompletedDelivery);
+    }
     
 
-     // @Nonnull
-    // public Delivery submitOrder(@Nonnull Order order)
-    //         throws DuplicateKeyException, InvalidDeliveryException {
-    //     log.debug("OrderManager > submitOrder(...)");
-    //     // update order status
-    //     order.setOrderStatus(OrderStatus.CONFIRMED);
-    //     orderController.updateOrder(order);
-    //     // create a new delivery
-    //     Delivery delivery = deliveryController.createDelivery(order);
-    //     return delivery;
-    // }
-
     // ADDITIONAL QUESTIONS:
-    // Need to check where these methods are being called in other files
-    // How to readd all delivery drivers that complete their delivery trip back to the queue?
+    // How to re-add all delivery drivers that complete their delivery trip back to the queue?
 }
