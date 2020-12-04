@@ -10,7 +10,8 @@ public class CreditCard implements Model {
 
     private ObjectId id;
     private Long cardNumber;
-    // Removed the expirationDate because the POST request in the CreditCard View will not deserialize the LocalDateTime object to a string
+    // Removed the expirationDate because the POST request in the CreditCard View will not
+    // deserialize the LocalDateTime object to a string
     // private LocalDateTime expirationDate;
     private String username;
     private Boolean isDefault;

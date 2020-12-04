@@ -56,7 +56,6 @@ public class DeliveryDriverView implements View {
                 },
                 jsonTransformer);
 
-
         post(
                 "/deliverydriver",
                 (request, response) -> {
@@ -72,7 +71,8 @@ public class DeliveryDriverView implements View {
                     deliveryDriver.setId(null);
                     deliveryDriver = deliveryDriverController.addDeliveryDriver(deliveryDriver);
                     deliveryDriver.setCurrentlyWorking(false);
-                    // Fills the queue of the deliveryDriverManager queue with the newly added driver (currently working == false)
+                    // Fills the queue of the deliveryDriverManager queue with the newly added
+                    // driver (currently working == false)
                     deliveryDriverManager.fillQueue(deliveryDriver);
 
                     response.redirect(
@@ -94,13 +94,15 @@ public class DeliveryDriverView implements View {
                         response.status(400);
                         return "";
                     }
-                    Boolean flippedWorking = deliveryDriver.getCurrentlyWorking();
-                    if (deliveryDriver.getCurrentlyWorking() == false) {
-                        flippedWorking = true;
-                    } else {
-                        flippedWorking = false;
-                    }
-                    deliveryDriver.setCurrentlyWorking(flippedWorking);
+                    // Commenting out the below code, because my deliverydrivermanager will manually
+                    // set the currently working status
+                    // Boolean flippedWorking = deliveryDriver.getCurrentlyWorking();
+                    // if (deliveryDriver.getCurrentlyWorking() == false) {
+                    //     flippedWorking = true;
+                    // } else {
+                    //     flippedWorking = false;
+                    // }
+                    // deliveryDriver.setCurrentlyWorking(flippedWorking);
                     deliveryDriverController.updateDeliveryDriver(deliveryDriver);
                     return deliveryDriver;
                 },
