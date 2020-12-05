@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DeliveryDriverManager {
     private final DeliveryController deliveryController;
     private final DeliveryDriverController deliveryDriverController;
-    private Queue<DeliveryDriver> availableDriverQueue = null;
+    private Queue<DeliveryDriver> availableDriverQueue;
 
     @Inject
     DeliveryDriverManager(
@@ -29,9 +29,7 @@ public class DeliveryDriverManager {
         deliveryController = deliveryControllerInstance;
         deliveryDriverController = deliveryDriverControllerInstance;
 
-        if (availableDriverQueue != null) {
-            return;
-        }
+        //if (availableDriverQueue != null) return;
         this.initDeliveryDrivers();
         log.info("DeliveryDriverManager > construct");
     }
