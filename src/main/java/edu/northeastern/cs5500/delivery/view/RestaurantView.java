@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.RestaurantController;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
+import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,18 @@ public class RestaurantView implements View {
                     }
                     response.type("application/json");
                     return restaurant;
+                },
+                jsonTransformer);
+
+        get(
+                "/restaurants/:searchString",
+                (request, response) -> {
+                    final String searchString = request.params(":searchString");
+                    log.debug("/restaurant/:searchString<{}>", searchString);
+                    Collection<Restaurant> restaurants =
+                            restaurantController.getRestaurantsByName(searchString);
+                    response.type("application/json");
+                    return restaurants;
                 },
                 jsonTransformer);
 

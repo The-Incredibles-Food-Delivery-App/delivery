@@ -21,14 +21,13 @@ public class MongoDBService implements Service {
 
     static String getDatabaseURI() {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        // TODO: Figure out how to use .env file!
         final String databaseURI = processBuilder.environment().get("MONGODB_URI");
         if (databaseURI != null) {
             return databaseURI;
         }
         // Local host: "mongodb://localhost:27017/delivery"
         // DB: "https://incredibles-delivery.herokuapp.com/delivery"
-        return "mongodb+srv://admin:incredibles@cluster0.6vxyz.mongodb.net/Incredibles?retryWrites=true&w=majority";
+        return "mongodb://localhost:27017/delivery";
     }
 
     @Getter private MongoDatabase mongoDatabase;
