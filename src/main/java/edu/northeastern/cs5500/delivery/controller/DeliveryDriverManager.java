@@ -37,7 +37,7 @@ public class DeliveryDriverManager {
 
     // Init method to call the fill queue, if the queue is null
     public void initDeliveryDrivers() {
-        // availableDriverQueue = new LinkedList<DeliveryDriver>();
+        availableDriverQueue = new LinkedList<DeliveryDriver>();
         log.info("DeliveryDriverManager > construct > adding default driverdrivers");
 
         Collection<DeliveryDriver> allDrivers = deliveryDriverController.getDeliveryDrivers();
