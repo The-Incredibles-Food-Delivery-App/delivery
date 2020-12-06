@@ -8,5 +8,6 @@ public enum CuisineType {
     ITALIAN,
     MIDDLE_EASTERN,
     VIETNAMESE,
-    AFRICAN
+    AFRICAN,
+    AMERICAN
 }
