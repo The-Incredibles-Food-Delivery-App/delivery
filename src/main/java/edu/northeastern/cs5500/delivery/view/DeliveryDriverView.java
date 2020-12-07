@@ -108,21 +108,6 @@ public class DeliveryDriverView implements View {
                 },
                 jsonTransformer);
 
-        // put(
-        //         "/deliverydriver",
-        //         (request, response) -> {
-        //             ObjectMapper mapper = new ObjectMapper();
-        //             DeliveryDriver deliveryDriver =
-        //                     mapper.readValue(request.body(), DeliveryDriver.class);
-        //             if (!deliveryDriver.isValid()) {
-        //                 response.status(400);
-        //                 return "";
-        //             }
-
-        //             deliveryDriverController.updateDeliveryDriver(deliveryDriver);
-        //             return deliveryDriver;
-        //         });
-
         delete(
                 "/deliverydriver",
                 (request, response) -> {

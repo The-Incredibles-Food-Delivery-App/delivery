@@ -4,6 +4,7 @@ import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
 import edu.northeastern.cs5500.delivery.model.DeliveryStatus;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Queue;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DeliveryDriverManager {
     private final DeliveryController deliveryController;
     private final DeliveryDriverController deliveryDriverController;
-    private Queue<DeliveryDriver> availableDriverQueue = null;
+    private Queue<DeliveryDriver> availableDriverQueue;
 
     @Inject
     DeliveryDriverManager(
@@ -28,16 +29,27 @@ public class DeliveryDriverManager {
         deliveryController = deliveryControllerInstance;
         deliveryDriverController = deliveryDriverControllerInstance;
 
-        if (availableDriverQueue != null) {
-            return;
-        }
         this.initDeliveryDrivers();
         log.info("DeliveryDriverManager > construct");
     }
 
+    /**
+     * Getter method to grab the queue of delivery drivers
+     *
+     * @return the queue of delivery drivers
+     */
+    @Nonnull
+    public Queue<DeliveryDriver> getQueue() {
+        return this.availableDriverQueue;
+    }
+
+    /**
+     * Initializes the default delivery drivers into the queue of deliverydrivers. The default
+     * delivery drivers will be pulled from the delivery controller
+     */
     // Init method to call the fill queue, if the queue is null
     public void initDeliveryDrivers() {
-        // availableDriverQueue = new LinkedList<DeliveryDriver>();
+        availableDriverQueue = new LinkedList<DeliveryDriver>();
         log.info("DeliveryDriverManager > construct > adding default driverdrivers");
 
         Collection<DeliveryDriver> allDrivers = deliveryDriverController.getDeliveryDrivers();
@@ -92,11 +104,9 @@ public class DeliveryDriverManager {
         return delivery;
     }
 
-    // This method to be called in the delivery view, @ Danielle in PR
     /**
-     * This method must be called when the delivery is complete (Maybe in Delivery Manager) When a
-     * delivery is completed, update the currently working status of the driver to false, and re-add
-     * into the queue
+     * This method is called when the delivery is completed, and will re-set the currently working
+     * status of the delivery driver to false, and will re-add that delivery driver to the queue
      *
      * @param delivery - the delivery that has completed delivery
      * @throws Exception

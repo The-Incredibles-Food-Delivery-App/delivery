@@ -1,7 +1,7 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
@@ -35,6 +35,7 @@ public class DeliveryDriverManagerTest {
     Queue<DeliveryDriver> availableDriverQueue;
     public Delivery newDelivery;
     public DeliveryDriver defaultDeliveryDriver;
+    public DeliveryDriver completedDeliveryDriver;
 
     @BeforeEach
     public void setup() throws InvalidOrderException, DuplicateKeyException {
@@ -51,6 +52,7 @@ public class DeliveryDriverManagerTest {
         item3 = new MenuItem();
         newDelivery = new Delivery();
         defaultDeliveryDriver = new DeliveryDriver();
+        completedDeliveryDriver = new DeliveryDriver();
 
         // create a valid order with three items
         item1.setName("Kimchi Soup");
@@ -80,7 +82,17 @@ public class DeliveryDriverManagerTest {
         defaultRestaurant.setMenuItems(defaultMenu);
         defaultOrder.setRestaurant(defaultRestaurant);
 
-        // create delivery driver
+        // create completed delivery driver (everything exact as the default driver except the
+        // currently working status)
+        completedDeliveryDriver.setCurrentlyWorking(true);
+        completedDeliveryDriver.setFirstName("Jonny");
+        completedDeliveryDriver.setLastName("Jingleheimersmith");
+        completedDeliveryDriver.setEmail("anemail@google.com");
+        completedDeliveryDriver.setPhoneNumber("55555555555");
+        completedDeliveryDriver.setAddress("111 Apple St");
+        completedDeliveryDriver.setCurrentOrder(null);
+
+        // create default delivery driver
         defaultDeliveryDriver.setCurrentlyWorking(false);
         defaultDeliveryDriver.setFirstName("Jonny");
         defaultDeliveryDriver.setLastName("Jingleheimersmith");
@@ -88,7 +100,6 @@ public class DeliveryDriverManagerTest {
         defaultDeliveryDriver.setPhoneNumber("55555555555");
         defaultDeliveryDriver.setAddress("111 Apple St");
         defaultDeliveryDriver.setCurrentOrder(null);
-        defaultDeliveryDriver.setCurrentlyWorking(false);
 
         newDelivery.setDeliveryDriver(null);
 
@@ -97,15 +108,16 @@ public class DeliveryDriverManagerTest {
         newDelivery.setDistance(33.5);
         newDelivery.setOrder(defaultOrder);
 
-        availableDriverQueue.add(defaultDeliveryDriver);
+        // grabs the delivery driver manager queue which includes the initialized default drivers
+        availableDriverQueue = deliveryDriverManager.getQueue();
     }
 
     @Test
     void fillQueue() throws DuplicateKeyException, InvalidUserException {
-        availableDriverQueue.remove();
-        assertEquals(null, availableDriverQueue.peek());
+        assertEquals(false, defaultDeliveryDriver.getCurrentlyWorking());
+        assertEquals(false, availableDriverQueue.isEmpty());
         deliveryDriverManager.fillQueue(defaultDeliveryDriver);
-        assertEquals(newDelivery, availableDriverQueue.peek());
+        assertEquals(true, availableDriverQueue.contains(defaultDeliveryDriver));
     }
 
     @Test
@@ -120,12 +132,16 @@ public class DeliveryDriverManagerTest {
 
     @Test
     void completeDelivery() throws Exception {
+        newDelivery.setDeliveryDriver(completedDeliveryDriver);
+        newDelivery.setDeliveryStatus(DeliveryStatus.OUT_FOR_DELIVERY);
         DeliveryDriver driverSet = newDelivery.getDeliveryDriver();
         assertNotEquals(null, newDelivery.getDeliveryDriver());
         assertEquals(DeliveryStatus.OUT_FOR_DELIVERY, newDelivery.getDeliveryStatus());
         assertEquals(true, driverSet.getCurrentlyWorking());
+        assertEquals(false, availableDriverQueue.contains(driverSet));
         deliveryDriverManager.completedDelivery(newDelivery);
         assertEquals(null, newDelivery.getDeliveryDriver());
         assertEquals(false, driverSet.getCurrentlyWorking());
+        assertEquals(true, availableDriverQueue.contains(driverSet));
     }
 }
