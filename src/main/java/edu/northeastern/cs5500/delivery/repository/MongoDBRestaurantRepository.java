@@ -4,14 +4,17 @@ import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.service.MongoDBService;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
+import org.bson.Document;
 
 public class MongoDBRestaurantRepository extends MongoDBRepository<Restaurant>
         implements GenericRestaurantRepository {
 
     @Inject
-    public MongoDBRestaurantRepository(MongoDBService mongoDBService) {
+    public <T> MongoDBRestaurantRepository(MongoDBService mongoDBService) {
         super(Restaurant.class, mongoDBService);
+        collection.createIndex(new Document("restaurantName", "text"));
     }
 
     @Override
@@ -26,7 +29,15 @@ public class MongoDBRestaurantRepository extends MongoDBRepository<Restaurant>
 
         // TODO: Index the Restaurants collection by name for faster lookup
         // TODO: Figure out how to use this filter with the supplied name parameter
-        // return collection.find({ "restaurantName": { $regex: /^name/ }}).into(new ArrayList<>());
-        return collection.find().into(new ArrayList<>());
+        // String regexExpr = String.format("/^%s/i", name);
+        Document regQuery = new Document();
+        regQuery.append("$regex", "^(?)" + Pattern.quote(name));
+        regQuery.append("$options", "i");
+
+        Document findQuery = new Document();
+        findQuery.append("restaurantName", regQuery);
+        // Document r = new Document("$regex", "/^C/");
+        // return collection.find(new Document("restaurantName", r)).into(new ArrayList<>());
+        return collection.find(findQuery).into(new ArrayList<>());
     }
 }
