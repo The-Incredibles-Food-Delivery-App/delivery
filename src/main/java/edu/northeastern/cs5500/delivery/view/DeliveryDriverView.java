@@ -94,15 +94,6 @@ public class DeliveryDriverView implements View {
                         response.status(400);
                         return "";
                     }
-                    // Commenting out the below code, because my deliverydrivermanager will manually
-                    // set the currently working status
-                    // Boolean flippedWorking = deliveryDriver.getCurrentlyWorking();
-                    // if (deliveryDriver.getCurrentlyWorking() == false) {
-                    //     flippedWorking = true;
-                    // } else {
-                    //     flippedWorking = false;
-                    // }
-                    // deliveryDriver.setCurrentlyWorking(flippedWorking);
                     deliveryDriverController.updateDeliveryDriver(deliveryDriver);
                     return deliveryDriver;
                 },
