@@ -29,12 +29,23 @@ public class CreditCardController {
         this.initializeCreditCards();
     }
 
+    /**
+     * Returns the creditcard corresponding to the given id
+     *
+     * @param uuid - the id of the creditcard
+     * @return the creditcard corresponding to the given id
+     */
     @Nullable
     public CreditCard getCreditCard(@Nonnull ObjectId uuid) {
         log.debug("CreditCardController > getCreditCard({})", uuid);
         return creditCards.get(uuid);
     }
 
+    /**
+     * Returns all creditcards in the repo
+     *
+     * @return all the creditcards
+     */
     @Nonnull
     public Collection<CreditCard> getCreditCards() {
         log.debug("CreditCardController > getCreditCards()");
@@ -92,6 +103,15 @@ public class CreditCardController {
     //     }
     // }
 
+
+    /**
+     * Adds a creditcard to the repository after it has been validated to be a valid creditcard
+     *
+     * @param creditCard - the creditcard to be validated
+     * @throws InvalidCreditCardException if the creditcard number exceeds or is less than the
+     *     number of allowed digits on a card
+     * @return the newly added creditcard to the repository
+     */
     @Nonnull
     public CreditCard addCreditCard(@Nonnull CreditCard creditCard)
             throws DuplicateKeyException, InvalidCreditCardException {
@@ -112,16 +132,29 @@ public class CreditCardController {
         return creditCards.add(creditCard);
     }
 
+    /**
+     * Updates the creditcard with the newly inputted creditcard
+     *
+     * @param creditCard - the creditcard to be validated
+     * @throws Exception if the creditcard is invalid
+     */
     public void updateCreditCard(@Nonnull CreditCard creditCard) throws Exception {
         log.debug("CreditCardController > updateCreditCard(...)");
         creditCards.update(creditCard);
     }
 
+    /**
+     * Deletes the creditcard from the repository based off the creditcard id passed in
+     *
+     * @param id - the creditcard's id to vbe deleted
+     * @throws Exception if the creditcard is invalid
+     */
     public void deleteCreditCard(@Nonnull ObjectId id) throws Exception {
         log.debug("CreditCardController > deleteCreditCard(...)");
         creditCards.delete(id);
     }
 
+    /** Initializes the creditcard repository with default data */
     private void initializeCreditCards() {
         log.info("CreditCardController > construct > adding default creditcards");
 

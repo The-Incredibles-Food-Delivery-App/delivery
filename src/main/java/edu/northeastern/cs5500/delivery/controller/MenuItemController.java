@@ -44,24 +44,47 @@ public class MenuItemController {
         }
     }
 
+    /**
+     * Returns the menuitem corresponding to the given id
+     *
+     * @param uuid - the id of the menuitem
+     * @return the menuitem corresponding to the given id
+     */
     @Nullable
     public MenuItem getMenuItem(@Nonnull ObjectId uuid) {
         log.debug("MenuItemController > getMenuItem({})", uuid);
         return menuItems.get(uuid);
     }
 
+    /**
+     * Returns all menuitems in the menuitem repository
+     *
+     * @return all menuitems
+     */
     @Nonnull
     public Collection<MenuItem> getMenuItems() {
         log.debug("MenuItemController > getMenuItems()");
         return menuItems.getAll();
     }
 
+    /**
+     * Updates the given menuitem
+     *
+     * @param item - the menuitem object to update
+     * @throws Exception
+     */
     public void updateMenuItem(@Nonnull MenuItem item) throws Exception {
         log.debug("MenuItemController > updateMenuItem(...)");
         // TODO: Do we need to check that the order id exists in the repo?
         menuItems.update(item);
     }
 
+    /**
+     * Deletes the menuitem corresponding to the given id
+     *
+     * @param id - the id corresponding to the menuitem to delete
+     * @throws Exception
+     */
     public void deleteMenuItem(@Nonnull ObjectId id) throws Exception {
         log.debug("MenuItemController > deleteMenuItem(...)");
         menuItems.delete(id);

@@ -47,18 +47,37 @@ public class RecommendationController {
         }
     }
 
+    /**
+     * Returns the recommendation corresponding to the given id
+     *
+     * @param uuid - the id of the recommendation
+     * @return the recommendation corresponding to the given id
+     */
     @Nullable
     public Recommendation getRecommendation(@Nonnull ObjectId uuid) {
         log.debug("RecommendationController > getRecommendation({})", uuid);
         return recommendations.get(uuid);
     }
 
+    /**
+     * Returns all recommendations in the recommendation repository
+     *
+     * @return all recommendation
+     */
     @Nonnull
     public Collection<Recommendation> getRecommendations() {
         log.debug("RecommendationController > getRecommendations()");
         return recommendations.getAll();
     }
 
+    /**
+     * Adds a recommendation to the repository
+     *
+     * @param item - the recommendation to add
+     * @throws Exeption
+     * @throws DuplicateKeyException - when the item id is already contained in the collection of
+     *     recommendation
+     */
     @Nonnull
     public Recommendation addRecommendation(@Nonnull Recommendation recommendation)
             throws Exception, DuplicateKeyException {
@@ -78,11 +97,23 @@ public class RecommendationController {
         return recommendations.add(recommendation);
     }
 
+    /**
+     * Updates the given recommendation
+     *
+     * @param item - the recommendation object to update
+     * @throws Exception
+     */
     public void updateRecommendation(@Nonnull Recommendation recommendation) throws Exception {
         log.debug("RecommendationController > updateRecommendation(...)");
         recommendations.update(recommendation);
     }
 
+    /**
+     * Deletes the recommendation corresponding to the given id
+     *
+     * @param id - the id corresponding to the recommendation to delete
+     * @throws Exception
+     */
     public void deleteRecommendation(@Nonnull ObjectId id) throws Exception {
         log.debug("RecommendationController > deleteRecommendation(...)");
         recommendations.delete(id);
