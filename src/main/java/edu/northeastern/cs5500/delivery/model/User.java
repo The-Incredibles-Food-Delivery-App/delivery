@@ -14,7 +14,8 @@ public abstract class User implements Model {
     private String address;
 
     /**
-     * Validates the user. A valid user has a nonnull firstname, lastname, phonenumber, address and email.
+     * Validates the user. A valid user has a nonnull firstname, lastname, phonenumber, address and
+     * email.
      *
      * @return true if this user is valid.
      */

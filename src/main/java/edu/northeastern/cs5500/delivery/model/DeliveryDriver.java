@@ -10,11 +10,13 @@ public class DeliveryDriver extends User {
     private Order currentOrder;
     private Boolean currentlyWorking;
 
-/**
-     * Checks that the deliverydriver is valid, a valid deliverydriver has a nonnull currentlyworking status.
+    /**
+     * Checks that the deliverydriver is valid, a valid deliverydriver has a nonnull
+     * currentlyworking status.
      *
      * @return true if this deliverydriver is valid
-     */    @JsonIgnore
+     */
+    @JsonIgnore
     public boolean isValid() {
         return this.currentlyWorking != null;
     }

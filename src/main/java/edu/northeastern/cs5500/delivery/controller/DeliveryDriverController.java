@@ -57,7 +57,8 @@ public class DeliveryDriverController {
     }
 
     /**
-     * Adds a delivery driver to the repository after it has been validated to be a valid delivery driver
+     * Adds a delivery driver to the repository after it has been validated to be a valid delivery
+     * driver
      *
      * @param driver - the delivery driver to be validated
      * @throws InvalidUserException if the delivery driver is invalid
