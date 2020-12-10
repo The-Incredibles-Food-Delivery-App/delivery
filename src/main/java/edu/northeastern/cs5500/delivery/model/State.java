@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Pulled for inspiration from https://gist.github.com/webdevwilson/5271984
+/** ENUM class representing the stes of America where delivery can occur*/
 
 public enum State {
     ALABAMA("Alabama", "AL"),

@@ -12,7 +12,11 @@ public class Customer extends User {
     private String username;
     private String password;
 
-    /** @return true if this customer is valid */
+    /**
+     * Checks that the customer is valid, a valid customer has a nonnull username and password
+     *
+     * @return true if this customer is valid
+     */
     @JsonIgnore
     public boolean isValid() {
         return this.username != null && this.password != null;

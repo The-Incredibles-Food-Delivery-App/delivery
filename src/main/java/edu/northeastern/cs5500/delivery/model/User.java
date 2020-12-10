@@ -13,7 +13,11 @@ public abstract class User implements Model {
     private String phoneNumber;
     private String address;
 
-    /** @return true if this delivery is valid */
+    /**
+     * Validates the user. A valid user has a nonnull firstname, lastname, phonenumber, address and email.
+     *
+     * @return true if this user is valid.
+     */
     @JsonIgnore
     public boolean isValid() {
         return firstName != null
