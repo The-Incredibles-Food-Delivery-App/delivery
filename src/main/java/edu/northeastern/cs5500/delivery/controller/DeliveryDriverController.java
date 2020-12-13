@@ -33,18 +33,37 @@ public class DeliveryDriverController {
         this.initializeDrivers();
     }
 
+    /**
+     * Returns the delivery driver corresponding to the given id
+     *
+     * @param uuid - the id of the delivery driver
+     * @return the delivery driver corresponding to the given id
+     */
     @Nullable
     public DeliveryDriver getDeliveryDriver(@Nonnull ObjectId uuid) {
         log.debug("DeliveryDriverController > getDriver({})", uuid);
         return deliveryDrivers.get(uuid);
     }
 
+    /**
+     * Returns all delivery drivers in the repo
+     *
+     * @return all the delivery drivers
+     */
     @Nonnull
     public Collection<DeliveryDriver> getDeliveryDrivers() {
         log.debug("DeliveryDriverController > getDrivers()");
         return deliveryDrivers.getAll();
     }
 
+    /**
+     * Adds a delivery driver to the repository after it has been validated to be a valid delivery
+     * driver
+     *
+     * @param driver - the delivery driver to be validated
+     * @throws InvalidUserException if the delivery driver is invalid
+     * @return the newly added delivery driver to the repository
+     */
     @Nonnull
     public DeliveryDriver addDeliveryDriver(@Nonnull DeliveryDriver driver)
             throws DuplicateKeyException, InvalidUserException {
@@ -62,11 +81,23 @@ public class DeliveryDriverController {
         return deliveryDrivers.add(driver);
     }
 
+    /**
+     * Updates the given delivery driver
+     *
+     * @param driver - the delivery driver object to update
+     * @throws Exception
+     */
     public void updateDeliveryDriver(@Nonnull DeliveryDriver driver) throws Exception {
         log.debug("DeliveryDriverController > updateDriver(...)");
         deliveryDrivers.update(driver);
     }
 
+    /**
+     * Deletes the delivery driver corresponding to the given id
+     *
+     * @param id - the id corresponding to the delivery driver to delete
+     * @throws Exception
+     */
     public void deleteDeliveryDriver(@Nonnull ObjectId id) throws Exception {
         log.debug("DeliveryDriverController > deleteDriver(...)");
         deliveryDrivers.delete(id);

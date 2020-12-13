@@ -25,19 +25,36 @@ public class CustomerController {
             return;
         }
     }
-
+    /**
+     * Returns the customer corresponding to the given id
+     *
+     * @param uuid - the id of the customer
+     * @return the customer corresponding to the given id
+     */
     @Nullable
     public Customer getCustomer(@Nonnull ObjectId uuid) {
         log.debug("CustomerController > getCustomer({})", uuid);
         return customers.get(uuid);
     }
 
+    /**
+     * Returns all customers in the repo
+     *
+     * @return all the customers
+     */
     @Nonnull
     public Collection<Customer> getCustomers() {
         log.debug("CustomerController > getCustomers()");
         return customers.getAll();
     }
 
+    /**
+     * Adds a customer to the repository after it has been validated to be a valid customer
+     *
+     * @param customer - the customer to be validated
+     * @throws InvalidUserException if the customer is not valid
+     * @return the newly added customer to the repository
+     */
     @Nonnull
     public Customer addCustomer(@Nonnull Customer customer)
             throws DuplicateKeyException, InvalidUserException {
@@ -55,16 +72,29 @@ public class CustomerController {
         return customers.add(customer);
     }
 
+    /**
+     * Updates the customer with the newly inputted customer
+     *
+     * @param customer - the customer to be validated
+     * @throws Exception if the customer is invalid
+     */
     public void updateCustomer(@Nonnull Customer customer) throws Exception {
         log.debug("CustomerController > updateCustomer(...)");
         customers.update(customer);
     }
 
+    /**
+     * Deletes the customer from the repository based off the customer id passed in
+     *
+     * @param id - the customer's id to vbe deleted
+     * @throws Exception if the customer is invalid
+     */
     public void deleteCustomer(@Nonnull ObjectId id) throws Exception {
         log.debug("CustomerController > deleteCustomer(...)");
         customers.delete(id);
     }
 
+    /** Initializes the customer repository with default data */
     private void initializeCustomers() {
         log.info("CustomerController > construct > adding default customers");
 

@@ -53,12 +53,23 @@ public class ReviewController {
         }
     }
 
+    /**
+     * Returns the review corresponding to the given id
+     *
+     * @param uuid - the id of the review
+     * @return the review corresponding to the given id
+     */
     @Nullable
     public Review getReview(@Nonnull ObjectId uuid) {
         log.debug("ReviewController > getReview({})", uuid);
         return reviews.get(uuid);
     }
 
+    /**
+     * Returns all reviews in the review repository
+     *
+     * @return all reviews
+     */
     @Nonnull
     public Collection<Review> getReviews() {
         log.debug("ReviewController > getReviews()");
@@ -90,6 +101,14 @@ public class ReviewController {
         return true;
     }
 
+    /**
+     * Adds a review to the repository
+     *
+     * @param review - the review to add
+     * @throws InvalidReviewException - when the review given is invalid
+     * @throws DuplicateKeyException - when the item id is already contained in the collection of
+     *     review
+     */
     @Nonnull
     public Review addReview(@Nonnull Review review)
             throws InvalidReviewException, DuplicateKeyException {
@@ -109,11 +128,23 @@ public class ReviewController {
         return reviews.add(review);
     }
 
+    /**
+     * Updates the given review
+     *
+     * @param item - the review object to update
+     * @throws Exception
+     */
     public void updateReview(@Nonnull Review review) throws Exception {
         log.debug("ReviewController > updateReview(...)");
         reviews.update(review);
     }
 
+    /**
+     * Deletes the review corresponding to the given id
+     *
+     * @param id - the id corresponding to the review to delete
+     * @throws Exception
+     */
     public void deleteReview(@Nonnull ObjectId id) throws Exception {
         log.debug("ReviewController > deleteReview(...)");
         reviews.delete(id);
