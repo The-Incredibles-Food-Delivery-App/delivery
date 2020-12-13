@@ -92,7 +92,8 @@ public class OrderView implements View {
                     order = orderController.addOrder(order);
                     // response.redirect(String.format("/order/{}", order.getId().toHexString(), 301));
                     return order;
-                });
+                },
+                jsonTransformer);
 
         put(
                 "/submitorder",
