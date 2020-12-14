@@ -1,7 +1,5 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.Customer;
-import edu.northeastern.cs5500.delivery.model.MenuItem;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
@@ -24,7 +22,6 @@ public class OrderController {
         orders = orderRepository;
 
         log.info("OrderController > construct");
-        initalizeOrders();
 
         if (orders.count() > 0) {
             return;
@@ -163,41 +160,5 @@ public class OrderController {
         order.getItems().put(itemId.toString(), quantity);
         updateOrder(order);
         return order;
-    }
-
-    /** Creates default orders to add to the order repository */
-    private void initalizeOrders() {
-        log.info("OrderController > construct > adding default orders");
-
-        // create the Customer.
-        Customer defaultCustomer = new Customer();
-        defaultCustomer.setUsername("catlover11");
-        defaultCustomer.setPassword("ellecat111");
-        defaultCustomer.setFirstName("Ellie");
-        defaultCustomer.setLastName("Gato");
-        defaultCustomer.setEmail("gatolover@gmail.com");
-
-        // create order items
-        HashMap<String, Integer> items = new HashMap<>();
-        MenuItem item1 = new MenuItem();
-        item1.setName("Kimchi Soup");
-        item1.setPrice(899);
-        item1.setId(new ObjectId());
-        items.put(item1.getId().toString(), 2);
-
-        // create the order
-        final Order defaultorder1 = new Order();
-        defaultorder1.setOrderTime(LocalDateTime.now());
-        // Creating dummy restaurant for the fake order
-        defaultorder1.setRestaurant(new Restaurant());
-        defaultorder1.setCustomerId(new ObjectId());
-        defaultorder1.setItems(items);
-
-        try {
-            addOrder(defaultorder1);
-        } catch (Exception e) {
-            log.error("OrderController > construct > adding default orders > failure?");
-            e.printStackTrace();
-        }
     }
 }

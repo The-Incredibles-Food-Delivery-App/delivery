@@ -1,6 +1,5 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,23 +65,6 @@ public class OrderControllerTest {
     }
 
     @Test
-    void testRegisterCreatesOrders() {
-        assertThat(orderController.getOrders()).isNotEmpty();
-    }
-
-    @Test
-    void testRegisterCreatesValidOrders() {
-        for (Order order : orderController.getOrders()) {
-            assertTrue(order.isValid());
-        }
-    }
-
-    @Test
-    void testRegisterGetOrders() {
-        assertEquals(orderController.getOrders().size(), 1);
-    }
-
-    @Test
     void testCanAddOrderValidOrder() throws DuplicateKeyException, InvalidOrderException {
         Order addedOrder = orderController.addOrder(neworder);
         // check that the order has been added to the Order repository
@@ -121,11 +103,12 @@ public class OrderControllerTest {
     void testCanDeleteOrder() throws Exception {
         // add the new order
         Order addedOrder = orderController.addOrder(neworder);
-        assertEquals(orderController.getOrders().size(), 2);
+        assertEquals(orderController.getOrders().size(), 1);
         ObjectId orderId = addedOrder.getId();
         // delete the new order
         orderController.deleteOrder(orderId);
-        assertEquals(orderController.getOrders().size(), 1);
+        assertEquals(orderController.getOrders().size(), 0);
+        assertEquals(null, orderController.getOrder(orderId));
     }
 
     @Test
