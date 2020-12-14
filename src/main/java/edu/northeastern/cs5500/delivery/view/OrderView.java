@@ -90,7 +90,8 @@ public class OrderView implements View {
                     // Set the order status
                     order.setOrderStatus(OrderStatus.NOT_CONFIRMED);
                     order = orderController.addOrder(order);
-                    // response.redirect(String.format("/order/{}", order.getId().toHexString(), 301));
+                    // response.redirect(String.format("/order/{}", order.getId().toHexString(),
+                    // 301));
                     return order;
                 },
                 jsonTransformer);
