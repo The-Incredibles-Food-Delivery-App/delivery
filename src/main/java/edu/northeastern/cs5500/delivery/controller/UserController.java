@@ -1,8 +1,6 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import com.mongodb.lang.Nullable;
-import edu.northeastern.cs5500.delivery.model.Customer;
-import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
 import edu.northeastern.cs5500.delivery.model.User;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.util.Collection;
@@ -23,13 +21,6 @@ public class UserController {
         users = userRepository;
 
         log.info("UserController > construct");
-
-        if (users.count() > 0) {
-            return;
-        }
-
-        log.info("UserController > construct > adding default users");
-        this.initializeUsers();
     }
 
     /**
@@ -99,33 +90,5 @@ public class UserController {
     public void deleteUser(@Nonnull ObjectId id) throws Exception {
         log.debug("UserController > deleteUser(...)");
         users.delete(id);
-    }
-
-    /* Initalizes the user collection with restaurants */
-    private void initializeUsers() {
-        final DeliveryDriver defaultDeliveryDriver1 = new DeliveryDriver();
-        defaultDeliveryDriver1.setFirstName("Rachel");
-        defaultDeliveryDriver1.setLastName("Woods");
-        defaultDeliveryDriver1.setPhoneNumber("2245678921");
-        defaultDeliveryDriver1.setEmail("ra_wood@hotmail.com");
-        defaultDeliveryDriver1.setAddress("344 Wood Lane");
-        defaultDeliveryDriver1.setCurrentlyWorking(false);
-
-        final Customer defaultCustomer1 = new Customer();
-        defaultCustomer1.setFirstName("Sam");
-        defaultCustomer1.setLastName("Rockwell");
-        defaultCustomer1.setPhoneNumber("8892134567");
-        defaultCustomer1.setUsername("sam_rockwell666");
-        defaultCustomer1.setPassword("samrockx666");
-        defaultCustomer1.setEmail("theOnlySamRockwell@gmail.com");
-        defaultCustomer1.setAddress("333 Hollywood Blvd");
-
-        try {
-            addUser(defaultDeliveryDriver1);
-            addUser(defaultCustomer1);
-        } catch (Exception e) {
-            log.error("UserController > construct > adding default Users > failure?");
-            e.printStackTrace();
-        }
     }
 }
