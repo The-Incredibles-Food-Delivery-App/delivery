@@ -67,10 +67,14 @@ public class CustomerView implements View {
                     customer.setId(null);
                     customer = customerController.addCustomer(customer);
 
+                    /* 
+                    * I am not sure how to work with this so I am commenting it out
                     response.redirect(
                             String.format("/customer/{}", customer.getId().toHexString()), 301);
+                    */
                     return customer;
-                });
+                },
+                jsonTransformer);
 
         put(
                 "/customer",
