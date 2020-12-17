@@ -1,7 +1,7 @@
 package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.CreditCard;
-import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.repository.GenericCreditCardRepository;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,10 +13,10 @@ import org.bson.types.ObjectId;
 @Singleton
 @Slf4j
 public class CreditCardController {
-    private final GenericRepository<CreditCard> creditCards;
+    private final GenericCreditCardRepository creditCards;
 
     @Inject
-    CreditCardController(GenericRepository<CreditCard> creditCardRepository) {
+    CreditCardController(GenericCreditCardRepository creditCardRepository) {
         creditCards = creditCardRepository;
 
         log.info("CreditCardController > construct");
@@ -27,6 +27,17 @@ public class CreditCardController {
 
         log.info("CreditCardController > construct > adding default creditCards");
         this.initializeCreditCards();
+    }
+
+    /**
+     * Returns the default credit card(s) corresponding to the given user
+     *
+     * @param username - the username whose default credit cards we would like to retrieve
+     * @return the default credit card(s) corresponding to the given user
+     */
+    @Nonnull
+    public Collection<CreditCard> getDefaultCreditCard(@Nonnull String username) {
+        return creditCards.getUserDefaultCard(username);
     }
 
     /**
@@ -161,7 +172,7 @@ public class CreditCardController {
         defaultCreditCard1.setCardNumber(1234567891234567L);
         // defaultCreditCard1.setExpirationDate(LocalDateTime.now());
         defaultCreditCard1.setUsername("Mary Poppins");
-        defaultCreditCard1.setIsDefault(false);
+        defaultCreditCard1.setIsDefault(true);
 
         final CreditCard defaultCreditCard2 = new CreditCard();
         defaultCreditCard2.setCardNumber(1234567891234569L);
