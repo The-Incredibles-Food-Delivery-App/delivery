@@ -68,10 +68,9 @@ public class DeliveryView implements View {
                     // Ignore the user-provided ID if there is one
                     delivery.setId(null);
                     delivery = deliveryController.addDelivery(delivery);
-                    response.redirect(
-                            String.format("/delivery/{}", delivery.getId().toHexString()), 301);
                     return delivery;
-                });
+                },
+                jsonTransformer);
 
         put(
                 "/deliver",
@@ -127,7 +126,6 @@ public class DeliveryView implements View {
                     deliveryController.deleteDelivery(deliveryId);
                     response.type("application/json");
                     log.debug("Successfully Deleted Delivery id <{}>", deliveryId);
-                    // TODO: Is this appropriate?
                     return null;
                 });
     }
