@@ -81,11 +81,9 @@ public class CreditCardView implements View {
                     // Ignore the user-provided ID if there is one
                     creditCard.setId(null);
                     creditCard = creditCardController.addCreditCard(creditCard);
-
-                    response.redirect(
-                            String.format("/creditcard/{}", creditCard.getId().toHexString()), 301);
                     return creditCard;
-                });
+                },
+                jsonTransformer);
 
         put(
                 "/creditcard",
