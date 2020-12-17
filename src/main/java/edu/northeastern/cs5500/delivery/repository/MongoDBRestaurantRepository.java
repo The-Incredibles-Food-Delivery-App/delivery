@@ -19,17 +19,6 @@ public class MongoDBRestaurantRepository extends MongoDBRepository<Restaurant>
 
     @Override
     public Collection<Restaurant> getRestaurantByName(String name) {
-        /* UPDATE (CSM):
-        I think this is how u would do that?
-        Collection<Restaurant> restaurants = this.getAll();
-        Collection<Restaurant> filteredRestaurants = new ArrayList<>();
-        restaurants.stream().filter(restaurant -> restaurant.getRestaurantName().equals(name));
-        // add this to the array
-        */
-
-        // TODO: Index the Restaurants collection by name for faster lookup
-        // TODO: Figure out how to use this filter with the supplied name parameter
-        // String regexExpr = String.format("/^%s/i", name);
         Document regQuery = new Document();
         regQuery.append("$regex", "^(?)" + Pattern.quote(name));
         regQuery.append("$options", "i");

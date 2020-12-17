@@ -6,6 +6,8 @@ import static spark.Spark.halt;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
+import java.util.Collection;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.CreditCardController;
@@ -51,6 +53,18 @@ public class CreditCardView implements View {
                     }
                     response.type("application/json");
                     return creditCard;
+                },
+                jsonTransformer);
+
+        get(
+                "/defaultcreditcard/:username",
+                (request, response) -> {
+                    final String username = request.params(":username");
+                    log.debug("/defaultcreditcard/:username<{}>", username);
+                    Collection<CreditCard> defaultCreditCards =
+                            creditCardController.getDefaultCreditCard(username);
+                    response.type("application/json");
+                    return defaultCreditCards;
                 },
                 jsonTransformer);
 

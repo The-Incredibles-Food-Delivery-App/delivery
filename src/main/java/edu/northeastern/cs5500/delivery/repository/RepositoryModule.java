@@ -2,7 +2,6 @@ package edu.northeastern.cs5500.delivery.repository;
 
 import dagger.Module;
 import dagger.Provides;
-import edu.northeastern.cs5500.delivery.model.CreditCard;
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.DeliveryDriver;
@@ -39,9 +38,8 @@ public class RepositoryModule {
     }
 
     @Provides
-    public GenericRepository<CreditCard> provideCreditCardRepository(
-            MongoDBService mongoDBService) {
-        return new MongoDBRepository<>(CreditCard.class, mongoDBService);
+    public GenericCreditCardRepository provideCreditCardRepository(MongoDBService mongoDBService) {
+        return new MongoDBCreditCardRepository(mongoDBService);
     }
 
     @Provides
