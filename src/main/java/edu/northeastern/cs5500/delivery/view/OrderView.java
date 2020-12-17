@@ -56,6 +56,22 @@ public class OrderView implements View {
                 },
                 jsonTransformer);
 
+        get(
+                "/calculatetotal/:id",
+                (request, response) -> {
+                    final String paramId = request.params(":id");
+                    log.debug("/order/:id<{}>", paramId);
+                    final ObjectId id = new ObjectId(paramId);
+                    Order order = orderController.getOrder(id);
+                    if (order == null) {
+                        halt(404);
+                    }
+                    response.type("application/json");
+                    orderController.calculateCost(order);
+                    return orderController.getOrder(id);
+                },
+                jsonTransformer);
+
         put(
                 "/additem",
                 (request, response) -> {
