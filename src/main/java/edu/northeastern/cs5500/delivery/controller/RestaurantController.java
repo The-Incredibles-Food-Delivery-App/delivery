@@ -135,6 +135,10 @@ public class RestaurantController {
         final Restaurant defaultRestaurant1 = new Restaurant();
         final Restaurant defaultRestaurant2 = new Restaurant();
         final Restaurant defaultRestaurant3 = new Restaurant();
+        final Restaurant defaultRestaurant4 = new Restaurant();
+        final Restaurant defaultRestaurant5 = new Restaurant();
+        final Restaurant defaultRestaurant6 = new Restaurant();
+        final Restaurant defaultRestaurant7 = new Restaurant();
 
         defaultRestaurant1.setRestaurantName("China Harbor");
         defaultRestaurant1.setAddress("123 Birch Lane");
@@ -226,10 +230,137 @@ public class RestaurantController {
         menu3.put(item12.getId().toString(), item12);
         defaultRestaurant3.setMenuItems(menu3);
 
+        // default restaurant 4
+        defaultRestaurant4.setRestaurantName("Delicous Bakery");
+        defaultRestaurant4.setAddress("9822 112th Ave. Bellevue, WA, 98043");
+        defaultRestaurant4.setCuisineType(CuisineType.AMERICAN);
+        defaultRestaurant4.setHours("9-6");
+        defaultRestaurant4.setPhoneNumber("5557779999");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu4 = new HashMap<>();
+        MenuItem item13 = new MenuItem();
+        MenuItem item14 = new MenuItem();
+        MenuItem item15 = new MenuItem();
+        MenuItem item16 = new MenuItem();
+        item13.setName("Chocolate Babka");
+        item13.setPrice(799);
+        item13.setId(new ObjectId());
+        item14.setName("Tiramisu Slice");
+        item14.setPrice(399);
+        item14.setId(new ObjectId());
+        item15.setName("Pumpkin Pie Slice");
+        item15.setPrice(325);
+        item15.setId(new ObjectId());
+        item16.setName("Pizelle");
+        item16.setPrice(25);
+        item16.setId(new ObjectId());
+        menu4.put(item13.getId().toString(), item13);
+        menu4.put(item14.getId().toString(), item14);
+        menu4.put(item15.getId().toString(), item15);
+        menu4.put(item16.getId().toString(), item16);
+        defaultRestaurant4.setMenuItems(menu4);
+
+        // default restaurant 5
+        defaultRestaurant5.setRestaurantName("Kanishka");
+        defaultRestaurant5.setAddress("2121 32nd Ave. Redmond, WA, 98225");
+        defaultRestaurant5.setCuisineType(CuisineType.INDIAN);
+        defaultRestaurant5.setHours("M-F 11-11, Sat 11-12, Sun 11-10");
+        defaultRestaurant5.setPhoneNumber("2315674532");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu5 = new HashMap<>();
+        MenuItem item17 = new MenuItem();
+        MenuItem item18 = new MenuItem();
+        MenuItem item19 = new MenuItem();
+        MenuItem item20 = new MenuItem();
+        item17.setName("Palak Paneer");
+        item17.setPrice(1099);
+        item17.setId(new ObjectId());
+        item18.setName("Garlic Naan");
+        item18.setPrice(325);
+        item18.setId(new ObjectId());
+        item19.setName("Chicken Tikka");
+        item19.setPrice(1125);
+        item19.setId(new ObjectId());
+        item20.setName("Mushroom Do Piyaza");
+        item20.setPrice(899);
+        item20.setId(new ObjectId());
+        menu5.put(item17.getId().toString(), item17);
+        menu5.put(item18.getId().toString(), item18);
+        menu5.put(item19.getId().toString(), item19);
+        menu5.put(item20.getId().toString(), item20);
+        defaultRestaurant5.setMenuItems(menu5);
+
+        // default restaurant 6
+        defaultRestaurant6.setRestaurantName("Queen Sheeba");
+        defaultRestaurant6.setAddress("1112 Broadway, Seattle, WA, 98001");
+        defaultRestaurant6.setCuisineType(CuisineType.AFRICAN);
+        defaultRestaurant6.setHours("M-F 4-10, Sat 4-12, Sun 4-9");
+        defaultRestaurant6.setPhoneNumber("1231234567");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu6 = new HashMap<>();
+        MenuItem item21 = new MenuItem();
+        MenuItem item22 = new MenuItem();
+        MenuItem item23 = new MenuItem();
+        MenuItem item24 = new MenuItem();
+        item21.setName("Bamia Beef");
+        item21.setPrice(1199);
+        item21.setId(new ObjectId());
+        item22.setName("Fish Tibbs");
+        item22.setPrice(1250);
+        item22.setId(new ObjectId());
+        item23.setName("Doro Wat");
+        item23.setPrice(899);
+        item23.setId(new ObjectId());
+        item24.setName("Lamb Tibbs");
+        item24.setPrice(1299);
+        item24.setId(new ObjectId());
+        menu6.put(item21.getId().toString(), item21);
+        menu6.put(item22.getId().toString(), item22);
+        menu6.put(item23.getId().toString(), item23);
+        menu6.put(item24.getId().toString(), item24);
+        defaultRestaurant6.setMenuItems(menu6);
+
+        // default restaurant 7
+        defaultRestaurant7.setRestaurantName("Chef's");
+        defaultRestaurant7.setAddress("7891 Pine Ave., Seattle, WA, 98002");
+        defaultRestaurant7.setHours("M-Sat 11-12, Sun 11-9");
+        defaultRestaurant7.setPhoneNumber("1231257834");
+
+        // create menu items and menu
+        HashMap<String, MenuItem> menu7 = new HashMap<>();
+        MenuItem item25 = new MenuItem();
+        MenuItem item26 = new MenuItem();
+        MenuItem item27 = new MenuItem();
+        MenuItem item28 = new MenuItem();
+        item25.setName("Eggplant Parmesan");
+        item25.setPrice(999);
+        item25.setId(new ObjectId());
+        item26.setName("Spaghetti Parmesan");
+        item26.setPrice(899);
+        item26.setId(new ObjectId());
+        item27.setName("Gnocchi");
+        item27.setPrice(1099);
+        item27.setId(new ObjectId());
+        item28.setName("Ravioli");
+        item28.setPrice(1025);
+        item28.setId(new ObjectId());
+        menu7.put(item25.getId().toString(), item25);
+        menu7.put(item26.getId().toString(), item26);
+        menu7.put(item27.getId().toString(), item27);
+        menu7.put(item28.getId().toString(), item28);
+        defaultRestaurant7.setMenuItems(menu7);
+
         try {
             addRestaurant(defaultRestaurant1);
             addRestaurant(defaultRestaurant2);
             addRestaurant(defaultRestaurant3);
+            addRestaurant(defaultRestaurant4);
+            addRestaurant(defaultRestaurant5);
+            addRestaurant(defaultRestaurant6);
+            addRestaurant(defaultRestaurant7);
         } catch (Exception e) {
             log.error("Restaurant Controller > construct > adding default restaurants > failure?");
             e.printStackTrace();

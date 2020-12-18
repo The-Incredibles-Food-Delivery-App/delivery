@@ -20,13 +20,11 @@ public class MongoDBRestaurantRepository extends MongoDBRepository<Restaurant>
     @Override
     public Collection<Restaurant> getRestaurantByName(String name) {
         Document regQuery = new Document();
-        regQuery.append("$regex", "^(?)" + Pattern.quote(name));
+        regQuery.append("$regex", ".*" + Pattern.quote(name) + ".*");
         regQuery.append("$options", "i");
 
         Document findQuery = new Document();
         findQuery.append("restaurantName", regQuery);
-        // Document r = new Document("$regex", "/^C/");
-        // return collection.find(new Document("restaurantName", r)).into(new ArrayList<>());
         return collection.find(findQuery).into(new ArrayList<>());
     }
 }

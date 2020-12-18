@@ -27,7 +27,7 @@ public class CustomerController {
         // if repository is empty, create default customers
         initializeCustomers();
     }
-    
+
     /**
      * Returns the customer corresponding to the given id
      *
