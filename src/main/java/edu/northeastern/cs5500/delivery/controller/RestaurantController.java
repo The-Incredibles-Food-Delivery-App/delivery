@@ -231,7 +231,7 @@ public class RestaurantController {
         defaultRestaurant3.setMenuItems(menu3);
 
         // default restaurant 4
-        defaultRestaurant4.setRestaurantName("Delicous Bakery");
+        defaultRestaurant4.setRestaurantName("Delicious Bakery");
         defaultRestaurant4.setAddress("9822 112th Ave. Bellevue, WA, 98043");
         defaultRestaurant4.setCuisineType(CuisineType.AMERICAN);
         defaultRestaurant4.setHours("9-6");
