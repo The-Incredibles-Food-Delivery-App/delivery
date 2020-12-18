@@ -293,11 +293,11 @@ public class RestaurantController {
         defaultRestaurant5.setMenuItems(menu5);
 
         // default restaurant 6
-        defaultRestaurant6.setRestaurantName("Queen Sheeba");
-        defaultRestaurant6.setAddress("1112 Broadway, Seattle, WA, 98001");
+        defaultRestaurant6.setRestaurantName("Cactus");
+        defaultRestaurant6.setAddress("88775 Lakeview Drive, Kirkland, WA, 98731");
         defaultRestaurant6.setCuisineType(CuisineType.AFRICAN);
-        defaultRestaurant6.setHours("M-F 4-10, Sat 4-12, Sun 4-9");
-        defaultRestaurant6.setPhoneNumber("1231234567");
+        defaultRestaurant6.setHours("M-F 11-12, Sat 12-1, Sun 12-10");
+        defaultRestaurant6.setPhoneNumber("7895674345");
 
         // create menu items and menu
         HashMap<String, MenuItem> menu6 = new HashMap<>();
@@ -305,17 +305,17 @@ public class RestaurantController {
         MenuItem item22 = new MenuItem();
         MenuItem item23 = new MenuItem();
         MenuItem item24 = new MenuItem();
-        item21.setName("Bamia Beef");
+        item21.setName("Chicken Enchiladas");
         item21.setPrice(1199);
         item21.setId(new ObjectId());
-        item22.setName("Fish Tibbs");
+        item22.setName("Chile Relleno ");
         item22.setPrice(1250);
         item22.setId(new ObjectId());
-        item23.setName("Doro Wat");
-        item23.setPrice(899);
+        item23.setName("Tacos De Carne Asada");
+        item23.setPrice(1099);
         item23.setId(new ObjectId());
-        item24.setName("Lamb Tibbs");
-        item24.setPrice(1299);
+        item24.setName("Roasted Corn Y Rajas Quesadilla ");
+        item24.setPrice(1099);
         item24.setId(new ObjectId());
         menu6.put(item21.getId().toString(), item21);
         menu6.put(item22.getId().toString(), item22);
