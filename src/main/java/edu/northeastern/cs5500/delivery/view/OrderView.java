@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.DeliveryManager;
 import edu.northeastern.cs5500.delivery.controller.OrderController;
+import edu.northeastern.cs5500.delivery.model.Delivery;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.OrderStatus;
 import javax.inject.Inject;
@@ -81,7 +82,6 @@ public class OrderView implements View {
                     log.debug("/order/additem/:itemid<{}>", itemParam);
                     final ObjectId orderId = new ObjectId(orderParam);
                     final ObjectId itemId = new ObjectId(itemParam);
-                    // TODO: CSM response: Make sure frontend enforces that quantity is a valid int
                     final Integer quantity = Integer.parseInt(quantityParam);
                     Order revisedOrder = orderController.addItemToOrder(orderId, itemId, quantity);
                     if (revisedOrder == null) {
@@ -119,8 +119,8 @@ public class OrderView implements View {
                     log.debug("/submitorder/:orderid<{}>", orderParam);
                     final ObjectId orderId = new ObjectId(orderParam);
                     Order order = orderController.getOrder(orderId);
-                    deliveryManager.submitOrder(order);
-                    return order;
+                    Delivery delivery = deliveryManager.submitOrder(order);
+                    return delivery;
                 },
                 jsonTransformer);
 

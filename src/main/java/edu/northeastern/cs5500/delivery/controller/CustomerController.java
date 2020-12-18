@@ -20,11 +20,14 @@ public class CustomerController {
         customers = customerRepository;
         log.info("CustomerController > construct");
 
-        initializeCustomers();
         if (customers.count() > 0) {
             return;
         }
+
+        // if repository is empty, create default customers
+        initializeCustomers();
     }
+    
     /**
      * Returns the customer corresponding to the given id
      *
