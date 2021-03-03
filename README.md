@@ -1,7 +1,6 @@
 # Delivery
 
-This is the basic Delivery project that all students forked in CS5500 F20.
-// adding a line here to test my commits
+"The Incredibles" Food Delivery application
 
 ## Requirements
 
